@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Ramses.Confactory;
+using Ramses.Confactory.Addons;
+using System;
 
 namespace Team.CodeConventions
 {
@@ -76,6 +77,11 @@ namespace Team.CodeConventions
 
         }
 
+        protected static void ProtectedStaticMethodVoid()
+        {
+
+        }
+
         protected void ProtectedMethodVoid(int firstParameter, params float[] secondParamsParameter)
         {
 
@@ -90,6 +96,12 @@ namespace Team.CodeConventions
         protected void OnDestroy()
         {
             ActionEvent -= OnActionEvent;
+        }
+
+
+        private static void PrivateStaticMethodVoid()
+        {
+
         }
 
         // RULE: Methods triggered on events are named 'On[eventName]' as seen below
@@ -116,5 +128,69 @@ namespace Team.CodeConventions
     {
         void FirstVoidMethod();
         float SecondFloatMethod(int firstParameter);
+    }
+
+    // RULE: Abstract classes always start with the term 'Base'
+    public abstract class BaseClass : IMyInterface
+    {
+        protected float protectedFloat;
+        private float _privateFloat;
+
+        public abstract void FirstVoidMethod();
+        public abstract float SecondFloatMethod(int firstParameter);
+    }
+
+    // << UTILS Concentions && Small Examples >>
+
+
+
+    // RULE: Pop-ups always end with the terms 'PopUp'
+    public class MyPopUp : BasePopUp
+    {
+        protected override void Open()
+        {
+
+        }
+    }
+
+    // RULE: Confactory classes always start with the term 'Con'
+    public class ConClass : IConfactory
+    {
+        public void ConClear()
+        {
+
+        }
+    }
+
+    public class ConClassSecond : MonoBehaviour, IConfactory
+    {
+        public void ConClear()
+        {
+
+        }
+    }
+
+    public class ConClassWithAddons : IConfactory, IConStructUser, IConSceneSwitchUser
+    {
+        public void ConClear()
+        {
+
+        }
+
+        public IConfactory ConStruct(IConfactoryFinder confactoryFinder)
+        {
+#if IOS
+            // Return IOS version of class.
+#elif ANDROID
+            // return Android version of class.
+#else
+            return null; // return this version of class.
+#endif
+        }
+
+        public void OnConSceneSwitched(string oldScene, string newScene)
+        {
+            
+        }
     }
 }
