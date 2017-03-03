@@ -73,7 +73,7 @@
 	    cardHolder.id = "card";
 	    cardButton.id = "cardButton";
 
-		cardImg.src = "cards/" + cardId + ".png";
+	    cardImg.src = "cards/" + cardId + ".png";
 		cardButton.appendChild(cardImg);
 		cardHolder.appendChild(cardButton);
 		document.getElementById("cardsHolder").appendChild(cardHolder);
@@ -87,7 +87,7 @@
         }
 
         html, body {
-            height: 100%;
+            width: 100%;
             margin: 0px;
             font-family: 'PressStart2P', sans-serif;
             color: white;
@@ -95,34 +95,20 @@
             background-color: black;
         }
 
-        .button {
-            display: inline-block;
-            height: 45%;
-            width: 98%;
-            background-color: #222;
-            position: relative;
-        }
-
         #card{
-            display: inline-block;
+            display: table-cell;
         }
 
         #cardsHolder{
+            display: table;
             width: 100%;
+            table-layout: fixed;
         }
 
         #cardButton{
             background: transparent;
             border: none !important;
             font-size: 0;
-        }
-
-        .button_label {
-            position: absolute;
-            left: 0px;
-            width: 100%;
-            top: 50%;
-            margin-top: -6px;
         }
 
         #player_id {
