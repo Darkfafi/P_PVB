@@ -180,9 +180,9 @@ namespace Team.CodeConventions
         public IConfactory ConStruct(IConfactoryFinder confactoryFinder)
         {
 #if IOS
-            // Return IOS version of class.
+            // return   [IOS version of class].
 #elif ANDROID
-            // return Android version of class.
+            // return   [Android version of class].
 #else
             return null; // return this version of class.
 #endif
