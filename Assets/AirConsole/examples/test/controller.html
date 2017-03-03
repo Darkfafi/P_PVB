@@ -66,17 +66,17 @@
 	
 	function createCard(cardId)
 	{
-	    var cardHolder = document.createElement("div");
+	    var card = document.createElement("div");
 	    var cardButton = document.createElement("BUTTON");
 	    var cardImg = document.createElement("IMG");
 
-	    cardHolder.id = "card";
+	    card.id = "card";
 	    cardButton.id = "cardButton";
 
 	    cardImg.src = "cards/" + cardId + ".png";
 		cardButton.appendChild(cardImg);
-		cardHolder.appendChild(cardButton);
-		document.getElementById("cardsHolder").appendChild(cardHolder);
+		card.appendChild(cardButton);
+		document.getElementById("cardsHolder").appendChild(card);
 		cardButton.onclick = function() {cardPress(cardId);};
 	}
 
@@ -102,13 +102,22 @@
         #cardsHolder{
             display: table;
             width: 100%;
+            height: 50%;
             table-layout: fixed;
         }
 
         #cardButton{
+            width: 100%;
+            height: 100%;
             background: transparent;
             border: none !important;
             font-size: 0;
+        }
+
+        #cardButton img{
+            display: block;
+            width: 100%;
+            height: auto;
         }
 
         #player_id {
