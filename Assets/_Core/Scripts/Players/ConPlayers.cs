@@ -1,6 +1,5 @@
 ﻿using Ramses.Confactory;
 using NDream.AirConsole;
-using System;
 
 public class ConPlayers : IConfactory
 {
@@ -48,6 +47,9 @@ public class ConPlayers : IConfactory
         Ready();
     }
 
+    /// <summary>
+    /// Sets the max player amount and looks for the connected controllers to create players for.
+    /// </summary>
     private void Ready()
     {
         AirConsole.instance.onReady -= OnReadyEvent;
@@ -56,6 +58,23 @@ public class ConPlayers : IConfactory
         RegisterAlreadyConnectedControllers();
 
         UnityEngine.Debug.Log("CONPLAYERS ACTIVATED");
+    }
+
+    /// <summary>
+    /// Gets a registered player by its device id. If there is no player with this device id it returns null.
+    /// </summary>
+    /// <param name="device_id">The deviceId the caller wants a registered player for as return value. </param>
+    /// <returns>Found player with device id. Returns null if no player with device_id is found.</returns>
+    private RegisteredPlayer GetRegisteredPlayerById(int device_id)
+    {
+        for (int i = 0; i < _registeredPlayers.Length; i++)
+        {
+            if (_registeredPlayers[i] != null && _registeredPlayers[i].DeviceID == device_id)
+            {
+                return _registeredPlayers[i];
+            }
+        }
+        return null;
     }
 
     private void OnConnectEvent(int device_id)
@@ -89,18 +108,6 @@ public class ConPlayers : IConfactory
                 return;
             }
         }
-    }
-
-    private RegisteredPlayer GetRegisteredPlayerById(int device_id)
-    {
-        for (int i = 0; i < _registeredPlayers.Length; i++)
-        {
-            if (_registeredPlayers[i] != null && _registeredPlayers[i].DeviceID == device_id)
-            {
-                return _registeredPlayers[i];
-            }
-        }
-        return null;
     }
 
     private void OnDisconnectEvent(int device_id)
