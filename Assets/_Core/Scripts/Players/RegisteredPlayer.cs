@@ -34,7 +34,7 @@ public class RegisteredPlayer
         IsConnected = false;
     }
 
-    public bool IsActiveDevice()
+    private bool IsActiveDevice()
     {
         int[] allControllerIds = AirConsole.instance.GetControllerDeviceIds().ToArray();
 

@@ -5,6 +5,13 @@ public class ConPlayers : IConfactory
 {
     public const int MAX_AMOUNT_OF_REGISTERED_PLAYERS = 4;
 
+    /// <summary>
+    /// Indicates if new players are allowed for registration. 
+    /// When 'false', it will only allow handeling disconnecting and reconnecting of already registered players by any device.
+    /// Else if 'true', it allows also for new players up to the max amount of 'MAX_AMOUNT_OF_REGISTERED_PLAYERS'
+    /// </summary>
+    public bool AllowsPlayerRegistration { get; private set; }
+
     private RegisteredPlayer[] _registeredPlayers = new RegisteredPlayer[MAX_AMOUNT_OF_REGISTERED_PLAYERS];
 
     public ConPlayers()
@@ -30,6 +37,18 @@ public class ConPlayers : IConfactory
     {
         RegisteredPlayer[] rps = _registeredPlayers;
         return rps;
+    }
+
+    public void AllowPlayerRegistration(bool allow)
+    {
+        if (AllowsPlayerRegistration != allow)
+        {
+            AllowsPlayerRegistration = allow;
+            if(AllowsPlayerRegistration)
+            {
+                RegisterAlreadyConnectedControllers(); // Registers already known devices after reallowing registration of players.
+            }
+        }
     }
 
     private void RegisterAlreadyConnectedControllers()
@@ -86,7 +105,7 @@ public class ConPlayers : IConfactory
             rd.DeviceConnectedAction(device_id);
             return;
         }
-        else
+        else if(AllowsPlayerRegistration)
         {
             for (int i = 0; i < _registeredPlayers.Length; i++)
             {
