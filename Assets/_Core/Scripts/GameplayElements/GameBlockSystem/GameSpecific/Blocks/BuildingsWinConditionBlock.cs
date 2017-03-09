@@ -9,12 +9,12 @@ public class BuildingsWinConditionBlock : BaseGameBlock<BuildingsGame, Buildings
     {
         get
         {
-            return info;
+            return _info;
         }
     }
 
     [SerializeField]
-    private BuildingsWinConditionBlockInfo info;
+    private BuildingsWinConditionBlockInfo _info;
 }
 
 [Serializable]

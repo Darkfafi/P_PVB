@@ -14,18 +14,18 @@ public class Playfield : MonoBehaviour {
     [SerializeField]
     private PlayerCorner _samuraiCorner;
 
-    private PlayerCorner[] allPlayCorners;
+    private PlayerCorner[] _allPlayCorners;
 
     public void SetCornersBuildfieldsAmount(int amount)
     {
-        for (int i = 0; i < allPlayCorners.Length; i++)
+        for (int i = 0; i < _allPlayCorners.Length; i++)
         {
-            allPlayCorners[i].SetCornerBuildingSpots(amount);
+            _allPlayCorners[i].SetCornerBuildingSpots(amount);
         }
     }
 
     protected void Awake()
     {
-        allPlayCorners = new PlayerCorner[] { _spartanCorner, _knightCorner, _vikingCorner, _samuraiCorner };
+        _allPlayCorners = new PlayerCorner[] { _spartanCorner, _knightCorner, _vikingCorner, _samuraiCorner };
     }
 }

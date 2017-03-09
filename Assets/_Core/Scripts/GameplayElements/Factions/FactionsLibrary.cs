@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-
+using System;
 public enum FactionType
 {
+    None,
     Spartans,
     Vikings,
     Knights,
@@ -28,6 +29,7 @@ public class FactionsLibrary : ScriptableObject
     }
 }
 
+[Serializable]
 public class FactionLibraryItem
 {
     public FactionType FactionType { get { return _factionType; } }

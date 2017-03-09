@@ -3,18 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillSelectionBlock : BaseGameBlock<BuildingsGame, SkillSelectionBlockInfo, SkillSelectionBlockLogics>
+public class SkillSelectionBlock : BaseGameBlock<BuildingsGame, SkillSelectionBlockInfo, SkillSelectionBlockLogic>
 {
     public override SkillSelectionBlockInfo BlockInfo
     {
         get
         {
-            return info;
+            return _info;
         }
     }
 
     [SerializeField]
-    private SkillSelectionBlockInfo info;
+    private SkillSelectionBlockInfo _info;
 }
 
 [Serializable]
@@ -24,11 +24,12 @@ public struct SkillSelectionBlockInfo : IGameBlockInfo<BuildingsGame>
     public int SecondsForEachSkillSelectionTurn;
 }
 
-public class SkillSelectionBlockLogics : BaseGameBlockLogic<BuildingsGame, SkillSelectionBlockInfo>
+public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillSelectionBlockInfo>
 {
     protected override void Activated()
     {
         Debug.Log("Activated Skill: " + gameBlockInfo.SecondsForEachSkillSelectionTurn);
+        NextBlock(); // TODO: Make block functionality and run it before NextBlock call.
     }
 
     protected override void CycleEnded()
@@ -43,7 +44,7 @@ public class SkillSelectionBlockLogics : BaseGameBlockLogic<BuildingsGame, Skill
 
     protected override void Deactivated()
     {
-        throw new NotImplementedException();
+
     }
 
     protected override void Destroyed()
