@@ -5,17 +5,24 @@ using System.Collections.Generic;
 public class CardsDefinitionsLibrary : ScriptableObject
 {
     [SerializeField]
-    private List<CardDefinitionItem> _cardsDefined;
+    private List<CardDefinitionBaseItem> _cardsDefined;
 
-    public CardDefinitionItem[] GetAllCardDefinitions()
+    public CardDefinitionBaseItem[] GetAllBaseCardDefinitions()
     {
         return _cardsDefined.ToArray();
+    }
+
+    public GlobalCardDefinitionItem[] GetAllCardDefinitions()
+    {
+        List<GlobalCardDefinitionItem> globalCards = new List<GlobalCardDefinitionItem>(_cardsDefined.ToArray());
+        globalCards.AddRange(GetAllCardUpgradeDefinitions());
+        return globalCards.ToArray();
     }
 
     public CardDefinitionUpgradeItem[] GetAllCardUpgradeDefinitions()
     {
         List<CardDefinitionUpgradeItem> items = new List<CardDefinitionUpgradeItem>();
-        CardDefinitionItem cdi = null;
+        CardDefinitionBaseItem cdi = null;
 
         for (int i = 0; i < _cardsDefined.Count; i++)
         {
@@ -29,20 +36,31 @@ public class CardsDefinitionsLibrary : ScriptableObject
         return items.ToArray();
     }
 
-    public bool IsUpgradeCard(string cardName)
+    public CardType GetCardTypeFromCard(string cardName)
     {
-        CardDefinitionUpgradeItem[] cduis = GetAllCardUpgradeDefinitions();
-        for(int i = 0; i < cduis.Length; i++)
+        GlobalCardDefinitionItem[] gcd = GetAllCardDefinitions();
+
+        for(int i = 0; i < gcd.Length; i++)
         {
-            if (cduis[i].CardName == cardName)
-                return true;
+            if(gcd[i].CardName == cardName)
+            {
+                if(gcd.GetType().IsSubclassOf(typeof(CardDefinitionBaseItem)))
+                {
+                    return CardType.BaseCard;
+                }
+                else if(gcd.GetType().IsSubclassOf(typeof(CardDefinitionUpgradeItem)))
+                {
+                    return CardType.UpgradeCard;
+                }
+            }
         }
-        return false;
+
+        return CardType.None;
     }
 }
 
 [Serializable]
-public class CardDefinitionItem : GlobalCardDefinitionItem
+public class CardDefinitionBaseItem : GlobalCardDefinitionItem
 {
     public Skill BaseCardSkillLinkedToCard { get { return _skillLinkedToCard; } }
     public CardDefinitionUpgradeItem[] BaseCardUpgrades { get { return _upgrades; } }

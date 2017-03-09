@@ -4,6 +4,13 @@ using UnityEngine;
 using Ramses.Confactory;
 using System;
 
+public enum CardType
+{
+    None,
+    BaseCard,
+    UpgradeCard
+}
+
 public class ConCards : IConfactory
 {
     public CardsDefinitionsLibrary CardsDefinitionLibrary { get; private set; }
@@ -18,7 +25,7 @@ public class ConCards : IConfactory
 
     }
 
-    public Card CreateCard(string cardName)
+    public Card CreateCard(string cardName, CardType cardType)
     {
         Card cardCreating = null;
         // TODO: insert information of cardCreating. If the cardName != a defined card. Then return null.
