@@ -12,6 +12,12 @@ public class BuildingsGame : MonoBehaviour, IGame {
     public Playfield Playfield { get{ return _playfield; } }
     private Playfield _playfield;
 
+    public int StartHandCardAmount { get { return _startHandCardAmount; } }
+
+    [Header("Global Game Options")]
+    [SerializeField]
+    private int _startHandCardAmount = 4;
+
     [Header("Game Blocks")]
     [SerializeField]
     private ScriptableGameBlock[] _gameBlocks;
@@ -52,7 +58,24 @@ public class BuildingsGame : MonoBehaviour, IGame {
 
     protected void Start()
     {
+        Introduction();
         _gameBlockSystem.StartBlockCycle();
+    }
+
+    private void Introduction()
+    {
+        PlayersHandDraw();
+    }
+
+    private void PlayersHandDraw()
+    {
+        for(int i = 0; i < GamePlayers.Length; i++)
+        {
+            for(int j = 0; j < StartHandCardAmount; j++)
+            {
+                GamePlayers[i].DrawCard();
+            }
+        }
     }
 
     private void GenerateGamePlayers()

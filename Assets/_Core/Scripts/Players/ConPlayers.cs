@@ -2,21 +2,50 @@
 using NDream.AirConsole;
 using System.Collections.Generic;
 
+public delegate void RegisteredPlayerHandler(RegisteredPlayer player);
+
 public class ConPlayers : IConfactory
 {
-    public const int MAX_AMOUNT_OF_REGISTERED_PLAYERS = 4;
+    /// <summary>
+    /// Triggered when the system has connected to the AirConsole service and is ready to be used.
+    /// </summary>
+    public event VoidHandler ConPlayerReadyToUseEvent;
 
+    /// <summary>
+    /// Triggered for each new RegisteredPlayer. This player will be registered even when he disconnects
+    /// </summary>
+    public event RegisteredPlayerHandler PlayerRegisteredEvent;
+
+    /// <summary>
+    /// Triggered for each RegisteredPlayer when the list is cleaned.
+    /// </summary>
+    public event RegisteredPlayerHandler PlayerUnregisteredEvent;
+
+    public const int MAX_AMOUNT_OF_REGISTERED_PLAYERS = 4;
     /// <summary>
     /// Indicates if new players are allowed for registration. 
     /// When 'false', it will only allow handeling disconnecting and reconnecting of already registered players by any device.
     /// Else if 'true', it allows also for new players up to the max amount of 'MAX_AMOUNT_OF_REGISTERED_PLAYERS'
     /// </summary>
     public bool AllowsPlayerRegistration { get; private set; }
+    
+    /// <summary>
+    /// Indicates if the system is allowed to clean its list when a player disconnects.
+    /// ALL Disconnected registered players will be removed when this is set to true / every time a player leaves.
+    /// </summary>
+    public bool AllowsDeleteRegisteredPlayerOnLeave { get; private set; }
+
+    /// <summary>
+    /// 'true' when the system has connected to the AirConsole service and is ready to be used.
+    /// </summary>
+    public bool IsReadyToUse { get; private set; }
 
     private RegisteredPlayer[] _registeredPlayers = new RegisteredPlayer[MAX_AMOUNT_OF_REGISTERED_PLAYERS];
 
     public ConPlayers()
     {
+        IsReadyToUse = false;
+
         AirConsole.instance.onConnect += OnConnectEvent;
         AirConsole.instance.onDisconnect += OnDisconnectEvent;
 
@@ -62,6 +91,18 @@ public class ConPlayers : IConfactory
         }
     }
 
+    public void AllowDeleteRegisteredPlayerOnLeave(bool allow)
+    {
+        if(AllowsDeleteRegisteredPlayerOnLeave != allow)
+        {
+            AllowsDeleteRegisteredPlayerOnLeave = allow;
+            if(AllowsDeleteRegisteredPlayerOnLeave)
+            {
+                CleanRegisteredPlayers(true);
+            }
+        }
+    }
+
     public void CleanRegisteredPlayers(bool notConnectedOnly)
     {
         for(int i = _registeredPlayers.Length -1; i >=0; i--)
@@ -71,6 +112,8 @@ public class ConPlayers : IConfactory
             if ((notConnectedOnly && !_registeredPlayers[i].IsConnected) || !notConnectedOnly)
             {
                 _registeredPlayers[i].DeviceDisconnectAction(_registeredPlayers[i].DeviceID);
+                if (PlayerUnregisteredEvent != null)
+                    PlayerUnregisteredEvent(_registeredPlayers[i]);
                 _registeredPlayers[i] = null;
             }
         }
@@ -97,11 +140,15 @@ public class ConPlayers : IConfactory
     private void Ready()
     {
         AirConsole.instance.onReady -= OnReadyEvent;
-
+        IsReadyToUse = true;
         AirConsole.instance.SetActivePlayers(MAX_AMOUNT_OF_REGISTERED_PLAYERS);
-        RegisterAlreadyConnectedControllers();
 
         UnityEngine.Debug.Log("CONPLAYERS ACTIVATED");
+
+        if (ConPlayerReadyToUseEvent != null)
+            ConPlayerReadyToUseEvent();
+
+        RegisterAlreadyConnectedControllers();
     }
 
     /// <summary>
@@ -128,6 +175,7 @@ public class ConPlayers : IConfactory
         if (rd != null)
         {
             rd.DeviceConnectedAction(device_id);
+            // Same device came back for player
             return;
         }
         else if(AllowsPlayerRegistration)
@@ -137,6 +185,9 @@ public class ConPlayers : IConfactory
                 if (_registeredPlayers[i] == null)
                 {
                     _registeredPlayers[i] = new RegisteredPlayer(i, device_id);
+                    // new register player item made
+                    if (PlayerRegisteredEvent != null)
+                        PlayerRegisteredEvent(_registeredPlayers[i]);
                     return;
                 }
             }
@@ -148,6 +199,7 @@ public class ConPlayers : IConfactory
         {
             if (_registeredPlayers[i] != null && !_registeredPlayers[i].IsConnected)
             {
+                // Other device came to replace player
                 _registeredPlayers[i].LinkDeviceToPlayer(device_id);
                 return;
             }
@@ -160,5 +212,8 @@ public class ConPlayers : IConfactory
 
         if (rd != null)
             rd.DeviceDisconnectAction(device_id);
+
+        if (AllowsDeleteRegisteredPlayerOnLeave)
+            CleanRegisteredPlayers(true);
     }
 }

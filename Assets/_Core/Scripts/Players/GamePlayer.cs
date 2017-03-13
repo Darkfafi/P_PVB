@@ -45,6 +45,21 @@ public class GamePlayer
         return names;
     }
 
+    public void DrawCard()
+    {
+        //TODO: Ask the cardpile for random card
+    }
+
+    public void DrawCard(CardType cardType)
+    {
+        //TODO: Ask the cardpile for random card of type
+    }
+
+    public void DrawCard(string cardName)
+    {
+        //TODO Ask the cardpile for specific card
+    }
+
     public bool PlayCard(string cardName)
     {
         for(int i = CardsInHand.Count - 1; i >= 0; i--)
