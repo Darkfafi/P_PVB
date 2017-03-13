@@ -3,8 +3,13 @@ using UnityEngine;
 using Ramses.Confactory;
 using System;
 
+public delegate void PlayerFactionHandler(PlayerFactionLinkItem linkItem);
+
 public class ConPlayerFactions : IConfactory
 {
+    public event PlayerFactionHandler PlayerFactionAssignedEvent;
+    public event PlayerFactionHandler PlayerFactionUnassignedEvent;
+
     public FactionsLibrary FactionsLibrary { get; private set; }
     public PlayerFactionLinkItem[] PlayerFactionLinks { get; private set; }
 
@@ -28,6 +33,10 @@ public class ConPlayerFactions : IConfactory
             if (PlayerFactionLinks[i].FactionType == faction)
             {
                 PlayerFactionLinks[i].Player = player;
+                if(PlayerFactionAssignedEvent != null)
+                {
+                    PlayerFactionAssignedEvent(PlayerFactionLinks[i]);
+                }
                 break;
             }
         }
@@ -40,6 +49,10 @@ public class ConPlayerFactions : IConfactory
             if (PlayerFactionLinks[i].Player == player)
             {
                 PlayerFactionLinks[i].Player = null;
+                if(PlayerFactionAssignedEvent != null)
+                {
+                    PlayerFactionAssignedEvent(PlayerFactionLinks[i]);
+                }
                 break;
             }
         }
@@ -53,6 +66,16 @@ public class ConPlayerFactions : IConfactory
                 return PlayerFactionLinks[i].FactionType;
         }
         return FactionType.None;
+    }
+
+    public PlayerFactionLinkItem GetLinkItemForFaction(FactionType factionType)
+    {
+        for (int i = 0; i < PlayerFactionLinks.Length; i++)
+        {
+            if (PlayerFactionLinks[i].FactionType == factionType)
+                return PlayerFactionLinks[i];
+        }
+        return new PlayerFactionLinkItem(factionType);
     }
 
     public FactionType[] GetFreeFactions()
