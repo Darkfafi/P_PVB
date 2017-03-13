@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Ramses.SceneTrackers;
 
 public class PlayerTurnsBlock : BaseGameBlock<BuildingsGame, PlayerTurnsBlockInfo, PlayerTurnsBlockLogic>
 {
@@ -26,14 +25,28 @@ public struct PlayerTurnsBlockInfo : IGameBlockInfo<BuildingsGame>
 
 public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTurnsBlockInfo>
 {
+    private CardInteractionTranslator _cardInteractionTranslator;
+
+    protected override void Initialized()
+    {
+        _cardInteractionTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CardInteractionTranslator>();
+    }
+
     protected override void Activated()
     {
+        _cardInteractionTranslator.CardPlayRequestEvent += OnCardPlayRequestEvent;
+
+        for (int i = 0; i < game.GamePlayers.Length; i++)
+        {
+            game.GamePlayers[i].PlayCardEvent += OnPlayCardEvent;
+        }
+
         Debug.Log("PlayerTurnsBlock Activated");
     }
 
     protected override void CycleEnded()
     {
-        throw new NotImplementedException();
+
     }
 
     protected override void CycleStarted()
@@ -43,11 +56,34 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
     protected override void Deactivated()
     {
-        throw new NotImplementedException();
+        _cardInteractionTranslator.CardPlayRequestEvent -= OnCardPlayRequestEvent;
+
+        for (int i = 0; i < game.GamePlayers.Length; i++)
+        {
+            game.GamePlayers[i].PlayCardEvent -= OnPlayCardEvent;
+        }
+
     }
 
     protected override void Destroyed()
     {
-        throw new NotImplementedException();
+
+    }
+
+    private void OnCardPlayRequestEvent(string cardName, int deviceId)
+    {
+        // TODO: Check if its the requesting player his or her turn.
+        GamePlayer p = game.GetGamePlayerByDeviceId(deviceId);
+        if (p != null)
+        {
+            p.PlayCard(cardName);
+        }  
+    }
+
+    private void OnPlayCardEvent(GamePlayer gamePlayer, BaseCard card)
+    {
+        _cardInteractionTranslator.SendAllowedPlayRequest(true, "Playing Card: " + card.CardName, gamePlayer.LinkedPlayer.DeviceID, card.CardName);
+        _cardInteractionTranslator.SendUpdateCardsShown(gamePlayer.LinkedPlayer.DeviceID, gamePlayer.GetNameListOfCardsInHand());
+        game.Playfield.GetCornerByFaction(gamePlayer.FactionType).BuildStructureForCard(card);
     }
 }

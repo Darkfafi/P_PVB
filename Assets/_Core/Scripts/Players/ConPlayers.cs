@@ -1,5 +1,6 @@
 ﻿using Ramses.Confactory;
 using NDream.AirConsole;
+using System.Collections.Generic;
 
 public class ConPlayers : IConfactory
 {
@@ -33,10 +34,20 @@ public class ConPlayers : IConfactory
         UnityEngine.Debug.Log("CONPLAYERS DEACTIVATED");
     }
 
-    public RegisteredPlayer[] GetRegisteredPlayers()
+    public RegisteredPlayer[] GetCurrentlyRegisteredPlayers(bool connectedOnly)
     {
-        RegisteredPlayer[] rps = _registeredPlayers;
-        return rps;
+        List<RegisteredPlayer> rps = new List<RegisteredPlayer>();
+
+        for(int i= 0; i < _registeredPlayers.Length; i++)
+        {
+            if(_registeredPlayers[i] != null)
+            {
+                if (!connectedOnly || _registeredPlayers[i].IsConnected)
+                    rps.Add(_registeredPlayers[i]);
+            }
+        }
+
+        return rps.ToArray();
     }
 
     public void AllowPlayerRegistration(bool allow)
@@ -47,6 +58,20 @@ public class ConPlayers : IConfactory
             if(AllowsPlayerRegistration)
             {
                 RegisterAlreadyConnectedControllers(); // Registers already known devices after reallowing registration of players.
+            }
+        }
+    }
+
+    public void CleanRegisteredPlayers(bool notConnectedOnly)
+    {
+        for(int i = _registeredPlayers.Length -1; i >=0; i--)
+        {
+            if (_registeredPlayers[i] == null) { continue; }
+
+            if ((notConnectedOnly && !_registeredPlayers[i].IsConnected) || !notConnectedOnly)
+            {
+                _registeredPlayers[i].DeviceDisconnectAction(_registeredPlayers[i].DeviceID);
+                _registeredPlayers[i] = null;
             }
         }
     }
@@ -84,7 +109,7 @@ public class ConPlayers : IConfactory
     /// </summary>
     /// <param name="device_id">The deviceId the caller wants a registered player for as return value. </param>
     /// <returns>Found player with device id. Returns null if no player with device_id is found.</returns>
-    private RegisteredPlayer GetRegisteredPlayerById(int device_id)
+    public RegisteredPlayer GetRegisteredPlayerById(int device_id)
     {
         for (int i = 0; i < _registeredPlayers.Length; i++)
         {

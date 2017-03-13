@@ -19,6 +19,19 @@ public class CardsDefinitionsLibrary : ScriptableObject
         return globalCards.ToArray();
     }
 
+    public GlobalCardDefinitionItem GetCardDefinitionByName(string cardName)
+    {
+        GlobalCardDefinitionItem[] cdis = GetAllCardDefinitions();
+
+        for(int i = 0; i < cdis.Length; i++)
+        {
+            if (cdis[i].CardName == cardName)
+                return cdis[i];
+        }
+        Debug.LogWarning("NO CARD FOUND WITH THE NAME: " + cardName);
+        return null;
+    }
+
     public CardDefinitionUpgradeItem[] GetAllCardUpgradeDefinitions()
     {
         List<CardDefinitionUpgradeItem> items = new List<CardDefinitionUpgradeItem>();
@@ -34,6 +47,20 @@ public class CardsDefinitionsLibrary : ScriptableObject
         }
 
         return items.ToArray();
+    }
+
+    public CardDefinitionBaseItem GetCardBaseItemOfUpgradeItem(CardDefinitionUpgradeItem upgradeItem)
+    {
+        CardDefinitionBaseItem[] items = GetAllBaseCardDefinitions();
+        for(int i = 0; i < items.Length; i++)
+        {
+            for(int j = 0; j < items[i].BaseCardUpgrades.Length; j++)
+            {
+                if (items[i].BaseCardUpgrades[j] == upgradeItem)
+                    return items[i];
+            }
+        }
+        return null;
     }
 
     public CardType GetCardTypeFromCard(string cardName)
@@ -89,7 +116,7 @@ public class GlobalCardDefinitionItem
     public string CardName { get { return _cardName; } }
     public int CardCost { get { return _cost; } }
     public Sprite CardSprite { get { return _cardSprite; } }
-    public GameObject CardBuildingObjectPrefab { get { return _buildingObjectPrefab; } }
+    public Building CardBuildingObjectPrefab { get { return _buildingObjectPrefab; } }
 
     [Header("Global Card Settings")]
 
@@ -103,5 +130,5 @@ public class GlobalCardDefinitionItem
     private Sprite _cardSprite;
 
     [SerializeField]
-    private GameObject _buildingObjectPrefab;
+    private Building _buildingObjectPrefab;
 }

@@ -26,6 +26,11 @@ public struct SkillSelectionBlockInfo : IGameBlockInfo<BuildingsGame>
 
 public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillSelectionBlockInfo>
 {
+    protected override void Initialized()
+    {
+
+    }
+
     protected override void Activated()
     {
         Debug.Log("Activated Skill: " + gameBlockInfo.SecondsForEachSkillSelectionTurn);
@@ -34,7 +39,7 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
 
     protected override void CycleEnded()
     {
-        throw new NotImplementedException();
+
     }
 
     protected override void CycleStarted()
@@ -49,6 +54,6 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
 
     protected override void Destroyed()
     {
-        throw new NotImplementedException();
+
     }
 }

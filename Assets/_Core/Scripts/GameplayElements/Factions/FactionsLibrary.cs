@@ -14,7 +14,6 @@ public class FactionsLibrary : ScriptableObject
     [SerializeField]
     private FactionLibraryItem[] factionLibraryItems;
 
-
     public FactionLibraryItem GetItemByFactionType(FactionType factionType)
     {
         for(int i = 0; i < factionLibraryItems.Length; i++)

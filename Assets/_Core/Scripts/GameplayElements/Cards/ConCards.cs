@@ -13,6 +13,8 @@ public enum CardType
 
 public class ConCards : IConfactory
 {
+    public const string CARDS_IMAGE_LOCATION = "cards/";
+
     public CardsDefinitionsLibrary CardsDefinitionLibrary { get; private set; }
 
     public ConCards()
@@ -25,10 +27,23 @@ public class ConCards : IConfactory
 
     }
 
-    public Card CreateCard(string cardName, CardType cardType)
+    public BaseCard CreateCard(string cardName)
     {
-        Card cardCreating = null;
-        // TODO: insert information of cardCreating. If the cardName != a defined card. Then return null.
+        BaseCard cardCreating = null;
+        GlobalCardDefinitionItem cardRepresentingItem = CardsDefinitionLibrary.GetCardDefinitionByName(cardName);
+
+        if (cardRepresentingItem != null)
+        {
+            if(cardRepresentingItem.GetType().IsSubclassOf(typeof(CardDefinitionBaseItem)))
+            {
+                cardCreating = new Card(cardName, (CardDefinitionBaseItem)cardRepresentingItem);
+            }
+            else if(cardRepresentingItem.GetType().IsSubclassOf(typeof(CardDefinitionUpgradeItem)))
+            {
+                cardCreating = new UpgradeCard(cardName, (CardDefinitionUpgradeItem)cardRepresentingItem, CardsDefinitionLibrary.GetCardBaseItemOfUpgradeItem((CardDefinitionUpgradeItem)cardRepresentingItem));
+            }
+        }
+
         return cardCreating;
     }
 }

@@ -63,11 +63,14 @@ public abstract class BaseGameBlockLogic<T, U> : IGameBlockLogic<T> where T : cl
 
         _gameBlockSystem.BlockCycleStartedEvent += OnBlockCycleStartedEvent;
         _gameBlockSystem.BlockCycleEndededEvent += OnBlockCycleEndededEvent;
+
+        Initialized();
     }
 
     public void Destroy()
     {
         if (!_initialized) { return; }
+        Deactivate();
         Destroyed();
         _gameBlockSystem.BlockCycleStartedEvent -= OnBlockCycleStartedEvent;
         _gameBlockSystem.BlockCycleEndededEvent -= OnBlockCycleEndededEvent;
@@ -92,6 +95,7 @@ public abstract class BaseGameBlockLogic<T, U> : IGameBlockLogic<T> where T : cl
         _gameBlockSystem.NextBlock();
     }
 
+    protected abstract void Initialized();
     protected abstract void Activated();
     protected abstract void Deactivated();
     protected abstract void CycleStarted();

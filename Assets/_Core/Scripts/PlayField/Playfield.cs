@@ -24,6 +24,23 @@ public class Playfield : MonoBehaviour {
         }
     }
 
+    public PlayerCorner GetCornerByFaction(FactionType factionType)
+    {
+        switch (factionType)
+        {
+            case FactionType.Spartans:
+                return _spartanCorner;
+            case FactionType.Vikings:
+                return _vikingCorner;
+            case FactionType.Knights:
+                return _knightCorner;
+            case FactionType.Samurai:
+                return _samuraiCorner;
+            default:
+                return null;
+        }
+    }
+
     protected void Awake()
     {
         _allPlayCorners = new PlayerCorner[] { _spartanCorner, _knightCorner, _vikingCorner, _samuraiCorner };

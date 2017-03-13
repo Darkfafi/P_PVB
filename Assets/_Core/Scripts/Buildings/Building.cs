@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class Building : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+	public int Score { get; private set; }
+
+    public void SetScore(int value)
+    {
+        Score = value;
+    }
 }

@@ -26,6 +26,11 @@ public struct BuildingsWinConditionBlockInfo : IGameBlockInfo<BuildingsGame>
 
 public class BuildingsWinConditionBlockLogic : BaseGameBlockLogic<BuildingsGame, BuildingsWinConditionBlockInfo>
 {
+    protected override void Initialized()
+    {
+        throw new NotImplementedException();
+    }
+
     protected override void Activated()
     {
         Debug.Log("Activated Win Condition");
