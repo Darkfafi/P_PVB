@@ -92,11 +92,11 @@ public class CardInteractionTranslator : BaseACMessageTranslator
     {
         if(data["drawCardsRequest"] != null)
         {
-            if(data[AirConsoleMessageST.INFO_PARAMETER] != null && data[AirConsoleMessageST.INFO_PARAMETER]["cardAmount"] != null)
+            if(data["drawCardsRequest"] != null && data["drawCardsRequest"]["cardAmount"] != null)
             {
                 if(DrawCardsRequestEvent != null)
                 {
-                    DrawCardsRequestEvent((int)data[AirConsoleMessageST.INFO_PARAMETER]["cardAmount"], from);
+                    DrawCardsRequestEvent((int)data["drawCardsRequest"]["cardAmount"], from);
                     return true;
                 }
             }
@@ -108,11 +108,11 @@ public class CardInteractionTranslator : BaseACMessageTranslator
     {
         if (data["playCardRequest"] != null)
         {
-            if (data[AirConsoleMessageST.INFO_PARAMETER] != null && data[AirConsoleMessageST.INFO_PARAMETER]["cardName"] != null)
+            if (data["playCardRequest"]["cardName"] != null)
             {
                 if (CardPlayRequestEvent != null)
                 {
-                    CardPlayRequestEvent((string)data[AirConsoleMessageST.INFO_PARAMETER]["cardName"], from);
+                    CardPlayRequestEvent((string)data["playCardRequest"]["cardName"], from);
                     return true;
                 }
             }
