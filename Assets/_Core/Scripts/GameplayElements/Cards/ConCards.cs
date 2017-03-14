@@ -34,11 +34,11 @@ public class ConCards : IConfactory
 
         if (cardRepresentingItem != null)
         {
-            if(cardRepresentingItem.GetType().IsSubclassOf(typeof(CardDefinitionBaseItem)))
+            if(cardRepresentingItem.GetType().IsAssignableFrom(typeof(CardDefinitionBaseItem)))
             {
                 cardCreating = new Card(cardName, (CardDefinitionBaseItem)cardRepresentingItem);
             }
-            else if(cardRepresentingItem.GetType().IsSubclassOf(typeof(CardDefinitionUpgradeItem)))
+            else if(cardRepresentingItem.GetType().IsAssignableFrom(typeof(CardDefinitionUpgradeItem)))
             {
                 cardCreating = new UpgradeCard(cardName, (CardDefinitionUpgradeItem)cardRepresentingItem, CardsDefinitionLibrary.GetCardBaseItemOfUpgradeItem((CardDefinitionUpgradeItem)cardRepresentingItem));
             }

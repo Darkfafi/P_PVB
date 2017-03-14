@@ -60,8 +60,11 @@
 
     function cardPress(cardId)
     {
-        airconsole.message(AirConsole.SCREEN, { action: "CardPlay", card: cardId });
-        alert("LOL " + cardId);
+        var message = {
+            'playCardRequest': new {'cardName' : 'HouseOne'}
+        };
+
+        airconsole.message(AirConsole.SCREEN, message);
     }
 	
 	function createCard(cardId)

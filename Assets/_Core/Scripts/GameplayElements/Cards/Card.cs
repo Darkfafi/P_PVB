@@ -13,6 +13,7 @@ public abstract class BaseCard
     public BaseCard(string cardName)
     {
         CardName = cardName;
+        Debug.Log(CardName);
     }
 
     public bool IsPlayable(FactionType factionPlayingCard)

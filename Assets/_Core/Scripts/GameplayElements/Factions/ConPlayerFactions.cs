@@ -16,11 +16,11 @@ public class ConPlayerFactions : IConfactory
     public ConPlayerFactions()
     {
         FactionsLibrary = Resources.Load<FactionsLibrary>(LibraryLocations.FACTIONS_LIBRARY_LOCATION);
-        PlayerFactionLinks = new PlayerFactionLinkItem[Enum.GetNames(typeof(FactionType)).Length];
+        PlayerFactionLinks = new PlayerFactionLinkItem[Enum.GetNames(typeof(FactionType)).Length - 1];
         FactionType factionType = FactionType.None;
         for(int i = 0; i < PlayerFactionLinks.Length; i++)
         {
-            factionType = (FactionType)i;
+            factionType = (FactionType)(i + 1);
             if(factionType != FactionType.None)
                 PlayerFactionLinks[i] = new PlayerFactionLinkItem(factionType);
         }

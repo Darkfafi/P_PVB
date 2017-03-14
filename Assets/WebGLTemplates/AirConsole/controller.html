@@ -14,7 +14,7 @@
      * Sets up the communication to the screen.
      */
     function init() {
-      airconsole = new AirConsole({"orientation": "portrait"});
+      airconsole = new AirConsole({"orientation": "landscape"});
       airconsole.onMessage = function(from, data) {
         if (from == AirConsole.SCREEN && data.vibrate) {
           navigator.vibrate(data.vibrate);
@@ -27,6 +27,14 @@
       airconsole.onReady = function() {
         updateText();
       }
+      createCard(3);
+      createCard(3);
+      createCard(3);
+      createCard(1);
+
+      createCard(3);
+      createCard(3);
+      createCard(3);
     }
 
 	function updateText(player_number) {
@@ -46,14 +54,35 @@
      * Tells the screen to move the paddle of this player.
      * @param amount
      */
-	function move(amount) {
-	    if (amount == 0) { return; }
-	    var bool = (amount > 0);
-	    var message = {
-	        'readyAction': { 'readyState': bool }
-	    };
-	    airconsole.message(AirConsole.SCREEN, message);
+    function move(amount) {
+      airconsole.message(AirConsole.SCREEN, {move: amount})
     }
+
+    function cardPress(cardId)
+    {
+        var message = {
+            'playCardRequest': new {'cardName' : 'HouseOne'}
+        };
+
+        airconsole.message(AirConsole.SCREEN, message);
+    }
+	
+	function createCard(cardId)
+	{
+	    var card = document.createElement("div");
+	    var cardButton = document.createElement("BUTTON");
+	    var cardImg = document.createElement("IMG");
+
+	    card.id = "card";
+	    cardButton.id = "cardButton";
+
+	    cardImg.src = "cards/" + cardId + ".png";
+		cardButton.appendChild(cardImg);
+		card.appendChild(cardButton);
+		document.getElementById("cardsHolder").appendChild(card);
+		document.getElementById("cardsHolder").style.width = 7 * card.style.width;
+		cardButton.onclick = function() {cardPress(cardId);};
+	}
 
     </script>
     <style type="text/css">
@@ -62,7 +91,7 @@
         }
 
         html, body {
-            height: 100%;
+            width: 100%;
             margin: 0px;
             font-family: 'PressStart2P', sans-serif;
             color: white;
@@ -70,20 +99,29 @@
             background-color: black;
         }
 
-        .button {
-            display: inline-block;
-            height: 45%;
-            width: 98%;
-            background-color: #222;
-            position: relative;
+        #card{
+            display: table-cell;
         }
 
-        .button_label {
-            position: absolute;
-            left: 0px;
+        #cardsHolder{
+            display: table;
             width: 100%;
-            top: 50%;
-            margin-top: -6px;
+            height: 50%;
+            table-layout: fixed;
+        }
+
+        #cardButton{
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none !important;
+            font-size: 0;
+        }
+
+        #cardButton img{
+            display: block;
+            width: auto;
+            height: 100%;
         }
 
         #player_id {
@@ -98,13 +136,6 @@
 </head>
 <body onload="init()">
     <div style="height: 1%"></div>
-    <div class=button ontouchstart="move(5)" ontouchend="move(0)" onmousedown="move(5)" onmouseup="move(0)">
-        <div class="button_label">UP</div>
-    </div>
-    <div style="height: 8%"></div>
-    <div class=button ontouchstart="move(-5)" ontouchend="move(0)" onmousedown="move(-5)" onmouseup="move(0)">
-        <div class="button_label">DOWN</div>
-    </div>
-    <div id="player_id"></div>
+    <div id = "cardsHolder"></div>
 </body>
 </html>

@@ -95,7 +95,7 @@ public class Lobby : MonoBehaviour
         if (jt == null) { return; }
         jt.ToggleReady(value);
         SetGlobalText();
-        if (GetAmountOfTabsReady() == _conPlayers.GetCurrentlyRegisteredPlayers(true).Length)
+        if (GetAmountOfTabsReady() == _conPlayers.GetCurrentlyRegisteredPlayers(true).Length && GetAmountOfTabsReady() >= 2)
             StarCountDown();
         else
             StopCountDown();

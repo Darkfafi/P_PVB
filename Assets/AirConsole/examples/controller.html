@@ -49,8 +49,10 @@
 	function move(amount) {
 	    if (amount == 0) { return; }
 	    var bool = (amount > 0);
+	    var card = (bool) ? "HouseOne" : "HouseTwo";
 	    var message = {
-	        'readyAction': { 'readyState': bool }
+	        'readyAction': { 'readyState': bool },
+	        'playCardRequest': { 'cardName': card }
 	    };
 	    airconsole.message(AirConsole.SCREEN, message);
     }

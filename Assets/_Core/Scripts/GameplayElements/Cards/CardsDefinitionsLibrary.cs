@@ -71,11 +71,11 @@ public class CardsDefinitionsLibrary : ScriptableObject
         {
             if(gcd[i].CardName == cardName)
             {
-                if(gcd.GetType().IsSubclassOf(typeof(CardDefinitionBaseItem)))
+                if(gcd.GetType().IsAssignableFrom(typeof(CardDefinitionBaseItem)))
                 {
                     return CardType.BaseCard;
                 }
-                else if(gcd.GetType().IsSubclassOf(typeof(CardDefinitionUpgradeItem)))
+                else if(gcd.GetType().IsAssignableFrom(typeof(CardDefinitionUpgradeItem)))
                 {
                     return CardType.UpgradeCard;
                 }

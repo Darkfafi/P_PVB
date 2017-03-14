@@ -32,6 +32,7 @@ public class GamePlayer
 
 	public GamePlayer(RegisteredPlayer linkedPlayer)
     {
+        CardsInHand = new List<BaseCard>();
         _linkedPlayer = linkedPlayer;
     }
 
@@ -48,6 +49,9 @@ public class GamePlayer
     public void DrawCard()
     {
         //TODO: Ask the cardpile for random card
+        CardsInHand.Add(Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CreateCard("HouseOne"));
+        CardsInHand.Add(Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CreateCard("HouseTwo"));
+        Debug.Log(CardsInHand.Count);
     }
 
     public void DrawCard(CardType cardType)
