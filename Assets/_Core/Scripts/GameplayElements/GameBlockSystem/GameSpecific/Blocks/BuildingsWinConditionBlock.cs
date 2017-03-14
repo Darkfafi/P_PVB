@@ -28,7 +28,7 @@ public class BuildingsWinConditionBlockLogic : BaseGameBlockLogic<BuildingsGame,
 {
     protected override void Initialized()
     {
-        throw new NotImplementedException();
+
     }
 
     protected override void Activated()

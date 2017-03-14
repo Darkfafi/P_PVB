@@ -98,6 +98,7 @@ public class Lobby : MonoBehaviour {
                         {
                             _joinTabs[i].DisplayPlayer(_joinTabs[j].DisplayingPlayer);
                             _joinTabs[j].DisplayPlayer(null);
+                            break;
                         }
                     }
                 }

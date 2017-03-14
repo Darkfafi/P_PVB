@@ -42,7 +42,7 @@ public class JoinTab : MonoBehaviour
             _usernameText.text = AirConsole.instance.GetNickname(player.DeviceID);
             _usernameText.color = _userInTabTextColor;
             _playerImage.gameObject.SetActive(true);
-            _playerImage.sprite = _guestProfileImage;
+            StartCoroutine(SetSprite(player.DeviceID));
         }
         else
         {
@@ -58,5 +58,12 @@ public class JoinTab : MonoBehaviour
     public void ToggleReady(bool ready)
     {
         _readyImage.gameObject.SetActive(ready);
+    }
+
+    private IEnumerator SetSprite(int playerId)
+    {
+        WWW profilePictureWWW = new WWW(AirConsole.instance.GetProfilePicture(playerId));
+        yield return profilePictureWWW;
+        _playerImage.sprite = Sprite.Create(profilePictureWWW.texture, new Rect(0,0, profilePictureWWW.texture.width, profilePictureWWW.texture.height), new Vector2(0, 0));
     }
 }
