@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 473814f0a88e3154397c3c7667ec35f8
+timeCreated: 1489407595
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: MetroScript
+  fontNames:
+  - MetroScript
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

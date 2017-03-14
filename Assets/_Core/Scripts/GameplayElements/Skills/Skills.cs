@@ -4,5 +4,11 @@
     Miracle,
     Trade,
     Destruction,
+    Thief,
     TheCrown   
+}
+
+public interface ICharacterSkill
+{
+
 }

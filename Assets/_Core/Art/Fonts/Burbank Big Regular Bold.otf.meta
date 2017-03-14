@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: bca56f2d1e375a74d85f97862545c0eb
+timeCreated: 1489407597
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Burbank Big Regular
+  fontNames:
+  - Burbank Big Regular
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a0658aa4ec05f044289029554d3a8433, type: 3}
+  - {fileID: 12800000, guid: 749ab47fcf7b461449c009fbfc599fe7, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
