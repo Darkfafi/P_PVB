@@ -42,6 +42,7 @@ public class JoinTab : MonoBehaviour
             _usernameText.text = AirConsole.instance.GetNickname(player.DeviceID);
             _usernameText.color = _userInTabTextColor;
             _playerImage.gameObject.SetActive(true);
+            _playerImage.sprite = _guestProfileImage;
             StartCoroutine(SetSprite(player.DeviceID));
         }
         else

@@ -5,6 +5,7 @@ using Ramses.Confactory;
 using System;
 using Ramses.SceneTrackers;
 using UnityEngine.UI;
+using Ramses.SceneTrackers;
 
 public class Lobby : MonoBehaviour {
 
@@ -15,10 +16,12 @@ public class Lobby : MonoBehaviour {
     private Text _globalText;
 
     private ConPlayers _conPlayers;
+    private ReadyTranslator _readyTranslator;
 
     protected void Awake()
     {
         _conPlayers = ConfactoryFinder.Instance.Get<ConPlayers>();
+        _readyTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<ReadyTranslator>();
 
         _conPlayers.PlayerRegisteredEvent += OnPlayerRegisteredEvent;
         _conPlayers.PlayerUnregisteredEvent += OnPlayerUnregisteredEvent;
@@ -42,6 +45,9 @@ public class Lobby : MonoBehaviour {
 
         _conPlayers.PlayerRegisteredEvent -= OnPlayerRegisteredEvent;
         _conPlayers.PlayerUnregisteredEvent -= OnPlayerUnregisteredEvent;
+
+        _readyTranslator.DeviceReadyEvent -= OnDeviceReadyEvent;
+        _readyTranslator.DeviceUnreadyEvent -= OnDeviceUnreadyEvent;
     }
 
     private void OnConPlayerReadyToUseEvent()
@@ -50,16 +56,62 @@ public class Lobby : MonoBehaviour {
         _conPlayers.AllowPlayerRegistration(true);
         _conPlayers.AllowDeleteRegisteredPlayerOnLeave(true);
 
+
+        _readyTranslator.DeviceReadyEvent += OnDeviceReadyEvent;
+        _readyTranslator.DeviceUnreadyEvent += OnDeviceUnreadyEvent;
+
         SetGlobalText();
+    }
+
+    private void OnDeviceReadyEvent(int deviceId)
+    {
+        JoinTab jt = GetJoinTabDisplaying(deviceId);
+        if (jt == null) { return; }
+        jt.ToggleReady(true);
+    }
+
+    private void OnDeviceUnreadyEvent(int deviceId)
+    {
+        JoinTab jt = GetJoinTabDisplaying(deviceId);
+        if (jt == null) { return; }
+        jt.ToggleReady(false);
+    }
+
+    private JoinTab GetJoinTabDisplaying(int deviceId)
+    {
+        for(int i = 0; i < _joinTabs.Length; i++)
+        {
+            if (_joinTabs[i].DisplayingPlayer != null && _joinTabs[i].DisplayingPlayer.DeviceID == deviceId)
+                return _joinTabs[i];
+        }
+        return null;
     }
 
     private void SetGlobalText()
     {
-        int registeredPlayerAmount = _conPlayers.GetCurrentlyRegisteredPlayers(false).Length;
+        int registeredPlayerAmount = _conPlayers.GetCurrentlyRegisteredPlayers(true).Length;
+        int amountReady = GetAmountOfTabsReady();
         if (registeredPlayerAmount < 2)
         {
-            _globalText.text = (2 - registeredPlayerAmount).ToString() + " more players needed to start..";
+            int amountNeeded = (2 - registeredPlayerAmount);
+            _globalText.text = amountNeeded.ToString() + " more player "+ ((amountNeeded > 1) ? "s" : "")  +" needed to start..";
         }
+        else if(amountReady < registeredPlayerAmount)
+        {
+            _globalText.text = (registeredPlayerAmount - amountReady) + " players still have to ready up..";
+        }
+    }
+
+    private int GetAmountOfTabsReady()
+    {
+        int returnValue = 0;
+        for(int i = 0; i < _joinTabs.Length; i++)
+        {
+            if (_joinTabs[i].DisplayingPlayer != null && _joinTabs[i].IsReady)
+                returnValue++;
+        }
+
+        return returnValue;
     }
 
     private void OnPlayerRegisteredEvent(RegisteredPlayer player)
@@ -72,6 +124,7 @@ public class Lobby : MonoBehaviour {
                 break;
             }
         }
+        SetGlobalText();
     }
 
     private void OnPlayerUnregisteredEvent(RegisteredPlayer player)
@@ -104,5 +157,6 @@ public class Lobby : MonoBehaviour {
                 }
             }
         }
+        SetGlobalText();
     }
 }
