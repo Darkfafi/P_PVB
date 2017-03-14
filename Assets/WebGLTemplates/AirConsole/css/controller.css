@@ -1,0 +1,242 @@
+/* --- General Tab --- */
+
+@font-face {
+    font-family: Burbank;
+    src: url(../fonts/Burbank Big Regular Bold.otf) format("opentype");
+    
+    font-family: 'Burbank';
+    src: url(../fonts/Burbank Big Regular Bold.ttf) format("truetype");
+}
+
+body {
+    background-image: url(/images/backgrounds/if_menu_bg.png);
+    font-family: Burbank, Arial;
+    font-size: 16px;
+    font-size: 1.6vw;
+    color: #feffb9;
+    -webkit-text-stroke: 1px black;
+    -moz-text-stroke: 1px black;
+    -o-text-stroke: 1px black;
+    text-stroke: 1px black;
+/*
+    text-shadow:
+   -2px -2px 0 #000,  
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+     2px 2px 0 #000;
+*/
+}
+
+li {
+    text-shadow: none;
+    
+    -webkit-text-stroke: 0px black;
+    -moz-text-stroke: 0px black;
+    -o-text-stroke: 0px black;
+    text-stroke: 0px black;
+    
+    list-style: decimal;
+}
+
+.player-hand-body {
+    margin: 0;
+    padding: 0;
+}
+
+#timer {
+    background-image: url(/images/backgrounds/if_timer.png);
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15%;;
+    
+    text-align: center;
+}
+
+/* --- Player Info Tab --- */
+
+#player-info {
+    background-image: url(/images/backgrounds/if_option_skill_bar.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0;
+    top: 10%;
+    width: 25%;
+    height: 65%;
+    float: left;
+    
+    text-align: center;
+}
+
+#skill-btn {
+    background: url(/images/buttons/btn_blue.png);
+
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    
+    position: relative;
+    margin: 0 auto;
+    margin-top: -5%;
+    margin-right: 7.5%;
+    padding-bottom: 40px;
+    width: 70%;
+    height: 25%;
+    
+    text-align: center;
+    line-height: 40px;
+    font-family: Burbank;
+    font-size: 3em;
+    color: #feffb9;
+    -webkit-text-stroke: -1px black;
+    -moz-text-stroke: -1px black;
+    -o-text-stroke: -1px black;
+    text-stroke: -1px black;
+/*
+    text-shadow:
+   -3px -3px 0 #000,
+    3px -3px 0 #000,
+    -3px 3px 0 #000,
+     3px 3px 0 #000;
+*/
+    
+    transition: all 0.1s ease;
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    -o-transition: all 0.1s ease;
+}
+
+#skill-btn:hover {
+cursor: pointer;
+}
+
+#skill-btn:active {
+    transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+    -moz-transform: scale(0.9);
+    -o-transform: scale(0.9);
+}
+
+/* --- Cards Tab --- */
+
+#player-cards {
+    position: absolute;
+    top: 0;
+    width: 78.5%;
+    height: 80%;
+    margin-left: 20%;
+    
+    text-align: center;
+}
+
+#card-holder {
+    background-image: url(/images/backgrounds/if_cards_bg.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 90%;
+    height: 90%;
+    
+    margin: auto;
+    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#cardholder img {
+    position: relative; 
+    display: inline-block;
+    width: 20%;
+    height: 20%;
+}
+
+/* --- Turn Options Tab --- */
+
+#player-options {
+    background-image: url(/images/backgrounds/if_option_btn_bar.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 20.5%;
+    margin: 0;
+    padding: 0;
+}
+
+#optionButtons {
+    position: relative;
+    margin: auto;
+    padding-left: 6%;
+    top: 5%;
+}
+
+.actionButton {
+    background: url(/images/buttons/btn_yellow.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    
+    position: relative;
+    width: 22.5%;
+    height: auto;
+    display: inline-block;
+    padding-bottom: 15px;
+    
+    text-align: left;
+    line-height: 50px;
+    font-family: Burbank;
+    font-size: 3em;
+    color: #feffb9;
+    -webkit-text-stroke: -1px black;
+    -moz-text-stroke: -1px black;
+    -o-text-stroke: -1px black;
+    text-stroke: -1px black;
+/*
+    text-shadow:
+   -3px -3px 0 #000,
+    3px -3px 0 #000,
+    -3px 3px 0 #000,
+     3px 3px 0 #000;
+*/
+    
+    transition: all 0.1s ease;
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    -o-transition: all 0.1s ease;
+}
+
+.actionButton:hover {
+    cursor: pointer;
+}
+
+.actionButton:active {
+    transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+    -moz-transform: scale(0.9);
+    -o-transform: scale(0.9);
+}
+
+#buttonImg {
+    width: 35px;
+    float: left;
+    position: relative;
+    margin: 0 auto;
+    right: 12.5%;
+    vertical-align: middle;
+}
+
+#or {
+    position: relative;
+    top: 50%;
+    margin: 0 auto;
+    display: inline-block;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    font-size: 2em;
+}
