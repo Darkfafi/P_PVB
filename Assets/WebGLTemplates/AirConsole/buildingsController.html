@@ -1,0 +1,101 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/controller.css">
+        <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+        <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+                
+        <script type="text/javascript">
+            
+            var airConsole;
+            
+            function init()
+            {
+                airConsole = new AirConsole({ "orientation":"landscape" });
+            }
+            
+            function sendMessage(messageString)
+            {                
+                airConsole.message(AirConsole.SCREEN, {sendMessage:messageString});
+            }
+            
+        </script>
+    </head>
+    
+    <body onload="init()">
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="slick/slick.min.js"></script>
+        
+        <div class="player-hand-body">
+                                
+            <div id="player-info">
+                <button id="skill-btn">Skill</button>
+                <br/>
+                <br/>
+                <h1>Skill Name</h1>
+                <ul>
+                    <li><h3>Skill Feature</h3></li>
+                    <li><h3>Skill Feature</h3></li>
+                </ul>
+            </div>
+            
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $('#cardholder').slick({
+                        centerMode: true,
+                        centerPadding: '50px',
+                        slidesToShow: 3,
+                        responsive: [
+                            {
+                                breakpoint: 768,
+                                settings: {
+                                    arrows: false,
+                                    centerMode: true,
+                                    centerPadding: '30px',
+                                    slidesToShow: 3
+                                }
+                            },
+                            {
+                                breakpoint: 480,
+                                settings: {
+                                    arrows: false,
+                                    centerMode: true,
+                                    centerPadding: '30px',
+                                    slidesToShow: 1
+                                }
+                            }
+                        ]
+                    });
+                });
+            </script>
+            
+            <div id="player-cards">
+                <h1 style="font-size:2.5em;">Buildable Cards</h1>
+                <div id="card-holder">
+                    <img src="images/cards/card_chrysler.png">
+                    <img src="images/cards/card_cinnamon.png">
+                    <img src="images/cards/card_destiny.png">
+                </div>
+            </div>
+            
+            <div id="player-options">
+                <div id="optionButtons">
+                    <button onclick="sendMessage('I want Cards')" class="actionButton" id="cardsBtn"><img id="buttonImg" src="images/buttons/icon_cards.png">Cards</button>
+                    <h4 id="or">or</h4>
+                    <button onclick="sendMessage('I want Gold')" class="actionButton" id="coinBtn"><img id="buttonImg" src="images/buttons/icon_gold.png">Gold</button>
+                    <h4 id="or">or</h4>
+                    <button onclick="sendMessage('I want to Build')" class="actionButton" id="buildBtn"><img id="buttonImg" src="images/buttons/icon_build.png">Build</button>
+                </div>
+            </div>
+            
+            <div id="timer">
+                <h3>Time Left:</h3>
+                <h1 style="color:white; padding:0; position: relative; bottom: 50%;">28</h1>
+            </div>
+            
+        </div>
+        
+    </body>
+</html>
