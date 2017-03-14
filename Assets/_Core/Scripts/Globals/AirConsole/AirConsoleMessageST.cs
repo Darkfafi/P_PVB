@@ -49,7 +49,10 @@ public class AirConsoleMessageST : MonoBehaviour, ISceneTracker
 
     private void OnMessageEvent(int from, JToken data)
     {
-
+        foreach(var translator in _translators)
+        {
+            translator.Value.DirectMessage(from, data);
+        }
     }
 }
 
