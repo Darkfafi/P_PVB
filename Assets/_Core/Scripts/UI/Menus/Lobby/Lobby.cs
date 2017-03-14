@@ -216,5 +216,15 @@ public class Lobby : MonoBehaviour
             }
         }
         SetGlobalText();
+        SetAllPlayersReadyValue(false); // All players are set unready when a person leaves so the game cannot accidentally start without a friend.
+    }
+
+    private void SetAllPlayersReadyValue(bool value)
+    {
+        for(int i = 0; i < _joinTabs.Length; i++)
+        {
+            if (_joinTabs[i].DisplayingPlayer != null)
+                ChangeReadyValue(value, _joinTabs[i].DisplayingPlayer.DeviceID);
+        }
     }
 }
