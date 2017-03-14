@@ -15,12 +15,12 @@ public class ReadyTranslator : BaseACMessageTranslator
     }
 
     private bool SendEventIfReadyMessage(int from, JToken data)
-    {
-        if(data["readyMessage"] != null)
+    { 
+        if(data["readyAction"] != null)
         {
-            if(data[AirConsoleMessageST.INFO_PARAMETER] != null && data[AirConsoleMessageST.INFO_PARAMETER]["readyState"] != null)
+            if(data["readyAction"]["readyState"] != null)
             {
-                if((bool)data[AirConsoleMessageST.INFO_PARAMETER]["readyState"])
+                if((bool)data["readyAction"]["readyState"])
                 {
                     if (DeviceReadyEvent != null)
                         DeviceReadyEvent(from);

@@ -5,10 +5,14 @@ using Ramses.Confactory;
 using System;
 using Ramses.SceneTrackers;
 using UnityEngine.UI;
-using Ramses.SceneTrackers;
 
-public class Lobby : MonoBehaviour {
+public class Lobby : MonoBehaviour
+{
+    [Header("Options")]
+    [SerializeField]
+    private int _countdownTime = 5;
 
+    [Header("Requirements")]
     [SerializeField]
     private JoinTab[] _joinTabs;
 
@@ -18,13 +22,18 @@ public class Lobby : MonoBehaviour {
     private ConPlayers _conPlayers;
     private ReadyTranslator _readyTranslator;
 
+    private Timer _countdownTimer;
+
     protected void Awake()
     {
+        _countdownTimer = new Timer(1, _countdownTime);
         _conPlayers = ConfactoryFinder.Instance.Get<ConPlayers>();
         _readyTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<ReadyTranslator>();
 
         _conPlayers.PlayerRegisteredEvent += OnPlayerRegisteredEvent;
         _conPlayers.PlayerUnregisteredEvent += OnPlayerUnregisteredEvent;
+
+        _countdownTimer.TimerTikkedEvent += OnTimerTikkedEvent;
 
         if (!_conPlayers.IsReadyToUse)
         {
@@ -38,10 +47,17 @@ public class Lobby : MonoBehaviour {
 
     protected void OnDestroy()
     {
+        UnlistenToEvents();
+    }
+
+    private void UnlistenToEvents()
+    {
         _conPlayers.ConPlayerReadyToUseEvent -= OnConPlayerReadyToUseEvent;
 
         _conPlayers.AllowPlayerRegistration(false);
         _conPlayers.AllowDeleteRegisteredPlayerOnLeave(false);
+
+        _countdownTimer.TimerTikkedEvent -= OnTimerTikkedEvent;
 
         _conPlayers.PlayerRegisteredEvent -= OnPlayerRegisteredEvent;
         _conPlayers.PlayerUnregisteredEvent -= OnPlayerUnregisteredEvent;
@@ -65,16 +81,56 @@ public class Lobby : MonoBehaviour {
 
     private void OnDeviceReadyEvent(int deviceId)
     {
-        JoinTab jt = GetJoinTabDisplaying(deviceId);
-        if (jt == null) { return; }
-        jt.ToggleReady(true);
+        ChangeReadyValue(true, deviceId);
     }
 
     private void OnDeviceUnreadyEvent(int deviceId)
     {
+        ChangeReadyValue(false, deviceId);
+    }
+
+    private void ChangeReadyValue(bool value, int deviceId)
+    {
         JoinTab jt = GetJoinTabDisplaying(deviceId);
         if (jt == null) { return; }
-        jt.ToggleReady(false);
+        jt.ToggleReady(value);
+        SetGlobalText();
+        if (GetAmountOfTabsReady() == _conPlayers.GetCurrentlyRegisteredPlayers(true).Length)
+            StarCountDown();
+        else
+            StopCountDown();
+    }
+
+    private void StarCountDown()
+    {
+        if (_countdownTimer.Running) { return; }
+        OnTimerTikkedEvent(0);
+        _countdownTimer.Start();
+    }
+
+    private void StopCountDown()
+    {
+        if (!_countdownTimer.Running) { return; }
+        _countdownTimer.Stop();
+        _countdownTimer.Reset();
+    }
+
+    private void OnTimerTikkedEvent(int timesTikked)
+    {
+        int timeLeft = _countdownTime - timesTikked;
+
+        _globalText.text = "Game starts in: " + timeLeft.ToString();
+
+        if (timeLeft <= 0)
+        {
+            GameStart();
+        }
+    }
+
+    private void GameStart()
+    {
+        UnlistenToEvents();
+        ConfactoryFinder.Instance.Get<ConSceneSwitcher>().SwitchScreen(SceneNames.FACTION_SCENE);
     }
 
     private JoinTab GetJoinTabDisplaying(int deviceId)
@@ -91,14 +147,16 @@ public class Lobby : MonoBehaviour {
     {
         int registeredPlayerAmount = _conPlayers.GetCurrentlyRegisteredPlayers(true).Length;
         int amountReady = GetAmountOfTabsReady();
+        int amountNeeded = 0;
         if (registeredPlayerAmount < 2)
         {
-            int amountNeeded = (2 - registeredPlayerAmount);
-            _globalText.text = amountNeeded.ToString() + " more player "+ ((amountNeeded > 1) ? "s" : "")  +" needed to start..";
+            amountNeeded = (2 - registeredPlayerAmount);
+            _globalText.text = amountNeeded.ToString() + " more player"+ ((amountNeeded > 1) ? "s are" : " is")  +" required to start..";
         }
         else if(amountReady < registeredPlayerAmount)
         {
-            _globalText.text = (registeredPlayerAmount - amountReady) + " players still have to ready up..";
+            amountNeeded = (registeredPlayerAmount - amountReady);
+            _globalText.text = amountNeeded + " player"+ ((amountNeeded > 1) ? "s" :"") + " still " + ((amountNeeded > 1) ? "have" : "has") + " to ready up..";
         }
     }
 
