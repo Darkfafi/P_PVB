@@ -183,6 +183,7 @@ public class Lobby : MonoBehaviour
             }
         }
         SetGlobalText();
+        StopCountDown();
     }
 
     private void OnPlayerUnregisteredEvent(RegisteredPlayer player)

@@ -3,6 +3,9 @@ using NDream.AirConsole;
 
 public class RegisteredPlayer
 {
+    public event RegisteredPlayerHandler RegisteredPlayerConnectedEvent;
+    public event RegisteredPlayerHandler RegisteredPlayerDisconnectedEvent;
+
     public int DeviceID { get; private set; }
     public int PlayerIndex { get; private set; }
     public bool IsConnected { get; private set; }
@@ -25,6 +28,10 @@ public class RegisteredPlayer
     {
         if (deviceId != DeviceID || IsConnected) { return; }
         IsConnected = true;
+
+        if (RegisteredPlayerConnectedEvent != null)
+            RegisteredPlayerConnectedEvent(this);
+
         Debug.LogWarning("Device Connected: " + deviceId + " PlayerIndex" + PlayerIndex);
     }
 
@@ -32,6 +39,8 @@ public class RegisteredPlayer
     {
         if (deviceId != DeviceID || !IsConnected) { return; }
         IsConnected = false;
+        if (RegisteredPlayerDisconnectedEvent != null)
+            RegisteredPlayerDisconnectedEvent(this);
     }
 
     private bool IsActiveDevice()

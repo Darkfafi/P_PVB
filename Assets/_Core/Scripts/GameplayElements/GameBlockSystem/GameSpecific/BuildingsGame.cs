@@ -34,7 +34,7 @@ public class BuildingsGame : MonoBehaviour, IGame {
         _playfield.SetCornersBuildfieldsAmount(amount);
     }
 
-    public GamePlayer GetGamePlayerByDeviceId(RegisteredPlayer player)
+    public GamePlayer GetGamePlayerBy(RegisteredPlayer player)
     {
         return GetGamePlayerByDeviceId(player.DeviceID);
     }

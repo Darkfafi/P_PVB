@@ -21,7 +21,9 @@ public class GamePlayer
     public int PlayerIndex  { get { return  (_linkedPlayer != null) ? _linkedPlayer.PlayerIndex : -1; } }
 
     public int GoldAmount { get; private set; }
-    public List<BaseCard> CardsInHand { get; private set; }
+    public BaseCard[] CardsInHand { get { return _cardsInHand.ToArray(); } }
+
+    private List<BaseCard> _cardsInHand = new List<BaseCard>();
 
     private void OnTurnGained()
     {
@@ -32,16 +34,15 @@ public class GamePlayer
 
 	public GamePlayer(RegisteredPlayer linkedPlayer)
     {
-        CardsInHand = new List<BaseCard>();
         _linkedPlayer = linkedPlayer;
     }
 
     public string[] GetNameListOfCardsInHand()
     {
-        string[] names = new string[CardsInHand.Count];
-        for(int i = 0; i < CardsInHand.Count; i++)
+        string[] names = new string[_cardsInHand.Count];
+        for(int i = 0; i < _cardsInHand.Count; i++)
         {
-            names[i] = CardsInHand[i].CardName;
+            names[i] = _cardsInHand[i].CardName;
         }
         return names;
     }
@@ -49,9 +50,9 @@ public class GamePlayer
     public void DrawCard()
     {
         //TODO: Ask the cardpile for random card
-        CardsInHand.Add(Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CreateCard("HouseOne"));
-        CardsInHand.Add(Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CreateCard("HouseTwo"));
-        Debug.Log(CardsInHand.Count);
+        _cardsInHand.Add(Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CreateCard("HouseOne"));
+        _cardsInHand.Add(Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CreateCard("HouseTwo"));
+        Debug.Log(_cardsInHand.Count);
     }
 
     public void DrawCard(CardType cardType)
@@ -66,17 +67,17 @@ public class GamePlayer
 
     public bool PlayCard(string cardName)
     {
-        for(int i = CardsInHand.Count - 1; i >= 0; i--)
+        for(int i = _cardsInHand.Count - 1; i >= 0; i--)
         {
-            if(CardsInHand[i].CardName == cardName)
+            if(_cardsInHand[i].CardName == cardName)
             {
-                if (CardsInHand[i].IsPlayable(FactionType))
+                if (_cardsInHand[i].IsPlayable(FactionType))
                 {
                     if(PlayCardEvent != null)
                     {
-                        PlayCardEvent(this, CardsInHand[i]);
+                        PlayCardEvent(this, _cardsInHand[i]);
                     }
-                    CardsInHand.RemoveAt(i);
+                    _cardsInHand.RemoveAt(i);
                     return true;
                 }
             }
