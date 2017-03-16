@@ -69,13 +69,13 @@ public class BuildingsGame : MonoBehaviour, IGame {
     protected void Start()
     {
         Introduction();
-        _gameBlockSystem.StartBlockCycle();
     }
 
     protected void OnDestroy()
     {
         for(int i = GamePlayers.Length - 1; i >= 0; i--)
         {
+            GamePlayers[i].AllRequestedCardsReceivedEvent -= OnAllRequestedCardsReceivedEvent;
             GamePlayers[i].Destroy();
         }
     }
@@ -85,12 +85,34 @@ public class BuildingsGame : MonoBehaviour, IGame {
         PlayersHandDraw();
     }
 
+    private void StartGame()
+    {
+        _gameBlockSystem.StartBlockCycle();
+    }
+
     private void PlayersHandDraw()
     {
+        if (GamePlayers.Length == 0) { Debug.LogError("NO PLAYERS DETECTED. PLEASE START FROM LOBBY SCENE!"); return; }
         for(int i = 0; i < GamePlayers.Length; i++)
         {
-            GamePlayers[i].DrawCard(StartHandCardAmount);
+            GamePlayers[i].AllRequestedCardsReceivedEvent -= OnAllRequestedCardsReceivedEvent;
+            GamePlayers[i].AllRequestedCardsReceivedEvent += OnAllRequestedCardsReceivedEvent;
         }
+        PlayersHandDrawLoop(0);
+    }
+
+    private void PlayersHandDrawLoop(int index)
+    {
+        if (index < GamePlayers.Length)
+            GamePlayers[index].DrawCard(StartHandCardAmount);
+        else
+            StartGame();
+    }
+
+    private void OnAllRequestedCardsReceivedEvent(CardDrawInfo info)
+    {
+        info.GamePlayer.AllRequestedCardsReceivedEvent -= OnAllRequestedCardsReceivedEvent;
+        PlayersHandDrawLoop((GamePlayers.GetIndexOf(info.GamePlayer) + 1));
     }
 
     private void GenerateGamePlayers()

@@ -10,6 +10,7 @@ public class GamePlayer
 {
     public event GamePlayerCardHandler PlayCardEvent;
     public event GamePlayerCardHandler ReceivedCardEvent;
+    public event CardDrawInfoHandler AllRequestedCardsReceivedEvent;
 
     public FactionType FactionType {
         get
@@ -37,6 +38,7 @@ public class GamePlayer
         _playfieldSceneTracker = Ramses.SceneTrackers.SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>();
 
         _playfieldSceneTracker.Playfield.CardPile.CardArrivedToPlayerEvent += OnCardArrivedToPlayerEvent;
+        _playfieldSceneTracker.Playfield.CardPile.AllCardsArrivedEvent += OnAllCardsArrivedEvent;
     }
 
     public string[] GetNameListOfCardsInHand()
@@ -93,6 +95,14 @@ public class GamePlayer
     public void Destroy()
     {
         _playfieldSceneTracker.Playfield.CardPile.CardArrivedToPlayerEvent -= OnCardArrivedToPlayerEvent;
+        _playfieldSceneTracker.Playfield.CardPile.AllCardsArrivedEvent -= OnAllCardsArrivedEvent;
+    }
+
+    private void OnAllCardsArrivedEvent(CardDrawInfo cardDrawInfo)
+    {
+        if (cardDrawInfo.GamePlayer == this)
+            if (AllRequestedCardsReceivedEvent != null)
+                AllRequestedCardsReceivedEvent(cardDrawInfo);
     }
 
     private void OnCardArrivedToPlayerEvent(GamePlayer gamePlayer, BaseCard card)

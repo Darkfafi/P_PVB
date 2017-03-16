@@ -8,7 +8,7 @@ public class CardPile : MonoBehaviour
     public GamePlayerCardHandler CardArrivedToPlayerEvent;
 
     [SerializeField]
-    private PileCard _pileCardPrefab;
+    private GameObject _pileCardPrefab;
 
     public void DrawCard(CardDrawInfo cardDrawInfo)
     {
@@ -36,19 +36,19 @@ public class CardPile : MonoBehaviour
     private Tweener InternalDrawCard(CardDrawInfo cardDrawInfo)
     {
         BaseCard cardDrawing = PickCardToDraw();
-        PileCard pileCard = Instantiate<PileCard>(_pileCardPrefab);
+        GameObject pileCard = Instantiate(_pileCardPrefab);
         pileCard.transform.position = transform.position;
         Vector2 destination = Ramses.SceneTrackers.SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>().Playfield.GetCornerByFaction(cardDrawInfo.GamePlayer.FactionType).transform.position;
         Vector2 dir = (destination - new Vector2(pileCard.transform.position.x, pileCard.transform.position.y)).normalized;
         destination += (dir * 1.1f);
 
-        pileCard.transform.DOMove(destination, 1f).OnComplete(
+        pileCard.transform.DOMove(destination, 0.8f).SetEase(Ease.InCubic).OnComplete(
         () =>
         {
             CardArrive(cardDrawInfo.GamePlayer, cardDrawing);
             Destroy(pileCard.gameObject);
         });
-        return pileCard.transform.DORotate(new Vector3(0,0, (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) - 90f), 0.7f);
+        return pileCard.transform.DORotate(new Vector3(0,0, (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) - 90f), 0.6f);
     }
 
     private BaseCard PickCardToDraw()

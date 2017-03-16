@@ -22,9 +22,18 @@ public class FactionsScreen : MonoBehaviour
     {
         RegisteredPlayer[] players = ConfactoryFinder.Instance.Get<ConPlayers>().GetCurrentlyRegisteredPlayers(false);
         FactionType[] types = _conPlayerFactions.GetFreeFactions();
-        for(int i = 0; i < players.Length; i++)
+        FactionType t = FactionType.Samurai;
+        for(int i = 0; i <  players.Length; i++)
         {
-            _conPlayerFactions.AssignPlayerToFaction(players[i], types[i]);
+            if (i == 0)
+                t = FactionType.Knights;
+            if (i == 1)
+                t = FactionType.Samurai;
+            if (i == 2)
+                t = FactionType.Vikings;
+            if (i == 3)
+                t = FactionType.Spartans;
+            _conPlayerFactions.AssignPlayerToFaction(players[i], t);
         }
         Invoke("GoToGameScene", 1f);
         Debug.LogError("DEBUG METHOD CALLED!: DEBUG_AssignFactionsToPlayersAndContinue", this.gameObject);
