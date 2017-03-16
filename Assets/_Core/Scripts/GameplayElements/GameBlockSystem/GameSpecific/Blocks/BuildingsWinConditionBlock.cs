@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ramses.SceneTrackers;
 
 public class BuildingsWinConditionBlock : BaseGameBlock<BuildingsGame, BuildingsWinConditionBlockInfo, BuildingsWinConditionBlockLogic>
 {
@@ -28,7 +29,7 @@ public class BuildingsWinConditionBlockLogic : BaseGameBlockLogic<BuildingsGame,
 {
     protected override void Initialized()
     {
-
+           
     }
 
     protected override void Activated()

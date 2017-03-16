@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-
+[RequireComponent(typeof(SpriteRenderer))]
 public class BuildField : MonoBehaviour {
 
 	public bool Available { get { return gameObject.activeSelf; } }
@@ -21,6 +19,10 @@ public class BuildField : MonoBehaviour {
         DestroyCurrentBuilding();
         CurrentBuiltBuilding = GameObject.Instantiate(buildingPrefab);
         CurrentBuiltBuilding.transform.SetParent(this.transform, false);
+        CurrentBuiltBuilding.GetComponent<SpriteRenderer>().sortingOrder = (GetComponent<SpriteRenderer>().sortingOrder + 1);
+        Vector3 pos = CurrentBuiltBuilding.transform.position;
+        pos.z = transform.position.y;
+        CurrentBuiltBuilding.transform.position = pos;
     }
 
     public void DestroyCurrentBuilding()

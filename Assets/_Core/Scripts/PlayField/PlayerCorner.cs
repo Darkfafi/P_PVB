@@ -6,6 +6,31 @@ public class PlayerCorner : MonoBehaviour
 {
     private List<BuildField> _buildFields = new List<BuildField>();
 
+    public BuildField[] GetAllBuildFieldsInUse()
+    {
+        List<BuildField> bf = new List<BuildField>();
+        for(int i = 0; i < _buildFields.Count; i++)
+        {
+            if(_buildFields[i].CurrentBuiltBuilding != null)
+            {
+                bf.Add(_buildFields[i]);
+            }
+        }
+
+        return bf.ToArray();
+    }
+
+    public int TotalScoreOfAllBuiltBuildings()
+    {
+        BuildField[] usedBuildfields = GetAllBuildFieldsInUse();
+        int totalScore = 0;
+        for (int i = 0; i < usedBuildfields.Length; i++)
+        {
+            totalScore += usedBuildfields[i].CurrentBuiltBuilding.Score;
+        }
+        return totalScore;
+    }
+
     public void BuildStructureForCard(BaseCard card)
     {
         Building buildingPrefab = ConfactoryFinder.Instance.Get<ConCards>().CardsDefinitionLibrary.GetCardDefinitionByName(card.CardName).CardBuildingObjectPrefab;

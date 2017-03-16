@@ -35,19 +35,28 @@ public class CardInteractionTranslator : BaseACMessageTranslator
         AirConsole.instance.Message(deviceId, message);
     }
 
-    public void SendAllowedDrawRequest(bool isAllowed, string allowMessage, int deviceId, params string[] drawedCards)
+    public void SendAllowedDrawRequest(bool isAllowed, string allowMessage, int deviceId)
     {
-        string bindedString = CreateParsableString(drawedCards);
         var message = new
         {
             action = (isAllowed) ? "drawCardsRequestAllowed" : "drawCardsRequestNotAllowed",
-            info = new { cardNames = bindedString, allowMessage = allowMessage }
+            info = new { allowMessage = allowMessage }
         };
 
         AirConsole.instance.Message(deviceId, message);
     }
 
     // Global Calls
+
+    public void SendUpdateCardsShown(int deviceId, params BaseCard[] cardsToShow)
+    {
+        string[] cardStrings = new string[cardsToShow.Length];
+        for(int i = 0; i < cardsToShow.Length; i++)
+        {
+            cardStrings[i] = cardsToShow[i].CardName;
+        }
+        SendUpdateCardsShown(deviceId, cardsToShow);
+    }
 
     /// <summary>
     /// Notifies the controller which cards to display.

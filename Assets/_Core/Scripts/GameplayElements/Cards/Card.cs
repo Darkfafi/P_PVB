@@ -1,19 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Ramses.SceneTrackers;
-using System;
 
 public abstract class BaseCard
 {
-    // TODO: This will not have references to any GameObjects. This class is only data. And the UI represents what happens directed by events.
     public string CardName { get; private set; }
     public abstract CardType CardType { get; }
+    public abstract int CardCost { get; }
 
     public BaseCard(string cardName)
     {
         CardName = cardName;
-        Debug.Log(CardName);
     }
 
     public bool IsPlayable(FactionType factionPlayingCard)
@@ -34,12 +30,18 @@ public class Card : BaseCard
         }
     }
 
-    public string CardName { get; private set; }
+    public override int CardCost
+    {
+        get
+        {
+            return CardDefinitionItem.CardCost;
+        }
+    }
+
     public CardDefinitionBaseItem CardDefinitionItem { get; private set; }
 
     public Card(string cardName, CardDefinitionBaseItem ownCardDefinitionItem) : base(cardName)
     {
-        CardName = cardName;
         CardDefinitionItem = ownCardDefinitionItem;
     }
 
@@ -56,6 +58,14 @@ public class UpgradeCard : BaseCard
         get
         {
             return CardType.UpgradeCard;
+        }
+    }
+
+    public override int CardCost
+    {
+        get
+        {
+            return CardDefinitionItem.UpgradeCardUpgradeCost;
         }
     }
 
