@@ -57,6 +57,19 @@ public class GamePlayerSectionUI : MonoBehaviour
         gameplayer.LinkedPlayer.RegisteredPlayerConnectedEvent += OnRegisteredPlayerConnectedEvent;
         gameplayer.LinkedPlayer.RegisteredPlayerDisconnectedEvent += OnRegisteredPlayerDisconnectedEvent;
 
+        gameplayer.ReceivedCardEvent += OnReceivedCardEvent;
+        gameplayer.PlayCardEvent += OnPlayCardEvent;
+
+        UpdateStats();
+    }
+
+    private void OnPlayCardEvent(GamePlayer gamePlayer, BaseCard card)
+    {
+        UpdateStats();
+    }
+
+    private void OnReceivedCardEvent(GamePlayer gamePlayer, BaseCard card)
+    {
         UpdateStats();
     }
 
@@ -118,6 +131,9 @@ public class GamePlayerSectionUI : MonoBehaviour
 
         _gamePlayerDisplaying.LinkedPlayer.RegisteredPlayerConnectedEvent -= OnRegisteredPlayerConnectedEvent;
         _gamePlayerDisplaying.LinkedPlayer.RegisteredPlayerDisconnectedEvent -= OnRegisteredPlayerConnectedEvent;
+
+        _gamePlayerDisplaying.ReceivedCardEvent -= OnReceivedCardEvent;
+        _gamePlayerDisplaying.PlayCardEvent -= OnPlayCardEvent;
 
         _gamePlayerDisplaying = null;
     }

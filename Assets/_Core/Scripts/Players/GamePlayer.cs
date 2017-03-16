@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void GamePlayerCardHandler(GamePlayer gamePlayer, BaseCard card);
+public delegate void CardDrawInfoHandler(CardDrawInfo info);
 
 public class GamePlayer
 {
     public event GamePlayerCardHandler PlayCardEvent;
+    public event GamePlayerCardHandler ReceivedCardEvent;
 
     public FactionType FactionType {
         get
@@ -15,6 +17,7 @@ public class GamePlayer
             return Ramses.Confactory.ConfactoryFinder.Instance.Get<ConPlayerFactions>().GetFactionTypeOfPlayer(LinkedPlayer);
         }
     }
+
     public RegisteredPlayer LinkedPlayer { get { return _linkedPlayer; } }
 
     public bool IsConnected { get { return  (_linkedPlayer != null) ? _linkedPlayer.IsConnected : false; } }
@@ -24,17 +27,16 @@ public class GamePlayer
     public BaseCard[] CardsInHand { get { return _cardsInHand.ToArray(); } }
 
     private List<BaseCard> _cardsInHand = new List<BaseCard>();
-
-    private void OnTurnGained()
-    {
-        
-    }
-
     private RegisteredPlayer _linkedPlayer = null;
 
-	public GamePlayer(RegisteredPlayer linkedPlayer)
+    private PlayfieldST _playfieldSceneTracker;
+
+    public GamePlayer(RegisteredPlayer linkedPlayer)
     {
         _linkedPlayer = linkedPlayer;
+        _playfieldSceneTracker = Ramses.SceneTrackers.SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>();
+
+        _playfieldSceneTracker.Playfield.CardPile.CardArrivedToPlayerEvent += OnCardArrivedToPlayerEvent;
     }
 
     public string[] GetNameListOfCardsInHand()
@@ -47,22 +49,22 @@ public class GamePlayer
         return names;
     }
 
-    public void DrawCard()
+    public bool DrawCard()
     {
-        //TODO: Ask the cardpile for random card
-        _cardsInHand.Add(Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CreateCard("HouseOne"));
-        _cardsInHand.Add(Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CreateCard("HouseTwo"));
-        Debug.Log(_cardsInHand.Count);
+        _playfieldSceneTracker.Playfield.CardPile.DrawCard(new CardDrawInfo(this, 1));
+        return true;
     }
 
-    public void DrawCard(CardType cardType)
+    public bool DrawCard(int amount)
     {
-        //TODO: Ask the cardpile for random card of type
+        _playfieldSceneTracker.Playfield.CardPile.DrawCard(new CardDrawInfo(this, amount));
+        return true;
     }
 
-    public void DrawCard(string cardName)
+    public bool DrawCard(string cardName)
     {
-        //TODO Ask the cardpile for specific card
+        _playfieldSceneTracker.Playfield.CardPile.DrawCard(new CardDrawInfo(this, 1, cardName));
+        return true;
     }
 
     public bool PlayCard(string cardName)
@@ -71,17 +73,35 @@ public class GamePlayer
         {
             if(_cardsInHand[i].CardName == cardName)
             {
-                if (_cardsInHand[i].IsPlayable(FactionType))
+                if (_cardsInHand[i].IsPlayable(FactionType) && GoldAmount >= _cardsInHand[i].CardCost)
                 {
-                    if(PlayCardEvent != null)
-                    {
-                        PlayCardEvent(this, _cardsInHand[i]);
-                    }
+                    GoldAmount -= _cardsInHand[i].CardCost;
+                    BaseCard card = _cardsInHand[i];
                     _cardsInHand.RemoveAt(i);
+
+                    if (PlayCardEvent != null)
+                    {
+                        PlayCardEvent(this, card);
+                    }
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    public void Destroy()
+    {
+        _playfieldSceneTracker.Playfield.CardPile.CardArrivedToPlayerEvent -= OnCardArrivedToPlayerEvent;
+    }
+
+    private void OnCardArrivedToPlayerEvent(GamePlayer gamePlayer, BaseCard card)
+    {
+        if (gamePlayer != this) { return; }
+
+        _cardsInHand.Add(card);
+
+        if (ReceivedCardEvent != null)
+            ReceivedCardEvent(this, card);
     }
 }

@@ -39,6 +39,16 @@ public class BuildingsGame : MonoBehaviour, IGame {
         return GetGamePlayerByDeviceId(player.DeviceID);
     }
 
+    public GamePlayer GetGamePlayerBy(int playerIndex)
+    {
+        for(int i = 0; i < GamePlayers.Length; i++)
+        {
+            if (GamePlayers[i].PlayerIndex == playerIndex)
+                return GamePlayers[i];
+        }
+        return null;
+    }
+
     public GamePlayer GetGamePlayerByDeviceId(int deviceId)
     {
         for(int i = _gamePlayers.Count - 1; i >=0; i--)
@@ -62,6 +72,14 @@ public class BuildingsGame : MonoBehaviour, IGame {
         _gameBlockSystem.StartBlockCycle();
     }
 
+    protected void OnDestroy()
+    {
+        for(int i = GamePlayers.Length - 1; i >= 0; i--)
+        {
+            GamePlayers[i].Destroy();
+        }
+    }
+
     private void Introduction()
     {
         PlayersHandDraw();
@@ -71,10 +89,7 @@ public class BuildingsGame : MonoBehaviour, IGame {
     {
         for(int i = 0; i < GamePlayers.Length; i++)
         {
-            for(int j = 0; j < StartHandCardAmount; j++)
-            {
-                GamePlayers[i].DrawCard();
-            }
+            GamePlayers[i].DrawCard(StartHandCardAmount);
         }
     }
 

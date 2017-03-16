@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 
-public class Playfield : MonoBehaviour {
+public class Playfield : MonoBehaviour
+{
+    public CardPile CardPile { get { return _cardPile; } }
 
 	[SerializeField]
     private PlayerCorner _spartanCorner;
@@ -13,6 +15,9 @@ public class Playfield : MonoBehaviour {
 
     [SerializeField]
     private PlayerCorner _samuraiCorner;
+
+    [SerializeField]
+    private CardPile _cardPile;
 
     private PlayerCorner[] _allPlayCorners;
 
