@@ -63,5 +63,30 @@ public abstract class BaseACMessageTranslator
         MessageReceived(from, data);
     }
 
+    protected string CreateParsableString(params int[] separateStringsToBind)
+    {
+        string[] s = new string[separateStringsToBind.Length];
+        for (int i = 0; i < s.Length; i++)
+        {
+            s[i] = separateStringsToBind[i].ToString();
+        }
+        return CreateParsableString(s);
+    }
+
+    protected string CreateParsableString(params string[] separateStringsToBind)
+    {
+        string binds = "";
+
+        for (int i = 0; i < separateStringsToBind.Length; i++)
+        {
+            binds += separateStringsToBind[i];
+            if (i < separateStringsToBind.Length - 1)
+            {
+                binds += ",";
+            }
+        }
+        return binds;
+    }
+
     protected abstract void MessageReceived(int from, JToken data);
 }

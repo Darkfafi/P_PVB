@@ -12,6 +12,11 @@ public class ConPlayers : IConfactory
     public event VoidHandler ConPlayerReadyToUseEvent;
 
     /// <summary>
+    /// Triggered when a registeredPlayer has been reconnected (With same or other device)
+    /// </summary>
+    public event RegisteredPlayerHandler RegisteredPlayerReconnectedEvent;
+
+    /// <summary>
     /// Triggered for each new RegisteredPlayer. This player will be registered even when he disconnects
     /// </summary>
     public event RegisteredPlayerHandler PlayerRegisteredEvent;
@@ -174,8 +179,10 @@ public class ConPlayers : IConfactory
 
         if (rd != null)
         {
-            rd.DeviceConnectedAction(device_id);
             // Same device came back for player
+            rd.DeviceConnectedAction(device_id);
+            if (RegisteredPlayerReconnectedEvent != null)
+                RegisteredPlayerReconnectedEvent(rd);
             return;
         }
         else if(AllowsPlayerRegistration)
@@ -184,8 +191,8 @@ public class ConPlayers : IConfactory
             {
                 if (_registeredPlayers[i] == null)
                 {
-                    _registeredPlayers[i] = new RegisteredPlayer(i, device_id);
                     // new register player item made
+                    _registeredPlayers[i] = new RegisteredPlayer(i, device_id);
                     if (PlayerRegisteredEvent != null)
                         PlayerRegisteredEvent(_registeredPlayers[i]);
                     return;
@@ -201,6 +208,8 @@ public class ConPlayers : IConfactory
             {
                 // Other device came to replace player
                 _registeredPlayers[i].LinkDeviceToPlayer(device_id);
+                if (RegisteredPlayerReconnectedEvent != null)
+                    RegisteredPlayerReconnectedEvent(_registeredPlayers[i]);
                 return;
             }
         }

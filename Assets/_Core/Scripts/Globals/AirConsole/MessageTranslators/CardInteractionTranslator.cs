@@ -132,21 +132,4 @@ public class CardInteractionTranslator : BaseACMessageTranslator
         }
         return false;
     }
-
-    // Tools
-
-    private string CreateParsableString(params string[] separateStringsToBind)
-    {
-        string binds = "";
-
-        for (int i = 0; i < separateStringsToBind.Length; i++)
-        {
-            binds += separateStringsToBind[i];
-            if (i < separateStringsToBind.Length - 1)
-            {
-                binds += ",";
-            }
-        }
-        return binds;
-    }
 }

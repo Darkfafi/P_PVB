@@ -98,11 +98,13 @@ public class BuildingsGame : MonoBehaviour, IGame {
             GamePlayers[i].AllRequestedCardsReceivedEvent -= OnAllRequestedCardsReceivedEvent;
             GamePlayers[i].AllRequestedCardsReceivedEvent += OnAllRequestedCardsReceivedEvent;
         }
-        PlayersHandDrawLoop(0);
+        StartCoroutine(PlayersHandDrawLoop(0, 0));
     }
 
-    private void PlayersHandDrawLoop(int index)
+    private IEnumerator PlayersHandDrawLoop(int index, float timeToWait)
     {
+        yield return new WaitForSeconds(timeToWait);
+
         if (index < GamePlayers.Length)
             GamePlayers[index].DrawCard(StartHandCardAmount);
         else
@@ -112,7 +114,7 @@ public class BuildingsGame : MonoBehaviour, IGame {
     private void OnAllRequestedCardsReceivedEvent(CardDrawInfo info)
     {
         info.GamePlayer.AllRequestedCardsReceivedEvent -= OnAllRequestedCardsReceivedEvent;
-        PlayersHandDrawLoop((GamePlayers.GetIndexOf(info.GamePlayer) + 1));
+        StartCoroutine(PlayersHandDrawLoop((GamePlayers.GetIndexOf(info.GamePlayer) + 1), 0.08f));
     }
 
     private void GenerateGamePlayers()

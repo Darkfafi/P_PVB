@@ -42,13 +42,13 @@ public class CardPile : MonoBehaviour
         Vector2 dir = (destination - new Vector2(pileCard.transform.position.x, pileCard.transform.position.y)).normalized;
         destination += (dir * 1.1f);
 
-        pileCard.transform.DOMove(destination, 0.8f).SetEase(Ease.InCubic).OnComplete(
+        pileCard.transform.DOMove(destination, 0.4f).SetEase(Ease.InExpo).OnComplete(
         () =>
         {
             CardArrive(cardDrawInfo.GamePlayer, cardDrawing);
             Destroy(pileCard.gameObject);
         });
-        return pileCard.transform.DORotate(new Vector3(0,0, (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) - 90f), 0.6f);
+        return pileCard.transform.DORotate(new Vector3(0,0, (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) - 90f), 0.2f).SetDelay(0.2f);
     }
 
     private BaseCard PickCardToDraw()
