@@ -42,7 +42,7 @@ public class CardsDefinitionsLibrary : ScriptableObject
             cdi = _cardsDefined[i];
             for(int j = 0; j < cdi.BaseCardUpgrades.Length; j++)
             {
-                items.Add(cdi.BaseCardUpgrades[i]);
+                items.Add(cdi.BaseCardUpgrades[j]);
             }
         }
 
