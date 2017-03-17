@@ -27,11 +27,13 @@ public struct PlayerTurnsBlockInfo : IGameBlockInfo<BuildingsGame>
 public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTurnsBlockInfo>
 {
     private CardInteractionTranslator _cardInteractionTranslator;
+    private CoinTranslator _coinTranslator;
     private TurnSystem _turnSystem = new TurnSystem(false);
 
     protected override void Initialized()
     {
         _cardInteractionTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CardInteractionTranslator>();
+        _coinTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CoinTranslator>();
 
         for (int i = 0; i < game.GamePlayers.Length; i++)
         {
@@ -43,6 +45,8 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
     {
         _cardInteractionTranslator.CardPlayRequestEvent += OnCardPlayRequestEvent;
         _cardInteractionTranslator.DrawCardsRequestEvent += OnDrawCardsRequestEvent;
+
+        _coinTranslator.CoinRequestEvent += OnCoinRequestEvent;
 
         _turnSystem.TurnStartedEvent += OnTurnStartedEvent;
         _turnSystem.TurnSystemEndedEvent += OnTurnSysemEndedEvent;
@@ -73,6 +77,8 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
     {
         _cardInteractionTranslator.CardPlayRequestEvent -= OnCardPlayRequestEvent;
         _cardInteractionTranslator.DrawCardsRequestEvent -= OnDrawCardsRequestEvent;
+
+        _coinTranslator.CoinRequestEvent -= OnCoinRequestEvent;
 
         _turnSystem.TurnStartedEvent -= OnTurnStartedEvent;
         _turnSystem.TurnSystemEndedEvent -= OnTurnSysemEndedEvent;
@@ -133,6 +139,19 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
             if(p.DrawCard(amount))
             {
                 _cardInteractionTranslator.SendAllowedDrawRequest(true, "Draw Allowed", p.LinkedPlayer.DeviceID);
+                _turnSystem.EndTurnForCurrentTicket();
+            }
+        }
+    }
+
+    private void OnCoinRequestEvent(int amount, int deviceId)
+    {
+        GamePlayer p = game.GetGamePlayerByDeviceId(deviceId);
+        if(p != null)
+        {
+            if (!IsPlayerTurn(p)) { return; }
+            if(p.GrabCoins(amount))
+            {
                 _turnSystem.EndTurnForCurrentTicket();
             }
         }

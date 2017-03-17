@@ -24,7 +24,7 @@ public class BuildingsGame : MonoBehaviour, IGame {
 
     private BuildingsGameBlockSystem _gameBlockSystem;
 
-    public void EndGameWinCondition()
+    public void EndGameWinCondition(GamePlayer winner)
     {
         _gameBlockSystem.EndBlockCycle();
     }
@@ -111,10 +111,10 @@ public class BuildingsGame : MonoBehaviour, IGame {
             StartGame();
     }
 
-    private void OnAllRequestedCardsReceivedEvent(CardDrawInfo info)
+    private void OnAllRequestedCardsReceivedEvent(GamePlayer player)
     {
-        info.GamePlayer.AllRequestedCardsReceivedEvent -= OnAllRequestedCardsReceivedEvent;
-        StartCoroutine(PlayersHandDrawLoop((GamePlayers.GetIndexOf(info.GamePlayer) + 1), 0.08f));
+        player.AllRequestedCardsReceivedEvent -= OnAllRequestedCardsReceivedEvent;
+        StartCoroutine(PlayersHandDrawLoop((GamePlayers.GetIndexOf(player) + 1), 0.08f));
     }
 
     private void GenerateGamePlayers()

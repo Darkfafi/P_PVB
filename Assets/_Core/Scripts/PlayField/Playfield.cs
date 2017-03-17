@@ -3,8 +3,11 @@
 public class Playfield : MonoBehaviour
 {
     public CardPile CardPile { get { return _cardPile; } }
+    public CoinPile CoinPile { get { return _coinPile; } }
 
-	[SerializeField]
+    public PlayerCorner[] AllPlayCorners { get; private set; }
+
+    [SerializeField]
     private PlayerCorner _spartanCorner;
 
     [SerializeField]
@@ -19,14 +22,43 @@ public class Playfield : MonoBehaviour
     [SerializeField]
     private CardPile _cardPile;
 
-    private PlayerCorner[] _allPlayCorners;
+    [SerializeField]
+    private CoinPile _coinPile;
 
     public void SetCornersBuildfieldsAmount(int amount)
     {
-        for (int i = 0; i < _allPlayCorners.Length; i++)
+        for (int i = 0; i < AllPlayCorners.Length; i++)
         {
-            _allPlayCorners[i].SetCornerBuildingSpots(amount);
+            AllPlayCorners[i].SetCornerBuildingSpots(amount);
         }
+    }
+
+    public FactionType GetFactionWithHeighestScore()
+    {
+        PlayerCorner pc = GetPlayerCornerWithHeighestScore();
+        if (pc == _spartanCorner)
+            return FactionType.Spartans;
+        if (pc == _knightCorner)
+            return FactionType.Knights;
+        if (pc == _samuraiCorner)
+            return FactionType.Samurai;
+        if (pc == _vikingCorner)
+            return FactionType.Vikings;
+
+        return FactionType.None;
+    }
+
+    public PlayerCorner GetPlayerCornerWithHeighestScore()
+    {
+        PlayerCorner pc = AllPlayCorners[0];
+        for(int i = 0; i < AllPlayCorners.Length; i++)
+        {
+            if(AllPlayCorners[i].TotalScoreOfAllBuiltBuildings() > pc.TotalScoreOfAllBuiltBuildings())
+            {
+                pc = AllPlayCorners[i];
+            }
+        }
+        return pc;
     }
 
     public PlayerCorner GetCornerByFaction(FactionType factionType)
@@ -48,6 +80,6 @@ public class Playfield : MonoBehaviour
 
     protected void Awake()
     {
-        _allPlayCorners = new PlayerCorner[] { _spartanCorner, _knightCorner, _vikingCorner, _samuraiCorner };
+        AllPlayCorners = new PlayerCorner[] { _spartanCorner, _knightCorner, _vikingCorner, _samuraiCorner };
     }
 }

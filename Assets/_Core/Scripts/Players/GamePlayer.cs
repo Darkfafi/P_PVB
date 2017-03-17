@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public delegate void GamePlayerCardHandler(GamePlayer gamePlayer, BaseCard card);
-public delegate void CardDrawInfoHandler(CardDrawInfo info);
+public delegate void GamePlayerHandler(GamePlayer gamePlayer);
 
 public class GamePlayer
 {
     public event GamePlayerCardHandler PlayCardEvent;
     public event GamePlayerCardHandler ReceivedCardEvent;
-    public event CardDrawInfoHandler AllRequestedCardsReceivedEvent;
+    public event GamePlayerHandler AllRequestedCardsReceivedEvent;
 
     public FactionType FactionType {
         get
@@ -37,8 +37,8 @@ public class GamePlayer
         _linkedPlayer = linkedPlayer;
         _playfieldSceneTracker = Ramses.SceneTrackers.SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>();
 
-        _playfieldSceneTracker.Playfield.CardPile.CardArrivedToPlayerEvent += OnCardArrivedToPlayerEvent;
-        _playfieldSceneTracker.Playfield.CardPile.AllCardsArrivedEvent += OnAllCardsArrivedEvent;
+        _playfieldSceneTracker.Playfield.CardPile.VisualObjectArrivedEvent += OnCardArrivedToPlayerEvent;
+        _playfieldSceneTracker.Playfield.CardPile.AllObjectsArrivedEvent += OnAllCardsArrivedEvent;
     }
 
     public string[] GetNameListOfCardsInHand()
@@ -51,21 +51,21 @@ public class GamePlayer
         return names;
     }
 
+    public bool GrabCoins(int amount)
+    {
+        _playfieldSceneTracker.Playfield.CoinPile.Grab(this, amount);
+        return true;
+    }
+
     public bool DrawCard()
     {
-        _playfieldSceneTracker.Playfield.CardPile.DrawCard(new CardDrawInfo(this, 1));
+        _playfieldSceneTracker.Playfield.CardPile.Grab(this, 1);
         return true;
     }
 
     public bool DrawCard(int amount)
     {
-        _playfieldSceneTracker.Playfield.CardPile.DrawCard(new CardDrawInfo(this, amount));
-        return true;
-    }
-
-    public bool DrawCard(string cardName)
-    {
-        _playfieldSceneTracker.Playfield.CardPile.DrawCard(new CardDrawInfo(this, 1, cardName));
+        _playfieldSceneTracker.Playfield.CardPile.Grab(this, amount);
         return true;
     }
 
@@ -94,15 +94,15 @@ public class GamePlayer
 
     public void Destroy()
     {
-        _playfieldSceneTracker.Playfield.CardPile.CardArrivedToPlayerEvent -= OnCardArrivedToPlayerEvent;
-        _playfieldSceneTracker.Playfield.CardPile.AllCardsArrivedEvent -= OnAllCardsArrivedEvent;
+        _playfieldSceneTracker.Playfield.CardPile.VisualObjectArrivedEvent -= OnCardArrivedToPlayerEvent;
+        _playfieldSceneTracker.Playfield.CardPile.AllObjectsArrivedEvent -= OnAllCardsArrivedEvent;
     }
 
-    private void OnAllCardsArrivedEvent(CardDrawInfo cardDrawInfo)
+    private void OnAllCardsArrivedEvent(GamePlayer player)
     {
-        if (cardDrawInfo.GamePlayer == this)
+        if (player == this)
             if (AllRequestedCardsReceivedEvent != null)
-                AllRequestedCardsReceivedEvent(cardDrawInfo);
+                AllRequestedCardsReceivedEvent(player);
     }
 
     private void OnCardArrivedToPlayerEvent(GamePlayer gamePlayer, BaseCard card)
