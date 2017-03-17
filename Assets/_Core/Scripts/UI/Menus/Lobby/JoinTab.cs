@@ -58,6 +58,8 @@ public class JoinTab : MonoBehaviour
         }
 
         DisplayingPlayer = player;
+
+        ToggleReady(true);
     }
 
     public void ToggleReady(bool ready)
