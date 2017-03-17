@@ -27,6 +27,8 @@ public struct BuildingsWinConditionBlockInfo : IGameBlockInfo<BuildingsGame>
 
 public class BuildingsWinConditionBlockLogic : BaseGameBlockLogic<BuildingsGame, BuildingsWinConditionBlockInfo>
 {
+    private PlayfieldST _playfieldSceneTracker;
+
     protected override void Initialized()
     {
            
@@ -35,6 +37,32 @@ public class BuildingsWinConditionBlockLogic : BaseGameBlockLogic<BuildingsGame,
     protected override void Activated()
     {
         Debug.Log("Activated Win Condition");
+
+        if (MaxBuildingsAmountReached())
+        {
+            GamePlayer winner = game.GetGamePlayerBy(
+                Ramses.Confactory.ConfactoryFinder.Instance.Get<ConPlayerFactions>()
+                .GetLinkItemForFaction(_playfieldSceneTracker.Playfield.GetFactionWithHeighestScore()).Player);
+
+            game.EndGameWinCondition(winner);
+        }
+        else
+        {
+            NextBlock();
+        }
+    }
+
+    private bool MaxBuildingsAmountReached()
+    {
+        PlayerCorner[] playerCorners = _playfieldSceneTracker.Playfield.AllPlayCorners; 
+        for(int i = 0; i < playerCorners.Length; i++)
+        {
+            if(playerCorners[i].GetAllBuildFieldsInUse().Length == gameBlockInfo.BuildingsNeededToEndGame)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected override void CycleEnded()
