@@ -27,6 +27,8 @@ public class GamePlayer
     public int GoldAmount { get; private set; }
     public BaseCard[] CardsInHand { get { return _cardsInHand.ToArray(); } }
 
+    public SkillPouch SkillPouch { get; private set; }
+
     private List<BaseCard> _cardsInHand = new List<BaseCard>();
     private RegisteredPlayer _linkedPlayer = null;
 
@@ -35,6 +37,7 @@ public class GamePlayer
     public GamePlayer(RegisteredPlayer linkedPlayer)
     {
         _linkedPlayer = linkedPlayer;
+        SkillPouch = new SkillPouch(this);
         _playfieldSceneTracker = Ramses.SceneTrackers.SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>();
 
         _playfieldSceneTracker.Playfield.CardPile.VisualObjectArrivedEvent += OnCardArrivedToPlayerEvent;

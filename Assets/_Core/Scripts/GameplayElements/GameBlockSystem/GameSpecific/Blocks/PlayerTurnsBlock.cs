@@ -28,12 +28,14 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 {
     private CardInteractionTranslator _cardInteractionTranslator;
     private CoinTranslator _coinTranslator;
+    private ConPlayers _conPlayer;
     private TurnSystem _turnSystem = new TurnSystem(false);
 
     protected override void Initialized()
     {
         _cardInteractionTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CardInteractionTranslator>();
         _coinTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CoinTranslator>();
+        _conPlayer = Ramses.Confactory.ConfactoryFinder.Instance.Get<ConPlayers>();
 
         for (int i = 0; i < game.GamePlayers.Length; i++)
         {
@@ -43,10 +45,14 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
     protected override void Activated()
     {
+        Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCurrentPhase>().SetCurrentPhase(GamePhase.Turns);
+
         _cardInteractionTranslator.CardPlayRequestEvent += OnCardPlayRequestEvent;
         _cardInteractionTranslator.DrawCardsRequestEvent += OnDrawCardsRequestEvent;
 
         _coinTranslator.CoinRequestEvent += OnCoinRequestEvent;
+
+        _conPlayer.RegisteredPlayerDisconnectedEvent += OnRegisteredPlayerDisconnectedEvent;
 
         _turnSystem.TurnStartedEvent += OnTurnStartedEvent;
         _turnSystem.TurnSystemEndedEvent += OnTurnSysemEndedEvent;
@@ -55,7 +61,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
         {
             game.GamePlayers[i].PlayCardEvent += OnPlayCardEvent;
             _turnSystem.AddTurnTickets(game.GamePlayers[i].PlayerIndex); // Player index used as id because the index does not change on device change.
-            //_turnSystem.SetPriorityLevelOfTicket(game.GamePlayers[i].PlayerIndex, ) // TODO: Set priority to skill turn count.
+            _turnSystem.SetPriorityLevelOfTicket(game.GamePlayers[i].PlayerIndex, Ramses.Confactory.ConfactoryFinder.Instance.Get<ConSkills>().GetIndexValueOfSkill(game.GamePlayers[i].SkillPouch.Skill));
         }
 
         _turnSystem.StartTurnSystem();
@@ -80,6 +86,8 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
         _coinTranslator.CoinRequestEvent -= OnCoinRequestEvent;
 
+        _conPlayer.RegisteredPlayerDisconnectedEvent -= OnRegisteredPlayerDisconnectedEvent;
+
         _turnSystem.TurnStartedEvent -= OnTurnStartedEvent;
         _turnSystem.TurnSystemEndedEvent -= OnTurnSysemEndedEvent;
 
@@ -98,6 +106,12 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
         {
             game.GamePlayers[i].ReceivedCardEvent -= OnReceivedCardEvent;
         }
+    }
+
+    private void OnRegisteredPlayerDisconnectedEvent(RegisteredPlayer player)
+    {
+        if (_turnSystem.CurrentTurnTicket == player.PlayerIndex)
+            _turnSystem.EndTurnForCurrentTicket();
     }
 
     private void OnTurnSysemEndedEvent()

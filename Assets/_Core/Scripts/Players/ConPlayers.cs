@@ -17,6 +17,11 @@ public class ConPlayers : IConfactory
     public event RegisteredPlayerHandler RegisteredPlayerReconnectedEvent;
 
     /// <summary>
+    /// Triggered when a registeredPlayer has been disconnected
+    /// </summary>
+    public event RegisteredPlayerHandler RegisteredPlayerDisconnectedEvent;
+
+    /// <summary>
     /// Triggered for each new RegisteredPlayer. This player will be registered even when he disconnects
     /// </summary>
     public event RegisteredPlayerHandler PlayerRegisteredEvent;
@@ -221,6 +226,9 @@ public class ConPlayers : IConfactory
 
         if (rd != null)
             rd.DeviceDisconnectAction(device_id);
+
+        if (RegisteredPlayerDisconnectedEvent != null)
+            RegisteredPlayerDisconnectedEvent(rd);
 
         if (AllowsDeleteRegisteredPlayerOnLeave)
             CleanRegisteredPlayers(true);
