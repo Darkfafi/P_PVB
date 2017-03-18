@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using Ramses.SceneTrackers;
-using System.Collections.Generic;
 
 public class PlayerTurnsBlock : BaseGameBlock<BuildingsGame, PlayerTurnsBlockInfo, PlayerTurnsBlockLogic>
 {
@@ -26,15 +25,20 @@ public struct PlayerTurnsBlockInfo : IGameBlockInfo<BuildingsGame>
 
 public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTurnsBlockInfo>
 {
-    private CardInteractionTranslator _cardInteractionTranslator;
-    private CoinTranslator _coinTranslator;
     private ConPlayers _conPlayer;
     private TurnSystem _turnSystem = new TurnSystem(false);
+    
+    // Translators
+    private CardInteractionTranslator _cardInteractionTranslator;
+    private CoinTranslator _coinTranslator;
+    private SkillTranslator _skillTranslator;
 
     protected override void Initialized()
     {
         _cardInteractionTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CardInteractionTranslator>();
         _coinTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CoinTranslator>();
+        _skillTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<SkillTranslator>();
+
         _conPlayer = Ramses.Confactory.ConfactoryFinder.Instance.Get<ConPlayers>();
 
         for (int i = 0; i < game.GamePlayers.Length; i++)
@@ -51,6 +55,8 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
         _cardInteractionTranslator.DrawCardsRequestEvent += OnDrawCardsRequestEvent;
 
         _coinTranslator.CoinRequestEvent += OnCoinRequestEvent;
+
+        _skillTranslator.SkillUseRequestEvent += OnSkillUseRequestEvent;
 
         _conPlayer.RegisteredPlayerDisconnectedEvent += OnRegisteredPlayerDisconnectedEvent;
 
@@ -86,6 +92,8 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
         _coinTranslator.CoinRequestEvent -= OnCoinRequestEvent;
 
+        _skillTranslator.SkillUseRequestEvent -= OnSkillUseRequestEvent;
+
         _conPlayer.RegisteredPlayerDisconnectedEvent -= OnRegisteredPlayerDisconnectedEvent;
 
         _turnSystem.TurnStartedEvent -= OnTurnStartedEvent;
@@ -105,6 +113,32 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
         for (int i = 0; i < game.GamePlayers.Length; i++)
         {
             game.GamePlayers[i].ReceivedCardEvent -= OnReceivedCardEvent;
+        }
+    }
+
+    private void OnSkillUseRequestEvent(int deviceId, Skill skill)
+    {
+        //Ramses.Confactory.ConfactoryFinder.Instance.Get<ConSkills>().GetSkillEffect(skill);
+        switch (skill)
+        {
+            case Skill.Miracle:
+                // Do nothing because only passive skill (Not effected by destruction)
+                break;
+            case Skill.Trade:
+                // Give player coins
+                break;
+            case Skill.Destruction:
+                // Destroyer call for random building of random player
+                break;
+            case Skill.Thief:
+                // Stealing call for all gold of random player
+                break;
+            case Skill.TheCrown:
+                // Do nothing because only passive skill (gaining money and starting first)
+                break;
+            default:
+                Debug.LogError("<< Unknown skill used: " + skill.ToString());
+                break;
         }
     }
 
