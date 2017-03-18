@@ -36,6 +36,9 @@ public abstract class BaseGameBlock<G ,T, U> : ScriptableGameBlock, IGameBlock<G
     }
 }
 
+/// <summary>
+/// This Class is created for the system to see the differents between a normal ScriptableObject and a BaseGameBlock to allow them to be linked in the editor.
+/// </summary>
 public class ScriptableGameBlock : ScriptableObject
 {
 
@@ -44,7 +47,7 @@ public class ScriptableGameBlock : ScriptableObject
 /// <summary>
 /// The interface for a GameBlock. This is used in the system for the 'BaseGameBlock' class
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">The linked information for the IGameBlock</typeparam>
 public interface IGameBlock<T> where T : class, IGame
 {
     IGameBlockInfo<T> BlockInfo { get; }
@@ -54,7 +57,7 @@ public interface IGameBlock<T> where T : class, IGame
 /// <summary>
 /// The interface for the info which is given to the GameBlocks. This info is used in the GameBlockSystem and is always expected to be of 'struct' type!
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T">The Game class linked to the information</typeparam>
 public interface IGameBlockInfo<T> where T : class, IGame
 {
 

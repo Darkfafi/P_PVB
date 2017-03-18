@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Ramses.Confactory;
-using System;
 using Ramses.SceneTrackers;
 using UnityEngine.UI;
 

@@ -35,6 +35,13 @@ public class CardInteractionTranslator : BaseACMessageTranslator
         AirConsole.instance.Message(deviceId, message);
     }
 
+    /// <summary>
+    /// This method is a responce to the 'DrawCardsRequestEvent'
+    /// If it was allowed, the message action will contain "drawCardsRequestAllowed" else "drawCardsRequestNotAllowed"
+    /// </summary>
+    /// <param name="isAllowed">Indicates if the request was allowed</param>
+    /// <param name="deviceId">The device which is responded to</param>
+    /// <param name="allowMessage">Extra information which is send to the device. This allowes for error messages if so desired</param>
     public void SendAllowedDrawRequest(bool isAllowed, string allowMessage, int deviceId)
     {
         var message = new
@@ -47,7 +54,12 @@ public class CardInteractionTranslator : BaseACMessageTranslator
     }
 
     // Global Calls
-
+    /// <summary>
+    /// Notifies the controller which cards to display.
+    /// This method must be called after all changes to the cardhand. This means: Playing cards, drawing cards, discarding cards etc..
+    /// The cards to display will be received in the info, cardNames and cardLocations. All parseable by ',' and in correct order.
+    /// </summary>
+    /// <param name="cardsToShow">The cards to show on the controller</param>
     public void SendUpdateCardsShown(int deviceId, params BaseCard[] cardsToShow)
     {
         string[] cardStrings = new string[cardsToShow.Length];
