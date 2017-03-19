@@ -39,6 +39,16 @@ public class BuildingsGame : MonoBehaviour, IGame {
         return GetGamePlayerByDeviceId(player.DeviceID);
     }
 
+    public GamePlayer GetGamePlayerBy(FactionType factionType)
+    {
+        for (int i = 0; i < GamePlayers.Length; i++)
+        {
+            if (GamePlayers[i].FactionType == factionType)
+                return GamePlayers[i];
+        }
+        return null;
+    }
+
     public GamePlayer GetGamePlayerBy(int playerIndex)
     {
         for(int i = 0; i < GamePlayers.Length; i++)

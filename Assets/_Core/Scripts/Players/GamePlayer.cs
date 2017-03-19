@@ -54,6 +54,23 @@ public class GamePlayer
         return names;
     }
 
+    public void GiveCoins(int amount)
+    {
+        GoldAmount += amount;
+    }
+
+    public int TakeCoins()
+    {
+        return TakeCoins(GoldAmount);
+    }
+
+    public int TakeCoins(int amount)
+    {
+        amount = Mathf.Clamp(amount, 0, GoldAmount);
+        GoldAmount -= amount;
+        return amount;
+    }
+
     public bool GrabCoins(int amount)
     {
         _playfieldSceneTracker.Playfield.CoinPile.Grab(this, amount);

@@ -29,6 +29,7 @@ public class SkillPouch
 
     public void UseSkill()
     {
+        if (_isUsed) { return; }
         _isUsed = true;
         if (SkillUsedEvent != null)
             SkillUsedEvent(SkillPouchHolder, Skill);
