@@ -31,6 +31,8 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
     private TurnSystem _turnSystem = new TurnSystem(false);
     private SkillTranslator _skillTranslator;
 
+    private Skill _skillPutAsside = Skill.None;
+
     protected override void Initialized()
     {
         _skillTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<SkillTranslator>();
@@ -48,6 +50,8 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         _turnSystem.TurnStartedEvent += OnTurnStartedEvent;
         _turnSystem.TurnSystemEndedEvent += OnTurnSysemEndedEvent;
 
+        PutSkillAsside(); // Puts random skill aside so the last player can choose from that skill or his own.
+
         for (int i = 0; i < game.GamePlayers.Length; i++)
         {
             game.GamePlayers[i].SkillPouch.SkillSetEvent += OnSkillSetEvent;
@@ -56,6 +60,13 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         }
 
         _turnSystem.StartTurnSystem();
+    }
+
+    private void PutSkillAsside()
+    {
+        _skillPutAsside = Skill.None;
+        Skill[] availableSkills = GetSkillsAvailable();
+        _skillPutAsside = availableSkills[UnityEngine.Random.Range(0, availableSkills.Length)];
     }
 
     protected override void CycleEnded()
@@ -92,6 +103,12 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         {
             _turnSystem.EndTurnForCurrentTicket();
         }
+
+        if(_turnSystem.CurrentTicketDistanceFromLastTicket() == 0)
+        {
+            _skillPutAsside = Skill.None; // The skill put asside will be available for the last player chosing a skill
+        }
+
         _skillTranslator.UpdateSkillsAvailable(game.GetGamePlayerBy(gamePlayerIndex).LinkedPlayer.DeviceID, GetSkillsAvailable());
         Debug.Log(game.GetGamePlayerBy(gamePlayerIndex).FactionType + " <-- TURN");
     }
@@ -101,9 +118,19 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         NextBlock();
     }
 
-    private Skill[] GetSkillsAvailable()
+    private Skill[] GetSkillsAvailable(params Skill[] lockedSkills)
     {
         List<Skill> availableSkills = new List<Skill>(ConfactoryFinder.Instance.Get<ConSkills>().SkillsInOrder);
+
+        for(int i = 0; i < lockedSkills.Length; i++)
+        {
+            if (availableSkills.Contains(lockedSkills[i]))
+                availableSkills.Remove(lockedSkills[i]);
+        }
+
+        if (availableSkills.Contains(_skillPutAsside))
+            availableSkills.Remove(_skillPutAsside);
+
         for (int i = availableSkills.Count - 1; i >= 0; i--)
         {
             for (int j = 0; j < game.GamePlayers.Length; j++)

@@ -21,6 +21,12 @@ public class TurnSystem
     {
         IsLooping = looping;
     }
+
+    public int CurrentTicketDistanceFromLastTicket()
+    {
+        if (_currentTurnTicket == null) { return -1; }
+        return (_turnTickets.Count - 1) - _currentTurnUserIndex;
+    }
     
     public void AddTurnTickets(params int[] turnTickets)
     {
