@@ -60,6 +60,8 @@ public class GamePlayerSectionUI : MonoBehaviour
         gameplayer.ReceivedCardEvent += OnReceivedCardEvent;
         gameplayer.PlayCardEvent += OnPlayCardEvent;
 
+        gameplayer.CoinAmountChangedEvent += OnReceivedCoinEvent;
+
         UpdateStats();
     }
 
@@ -134,8 +136,14 @@ public class GamePlayerSectionUI : MonoBehaviour
 
         _gamePlayerDisplaying.ReceivedCardEvent -= OnReceivedCardEvent;
         _gamePlayerDisplaying.PlayCardEvent -= OnPlayCardEvent;
+        _gamePlayerDisplaying.CoinAmountChangedEvent += OnReceivedCoinEvent;
 
         _gamePlayerDisplaying = null;
+    }
+
+    private void OnReceivedCoinEvent(GamePlayer gamePlayer)
+    {
+        UpdateStats();
     }
 
     private void DisplayActivePlayer(RegisteredPlayer player)

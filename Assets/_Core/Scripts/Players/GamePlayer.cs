@@ -23,6 +23,10 @@ public class GamePlayer
     /// This event will be triggered when the player has reveiced all the requested cards from the CardPile
     /// </summary>
     public event GamePlayerHandler AllRequestedCardsReceivedEvent;
+    /// <summary>
+    /// This event will be triggered when the player his or her coin amount has been changed
+    /// </summary>
+    public event GamePlayerHandler CoinAmountChangedEvent;
 
     /// <summary>
     /// The faction this player has been assigned to.
@@ -105,6 +109,10 @@ public class GamePlayer
     public void GiveCoins(int amount)
     {
         GoldAmount += amount;
+        if(CoinAmountChangedEvent != null)
+        {
+            CoinAmountChangedEvent(this);
+        }
     }
 
     /// <summary>
@@ -126,6 +134,10 @@ public class GamePlayer
     {
         amount = Mathf.Clamp(amount, 0, GoldAmount);
         GoldAmount -= amount;
+
+        if (CoinAmountChangedEvent != null)
+            CoinAmountChangedEvent(this);
+
         return amount;
     }
 
