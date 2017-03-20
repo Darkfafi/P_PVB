@@ -92,6 +92,7 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         {
             _turnSystem.EndTurnForCurrentTicket();
         }
+        _skillTranslator.UpdateSkillsAvailable(game.GetGamePlayerBy(gamePlayerIndex).LinkedPlayer.DeviceID, GetSkillsAvailable());
         Debug.Log(game.GetGamePlayerBy(gamePlayerIndex).FactionType + " <-- TURN");
     }
 
@@ -100,19 +101,25 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         NextBlock();
     }
 
-    // Actions
-    private void OnSkillSetEvent(GamePlayer gamePlayer, Skill skill)
+    private Skill[] GetSkillsAvailable()
     {
         List<Skill> availableSkills = new List<Skill>(ConfactoryFinder.Instance.Get<ConSkills>().SkillsInOrder);
-        for(int i = availableSkills.Count - 1; i >= 0; i--)
+        for (int i = availableSkills.Count - 1; i >= 0; i--)
         {
-            for(int j = 0; j <= game.GamePlayers.Length; j++)
+            for (int j = 0; j <= game.GamePlayers.Length; j++)
             {
                 if (availableSkills.Contains(game.GamePlayers[j].SkillPouch.Skill))
                     availableSkills.Remove(game.GamePlayers[j].SkillPouch.Skill);
             }
         }
-        _skillTranslator.UpdateSkillsAvailable(availableSkills.ToArray());
+        return availableSkills.ToArray();
+    }
+
+    // Actions
+    private void OnSkillSetEvent(GamePlayer gamePlayer, Skill skill)
+    {
+        if (!IsPlayerTurn(gamePlayer)) { return; }
+        _turnSystem.EndTurnForCurrentTicket();
     }
 
     // Requirements

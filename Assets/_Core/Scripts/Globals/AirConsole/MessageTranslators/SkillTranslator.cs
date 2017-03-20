@@ -10,7 +10,7 @@ public class SkillTranslator : BaseACMessageTranslator
     public event DeviceSkillHandler SkillPickRequestEvent;
     public event DeviceSkillHandler SkillUseRequestEvent;
 
-    public void UpdateSkillsAvailable(params Skill[] skillsAvailable)
+    public void UpdateSkillsAvailable(int deviceId, params Skill[] skillsAvailable)
     {
         int[] skillIndexList = new int[skillsAvailable.Length];
 
@@ -25,12 +25,13 @@ public class SkillTranslator : BaseACMessageTranslator
             info = new { skillIndexes = CreateParsableString(skillIndexList) }
         };
 
-        RegisteredPlayer[] registeredPlayers = ConfactoryFinder.Instance.Get<ConPlayers>().GetCurrentlyRegisteredPlayers(true);
-        for(int i = 0; i < registeredPlayers.Length; i++)
-        {
-            if (registeredPlayers[i].IsConnected)
-                AirConsole.instance.Message(registeredPlayers[i].DeviceID, message);
-        }
+        //RegisteredPlayer[] registeredPlayers = ConfactoryFinder.Instance.Get<ConPlayers>().GetCurrentlyRegisteredPlayers(true);
+        //for(int i = 0; i < registeredPlayers.Length; i++)
+        //{
+        //    if (registeredPlayers[i].IsConnected)
+        //        AirConsole.instance.Message(registeredPlayers[i].DeviceID, message);
+        //}
+        AirConsole.instance.Message(deviceId, message);
     }
 
     protected override void MessageReceived(int from, JToken data)
