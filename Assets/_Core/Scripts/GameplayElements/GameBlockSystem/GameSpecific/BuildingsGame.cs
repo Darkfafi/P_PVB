@@ -51,6 +51,7 @@ public class BuildingsGame : MonoBehaviour, IGame
     public void EndGameWinCondition(GamePlayer winner)
     {
         _gameBlockSystem.EndBlockCycle();
+        _gameBlockSystem.Destroy();
     }
 
     /// <summary>

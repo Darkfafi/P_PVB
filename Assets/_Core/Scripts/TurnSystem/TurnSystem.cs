@@ -75,6 +75,7 @@ public class TurnSystem
 
     public void StartTurnSystem()
     {
+        _currentTurnUserIndex = -1;
         if (TurnSystemStartedEvent != null)
             TurnSystemStartedEvent();
 
@@ -88,8 +89,6 @@ public class TurnSystem
 
         if (TurnSystemEndedEvent != null)
             TurnSystemEndedEvent();
-
-        _currentTurnUserIndex = -1;
     }
 
     public void EndTurnForCurrentTicket()

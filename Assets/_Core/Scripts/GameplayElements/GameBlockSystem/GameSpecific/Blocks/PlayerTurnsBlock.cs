@@ -147,6 +147,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
     
     private bool IsPlayerTurn(GamePlayer player)
     {
+        Debug.Log(_turnSystem.CurrentTurnTicket + " <- ctt | -> " + player.PlayerIndex);
         return _turnSystem.CurrentTurnTicket == player.PlayerIndex;
     }
 
@@ -181,7 +182,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
         if(p != null)
         {
             if (!IsPlayerTurn(p)) { return; }
-            if(p.GrabCoins(amount))
+            if (p.GrabCoins(amount))
             {
                 _turnSystem.EndTurnForCurrentTicket();
             }
