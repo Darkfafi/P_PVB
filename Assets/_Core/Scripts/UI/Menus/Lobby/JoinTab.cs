@@ -1,4 +1,4 @@
-﻿using NDream.AirConsole;
+using NDream.AirConsole;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,6 +58,7 @@ public class JoinTab : MonoBehaviour
         }
 
         DisplayingPlayer = player;
+
     }
 
     public void ToggleReady(bool ready)

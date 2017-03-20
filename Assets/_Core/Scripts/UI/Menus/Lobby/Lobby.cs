@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using Ramses.Confactory;
+using System;
 using Ramses.SceneTrackers;
 using UnityEngine.UI;
 
-/// <summary>
-/// The lobby for the game. Here the players are allowed to join and leave. After the Lobby the FactionScene will be loaded.
-/// </summary>
 public class Lobby : MonoBehaviour
 {
     [Header("Options")]
@@ -184,6 +184,7 @@ public class Lobby : MonoBehaviour
         }
         SetGlobalText();
         StopCountDown();
+        SetAllPlayersReadyValue(true);
     }
 
     private void OnPlayerUnregisteredEvent(RegisteredPlayer player)
