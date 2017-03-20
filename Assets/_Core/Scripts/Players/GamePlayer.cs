@@ -218,7 +218,6 @@ public class GamePlayer
         if (gamePlayer != this) { return; }
 
         _cardsInHand.Add(card);
-
         if (ReceivedCardEvent != null)
             ReceivedCardEvent(this, card);
     }

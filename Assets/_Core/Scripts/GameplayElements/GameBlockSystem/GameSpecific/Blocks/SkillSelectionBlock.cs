@@ -40,6 +40,8 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
 
     protected override void Activated()
     {
+        NextBlock(); // TODO: Make block functionality and run it before NextBlock call.
+        return;
         ConfactoryFinder.Instance.Get<ConCurrentPhase>().SetCurrentPhase(GamePhase.Skills);
         Debug.Log("Activated Skill: " + gameBlockInfo.SecondsForEachSkillSelectionTurn);
 
@@ -54,8 +56,6 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         }
 
         _turnSystem.StartTurnSystem();
-
-        //NextBlock(); // TODO: Make block functionality and run it before NextBlock call.
     }
 
     protected override void CycleEnded()

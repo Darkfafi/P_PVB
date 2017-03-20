@@ -120,8 +120,8 @@ public class BuildingsGame : MonoBehaviour, IGame
     protected void Awake()
     {
         _playfield = SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>().Playfield;
-        _gameBlockSystem = new BuildingsGameBlockSystem(this, _gameBlocks);
         GenerateGamePlayers();
+        _gameBlockSystem = new BuildingsGameBlockSystem(this, _gameBlocks);
     }
 
     protected void Start()
