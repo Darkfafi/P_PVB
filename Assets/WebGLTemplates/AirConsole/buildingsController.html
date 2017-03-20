@@ -17,8 +17,8 @@
             function init()
             {
                 airConsole = new AirConsole({ "orientation":"landscape" });
-                airConsole.onActivePlayersChange = function() {console.log("Hello")}
-                airConsole.onReady = function() {console.log("Hello");}
+                airConsole.onActivePlayersChange = function() {}
+                airConsole.onReady = function() {}
                 
                 document.getElementById('buildBtn')
                 $('#isReady').hide();
@@ -54,8 +54,10 @@
             function receiveMessage()
             {
                 airConsole.onMessage = function(from, data) {
-                    if(from == AirConsole.SCREEN && data.action.UpdateCardsDisplay)
+                    console.log(data.action);
+                    if(from === AirConsole.SCREEN && data.action === "UpdateCardsDisplay")
                     {
+                        console.log("Doing UpdateCardsDisplay Function.");
                         var cardNamesArray = data.info.cardNamesFromLib.split(",");
                         var cardLocationsArray = data.info.cardLocationsFromLib.split(",");
 
@@ -63,12 +65,14 @@
                         for(var i = 0; i < cardsArray.length; i++)
                         {
                             document.getElementById('card-holder').removeChild(cardsArray[i]);
+                            console.log("Deleting all existing Cards.");
                         }
                         cardsArray.clear();
 
                         //Create a card giving with it the name and card image path.
                         for(var i = 0; i < cardNamesArray.length; i++)
                         {
+                            console.log("Creating New Cards.");
                             createCard(cardNamesArray[i], cardLocationsArray[i]);
                         }
                     }
