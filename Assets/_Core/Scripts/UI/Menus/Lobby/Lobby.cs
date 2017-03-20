@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Ramses.Confactory;
@@ -184,6 +184,7 @@ public class Lobby : MonoBehaviour
         }
         SetGlobalText();
         StopCountDown();
+        SetAllPlayersReadyValue(true);
     }
 
     private void OnPlayerUnregisteredEvent(RegisteredPlayer player)

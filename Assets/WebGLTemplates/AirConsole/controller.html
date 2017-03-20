@@ -1,112 +1,252 @@
-
 <html>
-<head>
-    <script type="text/javascript"
-            src="https://www.airconsole.com/api/airconsole-1.4.0.js"></script>
-    <script type="text/javascript">
-    navigator.vibrate = (navigator.vibrate ||
-                         navigator.webkitVibrate ||
-                         navigator.mozVibrate ||
-                         navigator.msVibrate);
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="css/controller.css">
+        <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+        <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.7.0.js"></script>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+                
+        <script type="text/javascript">
+            
+            var airConsole;
+            var isReady = true;
+            var selectedCardName = "";
+            var cardsArray = [];
+            
+            //Initializer
+            function init()
+            {
+                airConsole = new AirConsole({ "orientation":"landscape" });
+                airConsole.onActivePlayersChange = function() {console.log("Hello")}
+                airConsole.onReady = function() {console.log("Hello");}
+                
+                document.getElementById('buildBtn')
+                $('#isReady').hide();
+                
+                receiveMessage();
+            }
+            
+//-----------------------------------------------------------------------------------//
+            
+            //AirConsole-to-Unity Communicators
+            function sendMessage(messageString)
+            {                
+                airConsole.message(AirConsole.SCREEN, {sendMessage:messageString});
+            }
+            
+            function drawCardsRequest(cardAmount)
+            {
+                airConsole.message(AirConsole.SCREEN, {drawCardsRequest:cardAmount});
+            }
+            
+            function takeGoldRequest(goldAmount)
+            {
+                airConsole.message(AirConsole.SCREEN, {takeGoldRequest:goldAmount});
+            }
+            
+            function playCardRequest(cardName)
+            {
+                airConsole.message(AirConsole.SCREEN, {playCardRequest:cardName});
+            }
+            
+//-----------------------------------------------------------------------------------//
+            
+            function receiveMessage()
+            {
+                airConsole.onMessage = function(from, data) {
+                    if(from == AirConsole.SCREEN && data.action.UpdateCardsDisplay)
+                    {
+                        var cardNamesArray = data.info.cardNamesFromLib.split(",");
+                        var cardLocationsArray = data.info.cardLocationsFromLib.split(",");
 
-    var airconsole;
-    /**
-     * Sets up the communication to the screen.
-     */
-    function init() {
-      airconsole = new AirConsole({"orientation": "portrait"});
-      airconsole.onMessage = function(from, data) {
-        if (from == AirConsole.SCREEN && data.vibrate) {
-          navigator.vibrate(data.vibrate);
-          console.log("Vibrating: " + data.vibrate);
-        }
-      }
-      airconsole.onActivePlayersChange = function(player_number) {
-        updateText(player_number);
-      }
-      airconsole.onReady = function() {
-        updateText();
-      }
-    }
+                        //"Destroy" the Card's Element.
+                        for(var i = 0; i < cardsArray.length; i++)
+                        {
+                            document.getElementById('card-holder').removeChild(cardsArray[i]);
+                        }
+                        cardsArray.clear();
 
-	function updateText(player_number) {
-	  var div = document.getElementById("player_id");
-      if (airconsole.getActivePlayerDeviceIds().length == 0) {
-        div.innerHTML = "Waiting for more players.";
-      } else if (player_number == undefined) {
-        div.innerHTML = "This is a 2 player game";
-      } else if (player_number == 0) {
-        div.innerHTML = "You are the player on the left";
-      } else if (player_number == 1) {
-        div.innerHTML = "You are the player on the right";
-      };
-	}
+                        //Create a card giving with it the name and card image path.
+                        for(var i = 0; i < cardNamesArray.length; i++)
+                        {
+                            createCard(cardNamesArray[i], cardLocationsArray[i]);
+                        }
+                    }
+                }
+            }
+            
+//-----------------------------------------------------------------------------------//
+            
+            //Ready Functions
+            function readyAction(readyParam)
+            {
+                var readyMessage = {
+                    'readyAction':{'readyState':readyParam}
+                };
+                
+                //Send Message to Unity
+                airConsole.message(AirConsole.SCREEN, readyMessage);
+                
+                $('#isNotReady').hide();
+                $('#isReady').show();
+            }
+            
+            function unreadyAction(readyParam)
+            {
+                var readyMessage = {
+                    'readyAction':{'readyState':readyParam}
+                };
+                
+                //Send Message to Unity
+                airConsole.message(AirConsole.SCREEN, readyMessage);
+                
+                $('#isNotReady').show();
+                $('#isReady').hide();
+            }
+            
+            //Create Card Function
+            function createCard(cardName, cardPath)
+            {
+                var card = document.createElement("img");
+                card.className = "card";
+                
+                card.src = cardPath;
+                
+                document.getElementById("card-holder").appendChild(card);
+                card.onclick = function(){
+                    selectCard(cardName);
+                };
+                cardsArray.push(card);
+            }
+            
+            function selectCard(cardName)
+            {
+                alert("Go Fuck Yourself!");
+            }
+            
+        </script>
+    </head>
+    
+    <body onload="init()">
+        <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script type="text/javascript" src="slick/slick.min.js"></script>
+        
+        <div class="container">
+        
+            <div class="player-hand-body">
 
-    /**
-     * Tells the screen to move the paddle of this player.
-     * @param amount
-     */
-	function move(amount) {
-	    if (amount == 0) { return; }
-	    var bool = (amount > 0);
-	    var card = (bool) ? "HouseOne" : "HouseTwo";
-	    var message = {
-	        'readyAction': { 'readyState': bool },
-	        'playCardRequest': { 'cardName': card }
-	    };
-	    airconsole.message(AirConsole.SCREEN, message);
-    }
+                <!-- Player Info -->
+                <div id="player-info">
+                    <button id="skill-btn">Skill</button>
+                    <br/>
+                    <br/>
+                    <h1>Skill Name</h1>
+                    <ul>
+                        <li><h3>Skill Feature</h3></li>
+                        <li><h3>Skill Feature</h3></li>
+                    </ul>
+                </div>
 
-    </script>
-    <style type="text/css">
-        @font-face {
-            font-family: 'Arial';
-        }
+                <!-- Slick Slider -->
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        $('#cardholder').slick({
+                            centerMode: true,
+                            centerPadding: '50px',
+                            slidesToShow: 3,
+                            responsive: [
+                                {
+                                    breakpoint: 768,
+                                    settings: {
+                                        arrows: false,
+                                        centerMode: true,
+                                        centerPadding: '30px',
+                                        slidesToShow: 3
+                                    }
+                                },
+                                {
+                                    breakpoint: 480,
+                                    settings: {
+                                        arrows: false,
+                                        centerMode: true,
+                                        centerPadding: '30px',
+                                        slidesToShow: 1
+                                    }
+                                }
+                            ]
+                        });
+                    });
+                </script>
 
-        html, body {
-            height: 100%;
-            margin: 0px;
-            font-family: 'PressStart2P', sans-serif;
-            color: white;
-            text-align: center;
-            background-color: black;
-        }
+                <div id="player-cards">
+                    <h1 style="font-size:2.5em;">Buildable Cards</h1>
+                    <div id="card-holder">
+<!--
+                        <img class="card" src="images/cards/card_chrysler.png">
+                        <img class="card" src="images/cards/card_cinnamon.png">
+                        <img class="card" src="images/cards/card_destiny.png">
+                        <img class="card" src="images/cards/card_lotus.png">
+-->
+                    </div>
+                </div>
 
-        .button {
-            display: inline-block;
-            height: 45%;
-            width: 98%;
-            background-color: #222;
-            position: relative;
-        }
+                <!-- Player Option Buttons -->
+                <div id="player-options">
+                    <div id="optionButtons">
+                        <button onclick="drawCardsRequest(2)" class="actionButton" id="cardsBtn"><img id="buttonImg" src="images/buttons/icon_cards.png">Cards</button>
+                        <h4 id="or">or</h4>
+                        <button onclick="takeGoldRequest(2)" class="actionButton" id="coinBtn"><img id="buttonImg" src="images/buttons/icon_gold.png">Gold</button>
+                        <h4 id="or">or</h4>
+                        <button onclick="playCardRequest('I want to Build')" class="actionButton" id="buildBtn"><img id="buttonImg" src="images/buttons/icon_build.png">Build</button>
+                    </div>
+                </div>
 
-        .button_label {
-            position: absolute;
-            left: 0px;
-            width: 100%;
-            top: 50%;
-            margin-top: -6px;
-        }
+                <!-- Timer -->
+                <div id="timer">
+                    <h3>Time Left:</h3>
+                    <h1 style="color:white; padding:0; position: relative; bottom: 50%;">28</h1>
+                </div>
 
-        #player_id {
-            position: absolute;
-            top: 50%;
-            left: 0%;
-            width: 100%;
-            margin-top: -8px;
-            color: #777;
-        }
-    </style>
-</head>
-<body onload="init()">
-    <div style="height: 1%"></div>
-    <div class=button ontouchstart="move(5)" ontouchend="move(0)" onmousedown="move(5)" onmouseup="move(0)">
-        <div class="button_label">UP</div>
-    </div>
-    <div style="height: 8%"></div>
-    <div class=button ontouchstart="move(-5)" ontouchend="move(0)" onmousedown="move(-5)" onmouseup="move(0)">
-        <div class="button_label">DOWN</div>
-    </div>
-    <div id="player_id"></div>
-</body>
+            </div>
+
+            <div class="skill-select-holder">
+                <h1 style="font-size: 3em; text-align: center;">Choose your Skill!</h1>
+
+                <div id="card-holder">
+                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_crown.png">
+                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_miracle.png">
+                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_trade.png">
+                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_destruction.png">
+                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_stealing.png">
+                </div>
+            </div>
+            
+            <div class="faction-select-holder">
+                <h1 style="font-size: 3em; text-align: center;">Choose your Faction!</h1>
+
+                <div id="card-holder">
+                    
+                    <button id="arrow" class="actionButton"></button>
+                    
+                    <div id="faction-holder">
+                        <img id="faction_card" class="card" src="images/factions/character_knight.png">
+                    </div>
+
+                    <button id="arrow" class="actionButton"></button>
+                    <button class="actionButton"></button>
+
+                </div>
+            </div>
+
+            <div class="ready-screen-holder">
+                <h1 style="font-size: 3.5em;">Ready up!</h1>
+                <br>
+                <button onclick="readyAction(true)" class="actionButton" id="isNotReady"></button>
+                <button onclick="unreadyAction(false)" class="actionButton" id="isReady"></button>
+            </div>
+            
+        </div>
+        
+    </body>
 </html>
