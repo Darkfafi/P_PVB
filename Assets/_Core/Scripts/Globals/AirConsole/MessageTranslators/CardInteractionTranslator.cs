@@ -97,7 +97,7 @@ public class CardInteractionTranslator : BaseACMessageTranslator
             action = "UpdateCardsDisplay",
             info = new { cardNames = cardNamesFromLib, cardLocations = cardLocationsFromLib }
         };
-        Debug.Log("dsdfsdf");
+        
         AirConsole.instance.Message(deviceId, message);
     }
 
