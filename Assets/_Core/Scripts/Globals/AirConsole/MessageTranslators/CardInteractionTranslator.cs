@@ -67,7 +67,7 @@ public class CardInteractionTranslator : BaseACMessageTranslator
         {
             cardStrings[i] = cardsToShow[i].CardName;
         }
-        SendUpdateCardsShown(deviceId, cardsToShow);
+        SendUpdateCardsShown(deviceId, cardStrings);
     }
 
     /// <summary>

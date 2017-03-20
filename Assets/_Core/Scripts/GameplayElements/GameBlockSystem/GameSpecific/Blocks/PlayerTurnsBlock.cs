@@ -207,7 +207,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
     private void OnReceivedCardEvent(GamePlayer gamePlayer, BaseCard card)
     {
-        _cardInteractionTranslator.SendUpdateCardsShown(gamePlayer.LinkedPlayer.DeviceID, gamePlayer.CardsInHand);
+        _cardInteractionTranslator.SendUpdateCardsShown(gamePlayer.LinkedPlayer.DeviceID, gamePlayer.GetNameListOfCardsInHand());
     }
 
     private void OnSkillUsedEvent(GamePlayer gamePlayer, Skill skill)
