@@ -20,7 +20,7 @@ public class BuildField : MonoBehaviour {
         CurrentBuiltBuilding = GameObject.Instantiate(buildingPrefab);
         CurrentBuiltBuilding.transform.SetParent(this.transform, false);
         CurrentBuiltBuilding.GetComponent<SpriteRenderer>().sortingOrder = (GetComponent<SpriteRenderer>().sortingOrder + 1);
-        Vector3 pos = CurrentBuiltBuilding.transform.position;
+        Vector3 pos = transform.position;
         pos.z = transform.position.y;
         CurrentBuiltBuilding.transform.position = pos;
     }
