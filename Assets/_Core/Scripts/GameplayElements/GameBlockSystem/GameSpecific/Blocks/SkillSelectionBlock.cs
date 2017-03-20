@@ -106,7 +106,7 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         List<Skill> availableSkills = new List<Skill>(ConfactoryFinder.Instance.Get<ConSkills>().SkillsInOrder);
         for (int i = availableSkills.Count - 1; i >= 0; i--)
         {
-            for (int j = 0; j <= game.GamePlayers.Length; j++)
+            for (int j = 0; j < game.GamePlayers.Length; j++)
             {
                 if (availableSkills.Contains(game.GamePlayers[j].SkillPouch.Skill))
                     availableSkills.Remove(game.GamePlayers[j].SkillPouch.Skill);
