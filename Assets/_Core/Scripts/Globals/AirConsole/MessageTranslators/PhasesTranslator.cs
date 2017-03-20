@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using NDream.AirConsole;
 
 public class PhasesTranslator : BaseACMessageTranslator
@@ -8,7 +8,7 @@ public class PhasesTranslator : BaseACMessageTranslator
         var message = new
         {
             action = "gamePhaseUpdate",
-            info = new { gamePhase = gamePhase.ToString() }
+            gamePhase = gamePhase.ToString()
         };
 
         AirConsole.instance.Message(deviceId, message);   

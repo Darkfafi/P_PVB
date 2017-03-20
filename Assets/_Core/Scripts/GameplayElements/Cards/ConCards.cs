@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Ramses.Confactory;
@@ -13,7 +13,7 @@ public enum CardType
 
 public class ConCards : IConfactory
 {
-    public const string CARDS_IMAGE_LOCATION = "cards/";
+    public const string CARDS_IMAGE_LOCATION = "images/cards/";
 
     public CardsDefinitionsLibrary CardsDefinitionLibrary { get; private set; }
 

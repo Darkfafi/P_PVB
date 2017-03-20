@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using UnityEngine;
 using NDream.AirConsole;
 
@@ -84,7 +84,7 @@ public class CardInteractionTranslator : BaseACMessageTranslator
         for (int i = 0; i < cardsToShow.Length; i++)
         {
             cardNamesFromLib += cardsToShow[i];
-            cardLocationsFromLib += ConCards.CARDS_IMAGE_LOCATION + Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CardsDefinitionLibrary.GetCardDefinitionByName(cardsToShow[i]).CardSprite.name;
+            cardLocationsFromLib += ConCards.CARDS_IMAGE_LOCATION + Ramses.Confactory.ConfactoryFinder.Instance.Get<ConCards>().CardsDefinitionLibrary.GetCardDefinitionByName(cardsToShow[i]).CardSprite.name + ".png";
             if (i < cardsToShow.Length - 1)
             {
                 cardNamesFromLib += ",";
