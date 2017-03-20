@@ -31,7 +31,7 @@ public class BuildingsWinConditionBlockLogic : BaseGameBlockLogic<BuildingsGame,
 
     protected override void Initialized()
     {
-           
+        _playfieldSceneTracker = SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>();
     }
 
     protected override void Activated()
