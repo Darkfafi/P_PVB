@@ -184,7 +184,6 @@ public class Lobby : MonoBehaviour
         }
         SetGlobalText();
         StopCountDown();
-        SetAllPlayersReadyValue(true);
     }
 
     private void OnPlayerUnregisteredEvent(RegisteredPlayer player)
