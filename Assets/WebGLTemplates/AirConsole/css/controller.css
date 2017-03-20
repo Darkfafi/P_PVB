@@ -54,7 +54,7 @@ li {
 }
 
 .player-hand-body {
-    visibility: hidden;
+/*    visibility: hidden;*/
 }
 
 .skill-select-holder {
@@ -90,7 +90,7 @@ li {
     width: 100%;
     height: 100%;
     text-align: center;
-/*    visibility: hidden;*/
+    visibility: hidden;
 }
 
 #timer {
