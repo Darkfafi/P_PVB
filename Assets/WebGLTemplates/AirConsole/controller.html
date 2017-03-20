@@ -30,12 +30,22 @@
             //AirConsole-to-Unity Communicators            
             function drawCardsRequest(cardAmount)
             {
-                airConsole.message(AirConsole.SCREEN, {drawCardsRequest:cardAmount});
+                var drawCardMessage = {
+                    'drawCardsRequest':{'cardAmount':cardAmount}
+                };
+                
+                airConsole.message(AirConsole.SCREEN, drawCardMessage);
+                console.log("I took some cards");
             }
             
             function takeGoldRequest(goldAmount)
             {
-                airConsole.message(AirConsole.SCREEN, {takeGoldRequest:goldAmount});
+                var takeGoldMessage = {
+                    'coinRequest':{'coinAmount':goldAmount}
+                };
+                
+                airConsole.message(AirConsole.SCREEN, takeGoldMessage);
+                console.log("gimme money");
             }
             
             function playCardRequest()
