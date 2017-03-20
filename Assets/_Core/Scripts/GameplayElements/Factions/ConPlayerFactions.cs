@@ -89,6 +89,17 @@ public class ConPlayerFactions : IConfactory
         return freeTypes.ToArray();
     }
 
+    public FactionType[] GetTakenFactions()
+    {
+        List<FactionType> takenTypes = new List<FactionType>();
+        for (int i = 0; i < PlayerFactionLinks.Length; i++)
+        {
+            if (PlayerFactionLinks[i].Player != null)
+                takenTypes.Add(PlayerFactionLinks[i].FactionType);
+        }
+        return takenTypes.ToArray();
+    }
+
     public void ConClear()
     {
 

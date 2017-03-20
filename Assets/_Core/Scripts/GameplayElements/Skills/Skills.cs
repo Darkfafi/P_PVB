@@ -1,12 +1,12 @@
 ﻿
 public enum Skill
 {
-    None,
-    Miracle,
-    Trade,
-    Destruction,
-    Thief,
-    TheCrown   
+    None, 
+    Miracle,        // Can't be effected by destruction                     :: Passive (System thingy?..)
+    Trade,          // Gains Money on activation                            :: Active  (On activate do automaticly)
+    Destruction,    // Destroys a building by random                        :: Active  (On activate do automaticly)
+    Thief,          // Steals money from a person by random                 :: Active  (On activate do automaticly)
+    TheCrown        // Starts as first & gains money from all buildings     :: Passive (Start round and starts first (System thingy))
 }
 
 public class SkillPouch
@@ -29,6 +29,7 @@ public class SkillPouch
 
     public void UseSkill()
     {
+        if (_isUsed) { return; }
         _isUsed = true;
         if (SkillUsedEvent != null)
             SkillUsedEvent(SkillPouchHolder, Skill);
@@ -45,5 +46,6 @@ public class SkillPouch
 
 public interface ICharacterSkill
 {
-
+    bool CanBeActivated { get; }
+    void Activate();
 }

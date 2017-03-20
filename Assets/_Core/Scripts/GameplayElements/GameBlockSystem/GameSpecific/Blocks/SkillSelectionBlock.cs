@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Ramses.SceneTrackers;
@@ -44,10 +43,18 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
         ConfactoryFinder.Instance.Get<ConCurrentPhase>().SetCurrentPhase(GamePhase.Skills);
         Debug.Log("Activated Skill: " + gameBlockInfo.SecondsForEachSkillSelectionTurn);
 
-        for(int i = 0; i < game.GamePlayers.Length; i++)
+        _turnSystem.TurnStartedEvent += OnTurnStartedEvent;
+        _turnSystem.TurnSystemEndedEvent += OnTurnSysemEndedEvent;
+
+        for (int i = 0; i < game.GamePlayers.Length; i++)
         {
             game.GamePlayers[i].SkillPouch.SkillSetEvent += OnSkillSetEvent;
+            _turnSystem.AddTurnTickets(game.GamePlayers[i].PlayerIndex);
+            // TODO: Set priority level on who choses skills first.
         }
+
+        _turnSystem.StartTurnSystem();
+
         //NextBlock(); // TODO: Make block functionality and run it before NextBlock call.
     }
 
@@ -64,6 +71,10 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
 
     protected override void Deactivated()
     {
+        _turnSystem.TurnStartedEvent -= OnTurnStartedEvent;
+        _turnSystem.TurnSystemEndedEvent -= OnTurnSysemEndedEvent;
+        _turnSystem.ClearTurnTickets();
+
         for (int i = 0; i < game.GamePlayers.Length; i++)
         {
             game.GamePlayers[i].SkillPouch.SkillSetEvent -= OnSkillSetEvent;
@@ -73,6 +84,20 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
     protected override void Destroyed()
     {
         _skillTranslator.SkillPickRequestEvent -= OnSkillPickRequestEvent;
+    }
+
+    private void OnTurnStartedEvent(int gamePlayerIndex)
+    {
+        if (!game.GetGamePlayerBy(gamePlayerIndex).IsConnected)
+        {
+            _turnSystem.EndTurnForCurrentTicket();
+        }
+        Debug.Log(game.GetGamePlayerBy(gamePlayerIndex).FactionType + " <-- TURN");
+    }
+
+    private void OnTurnSysemEndedEvent()
+    {
+        NextBlock();
     }
 
     // Actions
@@ -93,6 +118,16 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
     // Requirements
     private void OnSkillPickRequestEvent(int deviceId, Skill skill)
     {
+        GamePlayer p = game.GetGamePlayerByDeviceId(deviceId);
+        if(p != null)
+        {
+            if (!IsPlayerTurn(p)) { return; }
+            p.SkillPouch.SetSkill(skill);
+        }
+    }
 
+    private bool IsPlayerTurn(GamePlayer player)
+    {
+        return _turnSystem.CurrentTurnTicket == player.PlayerIndex;
     }
 }

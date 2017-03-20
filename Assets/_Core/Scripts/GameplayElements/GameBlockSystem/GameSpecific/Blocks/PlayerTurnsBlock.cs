@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using Ramses.SceneTrackers;
-using System.Collections.Generic;
 
 public class PlayerTurnsBlock : BaseGameBlock<BuildingsGame, PlayerTurnsBlockInfo, PlayerTurnsBlockLogic>
 {
@@ -26,15 +25,23 @@ public struct PlayerTurnsBlockInfo : IGameBlockInfo<BuildingsGame>
 
 public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTurnsBlockInfo>
 {
-    private CardInteractionTranslator _cardInteractionTranslator;
-    private CoinTranslator _coinTranslator;
     private ConPlayers _conPlayer;
     private TurnSystem _turnSystem = new TurnSystem(false);
 
+    private SkillEffects _skillEffects;
+
+    // Translators
+    private CardInteractionTranslator _cardInteractionTranslator;
+    private CoinTranslator _coinTranslator;
+    private SkillTranslator _skillTranslator;
+
     protected override void Initialized()
     {
+        _skillEffects = new SkillEffects(game);
         _cardInteractionTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CardInteractionTranslator>();
         _coinTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<CoinTranslator>();
+        _skillTranslator = SceneTrackersFinder.Instance.GetSceneTracker<AirConsoleMessageST>().Get<SkillTranslator>();
+
         _conPlayer = Ramses.Confactory.ConfactoryFinder.Instance.Get<ConPlayers>();
 
         for (int i = 0; i < game.GamePlayers.Length; i++)
@@ -52,14 +59,19 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
         _coinTranslator.CoinRequestEvent += OnCoinRequestEvent;
 
+        _skillTranslator.SkillUseRequestEvent += OnSkillUseRequestEvent;
+
         _conPlayer.RegisteredPlayerDisconnectedEvent += OnRegisteredPlayerDisconnectedEvent;
 
         _turnSystem.TurnStartedEvent += OnTurnStartedEvent;
         _turnSystem.TurnSystemEndedEvent += OnTurnSysemEndedEvent;
 
+        _skillEffects.SkillEffectDoneEvent += OnSkillEffectDoneEvent;
+
         for (int i = 0; i < game.GamePlayers.Length; i++)
         {
             game.GamePlayers[i].PlayCardEvent += OnPlayCardEvent;
+            game.GamePlayers[i].SkillPouch.SkillUsedEvent += OnSkillUsedEvent;
             _turnSystem.AddTurnTickets(game.GamePlayers[i].PlayerIndex); // Player index used as id because the index does not change on device change.
             _turnSystem.SetPriorityLevelOfTicket(game.GamePlayers[i].PlayerIndex, Ramses.Confactory.ConfactoryFinder.Instance.Get<ConSkills>().GetIndexValueOfSkill(game.GamePlayers[i].SkillPouch.Skill));
         }
@@ -86,6 +98,8 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
         _coinTranslator.CoinRequestEvent -= OnCoinRequestEvent;
 
+        _skillTranslator.SkillUseRequestEvent -= OnSkillUseRequestEvent;
+
         _conPlayer.RegisteredPlayerDisconnectedEvent -= OnRegisteredPlayerDisconnectedEvent;
 
         _turnSystem.TurnStartedEvent -= OnTurnStartedEvent;
@@ -93,9 +107,12 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
         _turnSystem.ClearTurnTickets();
 
+        _skillEffects.SkillEffectDoneEvent -= OnSkillEffectDoneEvent;
+
         for (int i = 0; i < game.GamePlayers.Length; i++)
         {
             game.GamePlayers[i].PlayCardEvent -= OnPlayCardEvent;
+            game.GamePlayers[i].SkillPouch.SkillUsedEvent -= OnSkillUsedEvent;
         }
 
     }
@@ -171,6 +188,14 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
         }
     }
 
+    private void OnSkillUseRequestEvent(int deviceId, Skill skill)
+    {
+        GamePlayer p = game.GetGamePlayerByDeviceId(deviceId);
+        if (p == null) { return; }
+        if (!IsPlayerTurn(p)) { return; }
+        p.SkillPouch.UseSkill();
+    }
+
     // Actions
     private void OnPlayCardEvent(GamePlayer gamePlayer, BaseCard card)
     {
@@ -183,5 +208,16 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
     private void OnReceivedCardEvent(GamePlayer gamePlayer, BaseCard card)
     {
         _cardInteractionTranslator.SendUpdateCardsShown(gamePlayer.LinkedPlayer.DeviceID, gamePlayer.CardsInHand);
+    }
+
+    private void OnSkillUsedEvent(GamePlayer gamePlayer, Skill skill)
+    {
+        _skillEffects.DoSkillEffect(gamePlayer, skill);
+    }
+
+    private void OnSkillEffectDoneEvent(GamePlayer player, Skill skill)
+    {
+        if (IsPlayerTurn(player))
+            _turnSystem.EndTurnForCurrentTicket();
     }
 }

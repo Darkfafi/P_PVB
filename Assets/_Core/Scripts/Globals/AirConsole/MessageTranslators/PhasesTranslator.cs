@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
-using UnityEngine;
+﻿using Newtonsoft.Json.Linq;
 using NDream.AirConsole;
 
 public class PhasesTranslator : BaseACMessageTranslator
