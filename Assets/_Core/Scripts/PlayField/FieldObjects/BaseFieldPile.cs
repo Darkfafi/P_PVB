@@ -60,14 +60,15 @@ public abstract class BaseFieldPile<T> : MonoBehaviour where T : class
         visualObject.transform.DOMove(destination, _objectArriveDuration).SetEase(Ease.InExpo).OnComplete(
         () =>
         {
-            ObjectArrived(player, objectGrabbing);
+            ObjectArrived(player, objectGrabbing, visualObject);
             Destroy(visualObject.gameObject);
         });
-        return visualObject.transform.DORotate(new Vector3(0, 0, (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) - 90f), _objectArriveDuration * 0.5f).SetDelay(_objectArriveDuration * 0.5f);
+        return visualObject.transform.DORotate(new Vector3(0, 0, (Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg) - 90f), _objectArriveDuration * 0.4f).SetDelay(_objectArriveDuration * 0.5f);
     }
 
-    private void ObjectArrived(GamePlayer player, T objectGrabbing)
+    private void ObjectArrived(GamePlayer player, T objectGrabbing, GameObject visualObject)
     {
+        visualObject.transform.DOKill();
         if (VisualObjectArrivedEvent != null)
             VisualObjectArrivedEvent(player, objectGrabbing);
     }
