@@ -14,10 +14,11 @@ public class BuildField : MonoBehaviour {
         }
     }
 
-    public void BuildBuilding(Building buildingPrefab)
+    public void BuildBuilding(GlobalCardDefinitionItem definition, CardDefinitionBaseItem baseDefinition)
     {
         DestroyCurrentBuilding();
-        CurrentBuiltBuilding = GameObject.Instantiate(buildingPrefab);
+        CurrentBuiltBuilding = GameObject.Instantiate(definition.CardBuildingObjectPrefab);
+        CurrentBuiltBuilding.SetBuilding(definition.CardCost, baseDefinition.BaseCardSkillLinkedToCard);
         CurrentBuiltBuilding.transform.SetParent(this.transform, false);
         CurrentBuiltBuilding.GetComponent<SpriteRenderer>().sortingOrder = (GetComponent<SpriteRenderer>().sortingOrder + 1);
         Vector3 pos = transform.position;

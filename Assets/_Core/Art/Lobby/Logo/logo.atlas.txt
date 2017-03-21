@@ -1,0 +1,139 @@
+
+logo.png
+size: 2048,2048
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Logo_building_text_shadow
+  rotate: false
+  xy: 2, 1680
+  size: 1458, 341
+  orig: 1458, 341
+  offset: 0, 0
+  index: -1
+Logo_buildings_text
+  rotate: false
+  xy: 2, 958
+  size: 1392, 353
+  orig: 1392, 353
+  offset: 0, 0
+  index: -1
+Logo_buildings_text_outline
+  rotate: false
+  xy: 2, 1313
+  size: 1402, 365
+  orig: 1402, 365
+  offset: 0, 0
+  index: -1
+Logo_crown
+  rotate: true
+  xy: 473, 729
+  size: 146, 132
+  orig: 146, 132
+  offset: 0, 0
+  index: -1
+Logo_crown_outline
+  rotate: false
+  xy: 313, 731
+  size: 158, 144
+  orig: 158, 144
+  offset: 0, 0
+  index: -1
+Logo_crown_shade
+  rotate: true
+  xy: 2, 15
+  size: 182, 127
+  orig: 182, 127
+  offset: 0, 0
+  index: -1
+Logo_shine_01
+  rotate: false
+  xy: 2, 680
+  size: 173, 276
+  orig: 173, 276
+  offset: 0, 0
+  index: -1
+Logo_shine_02
+  rotate: false
+  xy: 1781, 1781
+  size: 133, 240
+  orig: 133, 240
+  offset: 0, 0
+  index: -1
+Logo_shine_03
+  rotate: true
+  xy: 815, 899
+  size: 57, 229
+  orig: 57, 229
+  offset: 0, 0
+  index: -1
+Logo_shine_04
+  rotate: false
+  xy: 1916, 1795
+  size: 105, 226
+  orig: 105, 226
+  offset: 0, 0
+  index: -1
+Logo_shine_05
+  rotate: false
+  xy: 2, 199
+  size: 136, 237
+  orig: 136, 237
+  offset: 0, 0
+  index: -1
+Logo_shine_06
+  rotate: true
+  xy: 583, 894
+  size: 62, 230
+  orig: 62, 230
+  offset: 0, 0
+  index: -1
+Logo_shine_07
+  rotate: false
+  xy: 177, 716
+  size: 134, 240
+  orig: 134, 240
+  offset: 0, 0
+  index: -1
+Logo_shine_08
+  rotate: false
+  xy: 2, 438
+  size: 143, 240
+  orig: 143, 240
+  offset: 0, 0
+  index: -1
+Logo_shine_09
+  rotate: false
+  xy: 1626, 1762
+  size: 153, 259
+  orig: 153, 259
+  offset: 0, 0
+  index: -1
+Logo_shine_10
+  rotate: true
+  xy: 313, 877
+  size: 79, 268
+  orig: 79, 268
+  offset: 0, 0
+  index: -1
+Logo_shine_11
+  rotate: false
+  xy: 1462, 1722
+  size: 162, 299
+  orig: 162, 299
+  offset: 0, 0
+  index: -1
+Logo_tm_shade
+  rotate: false
+  xy: 1046, 893
+  size: 91, 63
+  orig: 91, 63
+  offset: 0, 0
+  index: -1
+Logo_tm_text
+  rotate: true
+  xy: 1406, 1600
+  size: 78, 50
+  orig: 78, 50
+  offset: 0, 0
+  index: -1

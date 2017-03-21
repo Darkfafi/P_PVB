@@ -4,9 +4,11 @@
 public class Building : MonoBehaviour {
 
 	public int Score { get; private set; }
+    public Skill SkillLinkedTo { get; private set; }
 
-    public void SetScore(int value)
+    public void SetBuilding(int score, Skill skill)
     {
-        Score = value;
+        Score = score;
+        SkillLinkedTo = skill;
     }
 }

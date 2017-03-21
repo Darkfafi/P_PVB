@@ -1,14 +1,18 @@
 ﻿using NDream.AirConsole;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Ramses.SceneTrackers;
 
+/// <summary>
+/// This component is the main component for the GamePlayer corner UIs.
+/// When linked to a player, it listens to changes in the players stats and displays.
+/// </summary>
 [RequireComponent(typeof(CanvasGroup))]
 public class GamePlayerSectionUI : MonoBehaviour
 {
+    /// <summary>
+    /// If the player is not connected or has never been registered in the first place. This will give false, else it will give true;
+    /// </summary>
     public bool IsActiveDisplay { get; private set; }
 
     [Header("Options")]
@@ -46,6 +50,11 @@ public class GamePlayerSectionUI : MonoBehaviour
 
     private PlayfieldST _playfieldSceneTracker;
 
+    /// <summary>
+    /// This links a player to the UI corner. This will listen to the plaayer his or her actions and set the UI coresponding to them.
+    /// PS: this also unlistens from the player if it is already displaying a GamePlayer.
+    /// </summary>
+    /// <param name="gameplayer">Player to link</param>
     public void DisplayGamePlayer(GamePlayer gameplayer)
     {
         UnDisplayGamePlayer();
@@ -65,25 +74,10 @@ public class GamePlayerSectionUI : MonoBehaviour
         UpdateStats();
     }
 
-    private void OnPlayCardEvent(GamePlayer gamePlayer, BaseCard card)
-    {
-        UpdateStats();
-    }
-
-    private void OnReceivedCardEvent(GamePlayer gamePlayer, BaseCard card)
-    {
-        UpdateStats();
-    }
-
-    private void UpdateStats()
-    {
-        if (_gamePlayerDisplaying == null) { return; }
-
-        _handCardsDisplayText.text = _gamePlayerDisplaying.CardsInHand.Length.ToString();
-        _coinDisplayText.text = _gamePlayerDisplaying.GoldAmount.ToString();
-        _buildingsBuiltDisplayText.text = _playfieldSceneTracker.Playfield.GetCornerByFaction(_gamePlayerDisplaying.FactionType).TotalScoreOfAllBuiltBuildings().ToString();
-    }
-
+    /// <summary>
+    /// Displays the faction specific parts for the corner, this includes its color / font color and its portrait.
+    /// </summary>
+    /// <param name="factionType">FactionType to chance appearance to</param>
     public void SetFactionSpecifics(FactionType factionType)
     {
         FactionLibraryItem item = Ramses.Confactory.ConfactoryFinder.Instance.Get<ConPlayerFactions>().FactionsLibrary.GetItemByFactionType(factionType);
@@ -95,8 +89,14 @@ public class GamePlayerSectionUI : MonoBehaviour
         _factionTypeDisplaying = factionType;
     }
 
+    /// <summary>
+    /// This will display the player as active or inactive player. 
+    /// If there is no player linked then the section will be put into complete inactive mode.
+    /// </summary>
+    /// <param name="activeState"></param>
     public void ToggleActivePlayerDisplay(bool activeState)
     {
+        gameObject.SetActive(true);
         IsActiveDisplay = activeState;
         _canvasGroup.alpha = (IsActiveDisplay) ? 1.0f : _inactiveDisplayAlpha;
 
@@ -106,6 +106,7 @@ public class GamePlayerSectionUI : MonoBehaviour
             _coinDisplayText.text = "-";
             _buildingsBuiltDisplayText.text = "-";
             _skillIconImage.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 
@@ -113,6 +114,28 @@ public class GamePlayerSectionUI : MonoBehaviour
     {
         _canvasGroup = GetComponent<CanvasGroup>();
         _playfieldSceneTracker = SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>();
+    }
+
+    private void OnPlayCardEvent(GamePlayer gamePlayer, BaseCard card)
+    {
+        UpdateStats();
+    }
+
+    private void OnReceivedCardEvent(GamePlayer gamePlayer, BaseCard card)
+    {
+        UpdateStats();
+    }
+
+    /// <summary>
+    /// This will update all the stat displays. This will be triggered when a stat value changes in the linked player.
+    /// </summary>
+    private void UpdateStats()
+    {
+        if (_gamePlayerDisplaying == null) { return; }
+
+        _handCardsDisplayText.text = _gamePlayerDisplaying.CardsInHand.Length.ToString();
+        _coinDisplayText.text = _gamePlayerDisplaying.GoldAmount.ToString();
+        _buildingsBuiltDisplayText.text = _playfieldSceneTracker.Playfield.GetCornerByFaction(_gamePlayerDisplaying.FactionType).TotalScoreOfAllBuiltBuildings().ToString();
     }
 
     private void OnRegisteredPlayerConnectedEvent(RegisteredPlayer player)
@@ -146,12 +169,19 @@ public class GamePlayerSectionUI : MonoBehaviour
         UpdateStats();
     }
 
+    /// <summary>
+    /// Displays the active player locally.
+    /// </summary>
+    /// <param name="player"></param>
     private void DisplayActivePlayer(RegisteredPlayer player)
     {
         ToggleActivePlayerDisplay(true);
         _nameText.text = AirConsole.instance.GetNickname(player.DeviceID);
     }
 
+    /// <summary>
+    /// Displays the inactive player locally.
+    /// </summary>
     private void DisplayInactivePlayer()
     {
         ToggleActivePlayerDisplay(false);

@@ -2,6 +2,9 @@
 using UnityEngine;
 using Ramses.SceneTrackers;
 
+/// <summary>
+/// The class which is responceable for the interaction turns. This means Playing cards, using skills, asking for cards and asking for coins.
+/// </summary>
 public class PlayerTurnsBlock : BaseGameBlock<BuildingsGame, PlayerTurnsBlockInfo, PlayerTurnsBlockLogic>
 {
     public override PlayerTurnsBlockInfo BlockInfo
@@ -23,6 +26,9 @@ public struct PlayerTurnsBlockInfo : IGameBlockInfo<BuildingsGame>
     public int SecondsForEachPlayerTurn;
 }
 
+/// <summary>
+/// The logics behind the PlayerTurnsBlock
+/// </summary>
 public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTurnsBlockInfo>
 {
     private ConPlayers _conPlayer;
@@ -142,9 +148,34 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
         {
             _turnSystem.EndTurnForCurrentTicket();
         }
+
+        GiveMoneyForBuildings(game.GetGamePlayerBy(gamePlayerIndex));
+
         Debug.Log(game.GetGamePlayerBy(gamePlayerIndex).FactionType + " <-- TURN");
     }
-    
+
+    private void GiveMoneyForBuildings(GamePlayer gamePlayer)
+    {
+        PlayerCorner pc = game.Playfield.GetCornerByFaction(gamePlayer.FactionType);
+        switch (gamePlayer.SkillPouch.Skill)
+        {
+            case Skill.Miracle:
+                gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse(Skill.Miracle).Length);
+                break;
+            case Skill.Trade:
+                gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse(Skill.Trade).Length);
+                break;
+            case Skill.Destruction:
+                gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse(Skill.Destruction).Length);
+                break;
+            case Skill.TheCrown:
+                gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse().Length);
+                break;
+            default:
+                break;
+        }
+    }
+
     private bool IsPlayerTurn(GamePlayer player)
     {
         Debug.Log(_turnSystem.CurrentTurnTicket + " <- ctt | -> " + player.PlayerIndex);
