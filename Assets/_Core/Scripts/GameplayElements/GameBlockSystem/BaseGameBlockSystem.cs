@@ -99,7 +99,7 @@ public abstract class BaseGameBlockSystem<T> where T : class, IGame
     public void EndBlockCycle()
     {
         EndCurrentBlock();
-
+        _currentBlockIndex = -1;
         if (BlockCycleEndededEvent != null)
             BlockCycleEndededEvent();
     }
@@ -117,6 +117,9 @@ public abstract class BaseGameBlockSystem<T> where T : class, IGame
         _isDestroyed = true;
     }
 
+    /// <summary>
+    /// Handles initialization because it has multiple constructors.
+    /// </summary>
     private void Initialization(T gameInstance, IGameBlock<T>[] buildingBlocks)
     {
         _gameBlocks = new IGameBlockLogic<T>[buildingBlocks.Length];
@@ -128,6 +131,9 @@ public abstract class BaseGameBlockSystem<T> where T : class, IGame
         }
     }
 
+    /// <summary>
+    /// Ends the currently active GameBlock. (If there is any)
+    /// </summary>
     private void EndCurrentBlock()
     {
         if (_currentBlockIndex != -1)

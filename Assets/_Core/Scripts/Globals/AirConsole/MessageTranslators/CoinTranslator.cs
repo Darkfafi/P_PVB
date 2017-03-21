@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Handles communication between the controller and the game about coin actions.
+/// </summary>
 public class CoinTranslator : BaseACMessageTranslator
 {
     public event DoubleIntHandler CoinRequestEvent;

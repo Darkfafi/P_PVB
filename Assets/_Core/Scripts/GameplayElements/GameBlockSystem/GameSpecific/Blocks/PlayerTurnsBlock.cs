@@ -2,6 +2,9 @@
 using UnityEngine;
 using Ramses.SceneTrackers;
 
+/// <summary>
+/// The class which is responceable for the interaction turns. This means Playing cards, using skills, asking for cards and asking for coins.
+/// </summary>
 public class PlayerTurnsBlock : BaseGameBlock<BuildingsGame, PlayerTurnsBlockInfo, PlayerTurnsBlockLogic>
 {
     public override PlayerTurnsBlockInfo BlockInfo
@@ -23,6 +26,9 @@ public struct PlayerTurnsBlockInfo : IGameBlockInfo<BuildingsGame>
     public int SecondsForEachPlayerTurn;
 }
 
+/// <summary>
+/// The logics behind the PlayerTurnsBlock
+/// </summary>
 public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTurnsBlockInfo>
 {
     private ConPlayers _conPlayer;

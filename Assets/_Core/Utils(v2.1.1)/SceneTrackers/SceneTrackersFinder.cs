@@ -3,6 +3,9 @@ using UnityEngine.SceneManagement;
 
 namespace Ramses.SceneTrackers
 {
+    /// <summary>
+    /// This class is the head system of the SceneTracking system.
+    /// </summary>
     [DisallowMultipleComponent]
     public class SceneTrackersFinder : MonoBehaviour
     {

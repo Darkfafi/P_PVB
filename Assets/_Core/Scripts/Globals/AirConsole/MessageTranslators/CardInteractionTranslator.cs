@@ -5,6 +5,9 @@ using NDream.AirConsole;
 public delegate void CardNameDeviceHandler(string cardName, int deviceId);
 public delegate void AmountDeviceHandler(int amount, int deviceId);
 
+/// <summary>
+/// This can be used for the communication between the Controller and the Game in context of Card Interactions (Playing and Drawing cards) 
+/// </summary>
 public class CardInteractionTranslator : BaseACMessageTranslator
 {
     /// <summary>
