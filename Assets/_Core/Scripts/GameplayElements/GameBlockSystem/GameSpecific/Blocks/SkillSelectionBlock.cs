@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Ramses.SceneTrackers;
@@ -42,8 +42,6 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
 
     protected override void Activated()
     {
-        NextBlock(); // TODO: Make block functionality and run it before NextBlock call.
-        return;
         ConfactoryFinder.Instance.Get<ConCurrentPhase>().SetCurrentPhase(GamePhase.Skills);
         Debug.Log("Activated Skill: " + gameBlockInfo.SecondsForEachSkillSelectionTurn);
 

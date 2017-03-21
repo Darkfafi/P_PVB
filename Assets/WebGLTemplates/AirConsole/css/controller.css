@@ -90,7 +90,25 @@ li {
     width: 100%;
     height: 100%;
     text-align: center;
-/*    visibility: hidden;*/
+    visibility: hidden;
+}
+
+.skill-select-holder .card-holder {
+    background-color: red;
+    position: relative;
+    display: inline-block;
+    
+    background: none;
+    width: 50%;
+    vertical-align: center;
+    margin: auto;
+    white-space: normal;
+}
+
+.skill-select-holder .card-holder img {
+    position: relative;
+    width: auto;
+    height: 80%;
 }
 
 #timer {
@@ -117,9 +135,27 @@ li {
     width: 40%;
     height: 40%;
 }
+#readyBtn {
+    background-image: url(/images/buttons/button_ready_green.png);
+    width: 22.5%;
+    height: 20%;
+    vertical-align: center;
+    position: relative;
+    top: 0;
+}
 
 #arrow {
-    background-image: url(images/buttons/if_pick_arrow.png);
+    background: url("/images/buttons/if_pick_arrow.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    
+    position: relative;
+    vertical-align: center;
+    margin: auto;
+    width: 10%;
+    height: 20%;
+    display: inline-block;
 }
 
 /* --- Player Info Tab --- */
@@ -199,11 +235,10 @@ li {
     text-align: center;
 }
 
-#card-holder {
+.card-holder {
     background-image: url(/images/backgrounds/if_cards_bg.png);
     background-size: contain;
     background-repeat: no-repeat;
-/*    width: 100%;*/
     width: auto;
     height: 90%;
     
@@ -217,6 +252,11 @@ li {
     position: relative; 
     display: inline-block;
     width: 30%;
+    
+    transition: all 0.1s ease;
+    -webkit-transition: all 0.1s ease;
+    -moz-transition: all 0.1s ease;
+    -o-transition: all 0.1s ease;
 }
 
 #skill_card {

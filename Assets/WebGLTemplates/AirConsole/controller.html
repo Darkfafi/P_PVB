@@ -11,7 +11,18 @@
             var airConsole = new AirConsole({ "orientation":"landscape" });
             var isReady = true;
             var selectedCardName = "";
+            var selectedCard;
             var cardsArray = [];
+            var factionsArray = [];
+            var skillsArray = [];
+            var skillIndexesArray = [];
+            var index = 0;
+            
+            skillsArray[0] = "/images/cards/skills/card_skill_crown.png";
+            skillsArray[1] = "/images/cards/skills/card_skill_stealing.png";
+            skillsArray[2] = "/images/cards/skills/card_skill_miracle.png";
+            skillsArray[3] = "/images/cards/skills/card_skill_trade.png";
+            skillsArray[4] = "/images/cards/skills/card_skill_destruction.png";
             
             //Initializer
             function init()
@@ -35,7 +46,6 @@
                 };
                 
                 airConsole.message(AirConsole.SCREEN, drawCardMessage);
-                console.log("I took some cards");
             }
             
             function takeGoldRequest(goldAmount)
@@ -45,7 +55,6 @@
                 };
                 
                 airConsole.message(AirConsole.SCREEN, takeGoldMessage);
-                console.log("gimme money");
             }
             
             function playCardRequest()
@@ -57,14 +66,30 @@
                 };
                 
                 airConsole.message(AirConsole.SCREEN, playCardMessage);
-                console.log("I built " + selectedCardName);
+            }
+            
+            function skillPickRequest()
+            {
+                var pickMessage = {
+                    'skillPickMessage':{'skillIndex':index}
+                };
+                
+                airConsole.message(AirConsole.SCREEN, pickMessage);
+            }
+            
+            function skillUseRequest()
+            {
+                var useMessage = {
+                    'skillUseMessage':{'skillIndex':index}
+                };
+                
+                airConsole.message(AirConsole.SCREEN, useMessage);
             }
             
 //-----------------------------------------------------------------------------------//
             
             function receiveMessage()
             {
-                console.log(airConsole);
                 airConsole.onMessage = function(from, data) {
                     
                     if(from === AirConsole.SCREEN && data.action === "gamePhaseUpdate")
@@ -109,7 +134,7 @@
                         //"Destroy" the Card's Element.
                         for(var i = 0; i < cardsArray.length; i++)
                         {
-                            document.getElementById('card-holder').removeChild(cardsArray[i]);
+                            document.getElementById("player-cards").getElementsByClassName("card-holder")[0].removeChild(cardsArray[i]);
                         }
                         cardsArray.splice(0, cardsArray.length);
 
@@ -118,6 +143,11 @@
                         {
                             createCard(cardNamesArray[i], cardLocationsArray[i]);
                         }
+                    }
+                    
+                    if(from === AirConsole.SCREEN && data.action === "UpdateSkillsAvailable")
+                    {
+                        skillIndexesArray = data.info.skillIndexes.split(",");
                     }
                 }
             }
@@ -159,7 +189,7 @@
                 
                 card.src = cardPath;
                 
-                document.getElementById("card-holder").appendChild(card);
+                document.getElementById("player-cards").getElementsByClassName("card-holder")[0].appendChild(card);
                 card.onclick = function(){
                     selectCard(card, cardName);
                 };
@@ -168,8 +198,45 @@
             
             function selectCard(card, cardName)
             {
+                if(selectedCard != null)
+                {
+                    selectedCard.style.transform = "scale(1)";
+                    selectedCard = null;
+                }
                 
-                selectedCardName = cardName;
+                if(selectedCardName == cardName)
+                {
+                    card.style.transform = "scale(1)";
+                    selectedCardName = "";
+                    selectedCard = null;
+                }
+                else
+                {
+                    card.style.transform = "scale(0.9)";
+                    selectedCardName = cardName;
+                    selectedCard = card;
+                }
+            }
+            
+            function skillCycler(index)
+            {
+                document.getElementById("skill_card").src = skillsArray[index];
+            }
+            
+            function changeIndex(value)
+            {
+                index = index + value;
+                
+                if(index > skillIndexesArray.length -1)
+                {
+                    index = 0;
+                }
+                else if(index < 0)
+                {
+                    index = skillIndexesArray.length -1;
+                }
+                
+                skillCycler(skillIndexesArray[index]);
             }
             
         </script>
@@ -186,7 +253,7 @@
                 
                 <div id="player-cards">
                     <h1 style="font-size:2.5em;">Buildable Cards</h1>
-                    <div id="card-holder">
+                    <div class="card-holder">
                         <!-- Cards -->
                     </div>
                 </div>
@@ -206,7 +273,7 @@
                 <!-- Slick Slider -->
                 <script type="text/javascript">
                     $(document).ready(function(){
-                        $('#cardholder').slick({
+                        $('.cardholder').slick({
                             centerMode: true,
                             centerPadding: '50px',
                             slidesToShow: 3,
@@ -254,32 +321,31 @@
             </div>
 
             <div id="Skills" class="skill-select-holder">
-                <h1 style="font-size: 3em; text-align: center;">Choose your Skill!</h1>
+<!--                <h1 style="font-size: 3em; text-align: center;">Choose your Skill!</h1>-->
 
-                <div id="card-holder">
+                <button onclick="changeIndex(-1)" id="arrow"></button>
+                <div class="card-holder">
                     <img id="skill_card" class="card" src="images/cards/skills/card_skill_crown.png">
-                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_miracle.png">
-                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_trade.png">
-                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_destruction.png">
-                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_stealing.png">
                 </div>
+                <button onclick="changeIndex(1)" id="arrow"></button>
+                
+                <button onclick="skillPickRequest()" id="readyBtn" class="actionButton"></button>
             </div>
             
             <div id="Factions" class="faction-select-holder">
 <!--                <h1 style="font-size: 3em; text-align: center;">Choose your Faction!</h1>-->
 
-                <div id="card-holder">
-                    
-                    <button id="arrow"></button>
+                <button id="arrow" class="actionButton"></button>
+                <div class="card-holder">
                     
                     <div id="faction-holder">
                         <img id="faction_card" class="card" src="images/factions/character_knight.png">
                     </div>
 
-                    <button id="arrow"></button>
-                    <button class="actionButton"></button>
-
                 </div>
+                <button id="arrow" class="actionButton"></button>
+                <button class="actionButton"></button>
+
             </div>
 
             <div id="Lobby" class="ready-screen-holder">
