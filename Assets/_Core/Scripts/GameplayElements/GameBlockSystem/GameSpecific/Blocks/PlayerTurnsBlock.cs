@@ -148,9 +148,34 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
         {
             _turnSystem.EndTurnForCurrentTicket();
         }
+
+        GiveMoneyForBuildings(game.GetGamePlayerBy(gamePlayerIndex));
+
         Debug.Log(game.GetGamePlayerBy(gamePlayerIndex).FactionType + " <-- TURN");
     }
-    
+
+    private void GiveMoneyForBuildings(GamePlayer gamePlayer)
+    {
+        PlayerCorner pc = game.Playfield.GetCornerByFaction(gamePlayer.FactionType);
+        switch (gamePlayer.SkillPouch.Skill)
+        {
+            case Skill.Miracle:
+                gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse(Skill.Miracle).Length);
+                break;
+            case Skill.Trade:
+                gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse(Skill.Trade).Length);
+                break;
+            case Skill.Destruction:
+                gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse(Skill.Destruction).Length);
+                break;
+            case Skill.TheCrown:
+                gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse().Length);
+                break;
+            default:
+                break;
+        }
+    }
+
     private bool IsPlayerTurn(GamePlayer player)
     {
         Debug.Log(_turnSystem.CurrentTurnTicket + " <- ctt | -> " + player.PlayerIndex);

@@ -20,6 +20,19 @@ public class PlayerCorner : MonoBehaviour
         return bf.ToArray();
     }
 
+    public BuildField[] GetAllBuildFieldsInUse(Skill skillRelated)
+    {
+        List<BuildField> bf = new List<BuildField>(GetAllBuildFieldsInUse());
+
+        for(int i = bf.Count - 1; i>=0; i--)
+        {
+            if (bf[i].CurrentBuiltBuilding.SkillLinkedTo != skillRelated)
+                bf.Remove(bf[i]);
+        }
+
+        return bf.ToArray();
+    }
+
     public int TotalScoreOfAllBuiltBuildings()
     {
         BuildField[] usedBuildfields = GetAllBuildFieldsInUse();
@@ -33,12 +46,15 @@ public class PlayerCorner : MonoBehaviour
 
     public void BuildStructureForCard(BaseCard card)
     {
-        Building buildingPrefab = ConfactoryFinder.Instance.Get<ConCards>().CardsDefinitionLibrary.GetCardDefinitionByName(card.CardName).CardBuildingObjectPrefab;
+        ConCards cc = ConfactoryFinder.Instance.Get<ConCards>();
+        GlobalCardDefinitionItem cardDefinition = cc.CardsDefinitionLibrary.GetCardDefinitionByName(card.CardName);
+        CardDefinitionBaseItem baseCardDefinition = (cc.CardsDefinitionLibrary.GetCardTypeFromCard(card.CardName) == CardType.UpgradeCard) ? cc.CardsDefinitionLibrary.GetCardBaseItemOfUpgradeItem((CardDefinitionUpgradeItem)cardDefinition) : (CardDefinitionBaseItem)cardDefinition;
+
         for(int i = 0; i < _buildFields.Count; i++)
         {
             if(_buildFields[i].Available && _buildFields[i].CurrentBuiltBuilding == null)
             {
-                _buildFields[i].BuildBuilding(buildingPrefab);
+                _buildFields[i].BuildBuilding(cardDefinition, baseCardDefinition);
                 break;
             }
         }
