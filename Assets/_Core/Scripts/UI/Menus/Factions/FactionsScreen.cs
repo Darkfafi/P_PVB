@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using Ramses.Confactory;
 using Ramses.SceneTrackers;
 using System;
@@ -73,6 +73,11 @@ public class FactionsScreen : MonoBehaviour
             _conPlayerFactions.UnassignPlayerFromItsFaction(playerOfId);
         }
 
+        if (_conPlayerFactions.GetTakenFactions().Length == _conPlayers.GetCurrentlyRegisteredPlayers(false).Length)
+        {
+            GoToGameScene();
+            return;
+        }
         SendUpdateFactions();
     }
 

@@ -48,11 +48,13 @@ public class FactionSelect : MonoBehaviour
 
     private void OnPlayerFactionAssignedEvent(PlayerFactionLinkItem linkItem)
     {
+        if (linkItem.FactionType != FactionType) { return; }
         SetActive(linkItem.Player);
     }
 
     private void OnPlayerFactionUnassignedEvent(PlayerFactionLinkItem linkItem)
     {
+        if (linkItem.FactionType != FactionType) { return; }
         SetActive(null);
     }
 
