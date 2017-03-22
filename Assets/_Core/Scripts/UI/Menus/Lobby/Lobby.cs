@@ -2,6 +2,7 @@ using UnityEngine;
 using Ramses.Confactory;
 using Ramses.SceneTrackers;
 using UnityEngine.UI;
+using System;
 
 /// <summary>
 /// This component binds all the functionalities to form the Lobby screen.
@@ -41,6 +42,7 @@ public class Lobby : MonoBehaviour
         }
         else
         {
+            _conPlayers.CleanRegisteredPlayers(true);
             OnConPlayerReadyToUseEvent();
         }
     }

@@ -36,6 +36,7 @@ public class FactionLibraryItem
     public Color FactionColor { get { return _factionColor; } }
     public Sprite FactionSectionBackground { get { return _factionSectionBackground; } }
     public Sprite FactionFortuneWheelCorner { get { return _factionFortuneWheelCorner; } }
+    public Sprite FactionCharacterSprite { get { return _factionCharacterSprite; } }
 
     [SerializeField]
     private FactionType _factionType;
@@ -51,4 +52,7 @@ public class FactionLibraryItem
 
     [SerializeField]
     private Sprite _factionFortuneWheelCorner;
+
+    [SerializeField]
+    private Sprite _factionCharacterSprite;
 }
