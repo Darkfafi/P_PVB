@@ -93,6 +93,18 @@ li {
     visibility: hidden;
 }
 
+.notTurn-screen-holder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    visibility: hidden;
+}
+
 .skill-select-holder .card-holder, .faction-select-holder .card-holder {
     background-color: red;
     position: relative;
@@ -105,10 +117,16 @@ li {
     white-space: normal;
 }
 
-.skill-select-holder .card-holder img, .faction-select-holder .card-holder img {
+.skill-select-holder .card-holder img {
     position: relative;
     width: auto;
     height: 80%;
+}
+
+.faction-select-holder .card-holder img {
+    position: relative;
+    width: auto;
+    height: 70%;
 }
 
 #timer {

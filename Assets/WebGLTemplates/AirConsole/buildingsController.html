@@ -14,16 +14,16 @@
             var selectedCard;
             var cardsArray = [];
             var factionsArray = [];
-            var factionsIndexesArray = [];
+            var factionsNamesArray = [];
             var skillsArray = [];
             var skillIndexesArray = [];
             var index = 0;
             var factionIndex = 0;
             
-            factionsArray[0] = "/images/factions/character_knight.png";
-            factionsArray[1] = "/images/factions/character_samurai.png";
-            factionsArray[2] = "/images/factions/character_spartan.png";
-            factionsArray[3] = "/images/factions/character_viking.png";
+            factionsArray[0] = "/images/factions/avatar_knight.png";
+            factionsArray[1] = "/images/factions/avatar_samurai.png";
+            factionsArray[2] = "/images/factions/avatar_spartan.png";
+            factionsArray[3] = "/images/factions/avatar_viking.png";
             
             skillsArray[0] = "/images/cards/skills/card_skill_crown.png";
             skillsArray[1] = "/images/cards/skills/card_skill_stealing.png";
@@ -37,10 +37,10 @@
                 airConsole.onActivePlayersChange = function() {}
                 airConsole.onReady = function() {}
                 
+                receiveMessage();
+                
                 document.getElementById('buildBtn')
                 $('#isReady').hide();
-                
-                receiveMessage();
             }
             
 //-----------------------------------------------------------------------------------//
@@ -78,7 +78,7 @@
             function skillPickRequest()
             {
                 var pickMessage = {
-                    'skillPickMessage':{'skillIndex':index}
+                    'skillPickMessage':{'skillIndex':skillIndexesArray[index]}
                 };
                 
                 airConsole.message(AirConsole.SCREEN, pickMessage);
@@ -87,7 +87,7 @@
             function skillUseRequest()
             {
                 var useMessage = {
-                    'skillUseMessage':{'skillIndex':index}
+                    'skillUseMessage':{'skillIndex':skillIndexesArray[index]}
                 };
                 
                 airConsole.message(AirConsole.SCREEN, useMessage);
@@ -96,7 +96,7 @@
             function factionPickRequest()
             {
                 var factionMessage = {
-                    'factionAction':{'factionIndex':factionIndex,
+                    'factionAction':{'factionIndex':factionsNamesArray[factionIndex],
                                      'selectType':true
                                     }
                 };
@@ -165,7 +165,8 @@
                     
                     if(from === AirConsole.SCREEN && data.action === "UpdateFactionsAvailable")
                     {
-                        factionsIndexesArray = data.info.factionIndexes.split(",");
+                        factionsNamesArray = data.info.factionIndexes.split(",");
+                        alert("my boy?");
                     }
                     
                     if(from === AirConsole.SCREEN && data.action === "UpdateSkillsAvailable")
@@ -271,16 +272,16 @@
             {
                 factionIndex = factionIndex + value;
                 
-                if(factionIndex > skillIndexesArray.length -1)
+                if(factionIndex > factionsNamesArray.length -1)
                 {
                     factionIndex = 0;
                 }
                 else if(factionIndex < 0)
                 {
-                    factionIndex = skillIndexesArray.length -1;
+                    factionIndex = factionsNamesArray.length -1;
                 }
                 
-                factionCycler(skillIndexesArray[factionIndex]);
+                factionCycler(factionsNamesArray[factionIndex]);
             }
             
         </script>
@@ -304,7 +305,7 @@
 
                 <!-- Player Info -->
                 <div id="player-info">
-                    <button id="skill-btn">Skill</button>
+                    <button onclick="skillUseRequest()" id="skill-btn">Skill</button>
                     <br/>
                     <br/>
                     <h1>Skill Name</h1>
@@ -313,37 +314,6 @@
                         <li><h3>Skill Feature</h3></li>
                     </ul>
                 </div>
-
-                <!-- Slick Slider -->
-                <script type="text/javascript">
-                    $(document).ready(function(){
-                        $('.cardholder').slick({
-                            centerMode: true,
-                            centerPadding: '50px',
-                            slidesToShow: 3,
-                            responsive: [
-                                {
-                                    breakpoint: 768,
-                                    settings: {
-                                        arrows: false,
-                                        centerMode: true,
-                                        centerPadding: '30px',
-                                        slidesToShow: 3
-                                    }
-                                },
-                                {
-                                    breakpoint: 480,
-                                    settings: {
-                                        arrows: false,
-                                        centerMode: true,
-                                        centerPadding: '30px',
-                                        slidesToShow: 1
-                                    }
-                                }
-                            ]
-                        });
-                    });
-                </script>
 
                 <!-- Player Option Buttons -->
                 <div id="player-options">
@@ -365,31 +335,25 @@
             </div>
 
             <div id="Skills" class="skill-select-holder">
-<!--                <h1 style="font-size: 3em; text-align: center;">Choose your Skill!</h1>-->
 
                 <button onclick="changeSkillIndex(-1)" id="arrow"></button>
-                <div class="card-holder">
-                    <img id="skill_card" class="card" src="images/cards/skills/card_skill_crown.png">
-                </div>
+                    <div class="card-holder">
+                        <img id="skill_card" class="card" src="images/cards/skills/card_skill_crown.png">
+                    </div>
                 <button onclick="changeSkillIndex(1)" id="arrow"></button>
                 
                 <button onclick="skillPickRequest()" id="readyBtn" class="actionButton"></button>
             </div>
             
             <div id="Factions" class="faction-select-holder">
-<!--                <h1 style="font-size: 3em; text-align: center;">Choose your Faction!</h1>-->
 
                 <button onclick="changeFactionIndex(-1)" id="arrow" class="actionButton"></button>
-                <div class="card-holder">
-                    
-                    <div id="faction-holder">
-                        <img id="faction_card" class="card" src="images/factions/character_knight.png">
+                    <div class="card-holder">
+                        <img id="faction_card" class="card" src="images/factions/avatar_knight.png">
                     </div>
-
-                </div>
                 <button onclick="changeFactionIndex(1)" id="arrow" class="actionButton"></button>
+                    
                 <button onclick="factionPickRequest()" class="actionButton"></button>
-
             </div>
 
             <div id="Lobby" class="ready-screen-holder">
@@ -397,6 +361,10 @@
                 <br>
                 <button onclick="readyAction(true)" class="actionButton" id="isNotReady"></button>
                 <button onclick="unreadyAction(false)" class="actionButton" id="isReady"></button>
+            </div>
+            
+            <div id="NotMyTurn" class="notTurn-screen-holder">
+                <h1 style="font-size: 3.5em; text-align:center; font-family:'Burbank';">Wait for your Turn!</h1>
             </div>
             
         </div>

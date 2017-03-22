@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Ramses.Confactory;
 using Ramses.SceneTrackers;
 using System;
@@ -54,7 +54,7 @@ public class FactionsScreen : MonoBehaviour
     private void OnReady()
     {
         ListenToDevices();
-        DEBUG_AssignFactionsToPlayersAndContinue();
+//        DEBUG_AssignFactionsToPlayersAndContinue();
     }
 
     private void OnFactionRequestEvent(int deviceId, FactionType factionType, bool selectType)
