@@ -78,7 +78,7 @@
             function skillPickRequest()
             {
                 var pickMessage = {
-                    'skillPickMessage':{'skillIndex':index}
+                    'skillPickMessage':{'skillIndex':skillIndexesArray[index]}
                 };
                 
                 airConsole.message(AirConsole.SCREEN, pickMessage);
@@ -87,7 +87,7 @@
             function skillUseRequest()
             {
                 var useMessage = {
-                    'skillUseMessage':{'skillIndex':index}
+                    'skillUseMessage':{'skillIndex':skillIndexesArray[index]}
                 };
                 
                 airConsole.message(AirConsole.SCREEN, useMessage);
@@ -96,7 +96,7 @@
             function factionPickRequest()
             {
                 var factionMessage = {
-                    'factionAction':{'factionIndex':factionIndex,
+                    'factionAction':{'factionIndex':factionsNamesArray[factionIndex],
                                      'selectType':true
                                     }
                 };
@@ -167,6 +167,7 @@
                     {
                         factionsNamesArray = data.info.factionIndexes.split(",");
                         alert("my boy?");
+                        console.log("my boy?");
                     }
                     
                     if(from === AirConsole.SCREEN && data.action === "UpdateSkillsAvailable")
