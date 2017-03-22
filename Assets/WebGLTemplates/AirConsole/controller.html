@@ -81,6 +81,8 @@
                     'skillPickMessage':{'skillIndex':skillIndexesArray[index]}
                 };
                 
+                document.getElementById("Skills").style.visibility = "hidden";
+                document.getElementById("NotMyTurn").style.visibility = "visible";
                 airConsole.message(AirConsole.SCREEN, pickMessage);
             }
             
@@ -110,11 +112,6 @@
             {
                 airConsole.onMessage = function(from, data) {
                     
-                    if(from === AirConsole.SCREEN && data.action === "")
-                    {
-                        
-                    }
-                    
                     if(from === AirConsole.SCREEN && data.action === "gamePhaseUpdate")
                     {
                         switch(data.gamePhase)
@@ -124,6 +121,7 @@
                                 document.getElementById("Factions").style.visibility = "hidden";
                                 document.getElementById("Skills").style.visibility = "hidden";
                                 document.getElementById("Turns").style.visibility = "hidden";
+                                document.getElementById("NotMyTurn").style.visibility = "hidden";
                             break;
                                 
                             case "Factions":
@@ -131,15 +129,15 @@
                                 document.getElementById("Factions").style.visibility = "visible";
                                 document.getElementById("Skills").style.visibility = "hidden";
                                 document.getElementById("Turns").style.visibility = "hidden";
+                                document.getElementById("NotMyTurn").style.visibility = "hidden";
                             break;
                                 
                             case "Skills":
-                                document.getElementById("NotMyTurn").style.visibility = "visible";
-                                
                                 document.getElementById("Lobby").style.visibility = "hidden";
                                 document.getElementById("Factions").style.visibility = "hidden";
                                 document.getElementById("Skills").style.visibility = "hidden";
                                 document.getElementById("Turns").style.visibility = "hidden";
+                                document.getElementById("NotMyTurn").style.visibility = "visible";
                             break;
                                 
                             case "Turns":
@@ -147,6 +145,7 @@
                                 document.getElementById("Factions").style.visibility = "hidden";
                                 document.getElementById("Skills").style.visibility = "hidden";
                                 document.getElementById("Turns").style.visibility = "visible";
+                                document.getElementById("NotMyTurn").style.visibility = "hidden";
                             break;
                         }
                     }
@@ -253,14 +252,14 @@
                 }
             }
             
-            function skillCycler(index)
+            function skillCycler(thisIndex)
             {
-                document.getElementById("skill_card").src = skillsArray[index];
+                document.getElementById("skill_card").src = thisIndex;
             }
             
-            function factionCycler(index)
+            function factionCycler(thisIndex)
             {
-                document.getElementById("faction_card").src = factionsArray[factionIndex];
+                document.getElementById("faction_card").src = thisIndex;
             }
             
             function changeSkillIndex(value)
@@ -276,7 +275,7 @@
                     index = skillIndexesArray.length -1;
                 }
                 
-                skillCycler(skillIndexesArray[index]);
+                skillCycler(skillsArray[index]);
             }
             
             function changeFactionIndex(value)
@@ -292,7 +291,7 @@
                     factionIndex = factionsIndexesArray.length -1;
                 }
                 
-                factionCycler(factionsIndexesArray[factionIndex]);
+                factionCycler(factionsArray[factionsIndexesArray[factionIndex]]);
             }
             
         </script>
@@ -349,7 +348,7 @@
 
                 <button onclick="changeSkillIndex(-1)" id="arrow"></button>
                     <div class="card-holder">
-                        <img id="skill_card" class="card" src="images/cards/skills/card_skill_crown.png">
+                        <img id="skill_card" class="card" <src="images/cards/skills/card_skill_crown.png">
                     </div>
                 <button onclick="changeSkillIndex(1)" id="arrow"></button>
                 
