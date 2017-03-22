@@ -52,6 +52,7 @@ public class BuildingsGame : MonoBehaviour, IGame
     {
         _gameBlockSystem.EndBlockCycle();
         _gameBlockSystem.Destroy();
+        ConfactoryFinder.Instance.Get<ConSceneSwitcher>().SwitchScreen(SceneNames.LOBBY_SCENE);
     }
 
     /// <summary>

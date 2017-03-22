@@ -161,6 +161,7 @@ public class TurnSystem
 
         public void SetPriorityLevel(int level)
         {
+            Debug.Log(level + " < --- level");
             PriorityLevel = level;
         }
     }

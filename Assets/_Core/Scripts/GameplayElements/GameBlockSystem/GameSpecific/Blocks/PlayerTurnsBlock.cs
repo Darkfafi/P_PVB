@@ -81,7 +81,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
             game.GamePlayers[i].PlayCardEvent += OnPlayCardEvent;
             game.GamePlayers[i].SkillPouch.SkillUsedEvent += OnSkillUsedEvent;
             _turnSystem.AddTurnTickets(game.GamePlayers[i].PlayerIndex); // Player index used as id because the index does not change on device change.
-            _turnSystem.SetPriorityLevelOfTicket(game.GamePlayers[i].PlayerIndex, Ramses.Confactory.ConfactoryFinder.Instance.Get<ConSkills>().GetIndexValueOfSkill(game.GamePlayers[i].SkillPouch.Skill));
+            _turnSystem.SetPriorityLevelOfTicket(game.GamePlayers[i].PlayerIndex, Enum.GetNames(typeof(Skill)).Length - Ramses.Confactory.ConfactoryFinder.Instance.Get<ConSkills>().GetIndexValueOfSkill(game.GamePlayers[i].SkillPouch.Skill));
         }
 
         _turnSystem.StartTurnSystem();
