@@ -83,6 +83,7 @@
                 
                 document.getElementById("Skills").style.visibility = "hidden";
                 document.getElementById("NotMyTurn").style.visibility = "visible";
+                
                 airConsole.message(AirConsole.SCREEN, pickMessage);
             }
             
@@ -102,6 +103,9 @@
                                      'selectType':true
                                     }
                 };
+                
+                document.getElementById("Factions").style.visibility = "hidden";
+                document.getElementById("NotMyTurn").style.visibility = "visible";
                 
                 airConsole.message(AirConsole.SCREEN, factionMessage);
             }
@@ -173,6 +177,8 @@
                     {
                         factionsIndexesArray.splice(0, factionsIndexesArray.length);
                         factionsIndexesArray = data.info.factionIndexes.split(",");
+                        
+                        document.getElementById("faction_card").src = factionsArray[factionsIndexesArray[factionIndex]];
                     }
                     
                     if(from === AirConsole.SCREEN && data.action === "UpdateSkillsAvailable")
@@ -182,6 +188,8 @@
                         
                         skillIndexesArray.splice(0, skillIndexesArray.length);
                         skillIndexesArray = data.info.skillIndexes.split(",");
+                        
+                        document.getElementById("skill_card").src = skillsArray[skillIndexesArray[index]];
                     }
                 }
             }
@@ -347,7 +355,7 @@
 
                 <button onclick="changeSkillIndex(-1)" id="arrow"></button>
                     <div class="card-holder">
-                        <img id="skill_card" class="card" <src="images/cards/skills/card_skill_crown.png">
+                        <img id="skill_card" class="card">
                     </div>
                 <button onclick="changeSkillIndex(1)" id="arrow"></button>
                 
@@ -358,11 +366,11 @@
 
                 <button onclick="changeFactionIndex(-1)" id="arrow" class="actionButton"></button>
                     <div class="card-holder">
-                        <img id="faction_card" class="card" src="images/factions/avatar_spartan.png">
+                        <img id="faction_card" class="card">
                     </div>
                 <button onclick="changeFactionIndex(1)" id="arrow" class="actionButton"></button>
                     
-                <button onclick="factionPickRequest()" class="actionButton"></button>
+                <button onclick="factionPickRequest()" id="readyBtn" class="actionButton"></button>
             </div>
 
             <div id="Lobby" class="ready-screen-holder">
