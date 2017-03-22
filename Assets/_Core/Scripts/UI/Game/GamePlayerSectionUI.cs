@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Ramses.SceneTrackers;
+using System;
 
 /// <summary>
 /// This component is the main component for the GamePlayer corner UIs.
@@ -69,9 +70,25 @@ public class GamePlayerSectionUI : MonoBehaviour
         gameplayer.ReceivedCardEvent += OnReceivedCardEvent;
         gameplayer.PlayCardEvent += OnPlayCardEvent;
 
+        gameplayer.SkillPouch.SkillSetEvent += OnSkillSetEvent;
+
         gameplayer.CoinAmountChangedEvent += OnReceivedCoinEvent;
 
         UpdateStats();
+    }
+
+    private void OnSkillSetEvent(GamePlayer gamePlayer, Skill skill)
+    {
+        SkillLibraryItem item = Ramses.Confactory.ConfactoryFinder.Instance.Get<ConSkills>().SkillLibrary.GetSkillItem(skill);
+        if(item != null)
+        {
+            _skillIconImage.sprite = item.SkillIcon;
+            _skillIconImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            _skillIconImage.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>
@@ -160,6 +177,8 @@ public class GamePlayerSectionUI : MonoBehaviour
         _gamePlayerDisplaying.ReceivedCardEvent -= OnReceivedCardEvent;
         _gamePlayerDisplaying.PlayCardEvent -= OnPlayCardEvent;
         _gamePlayerDisplaying.CoinAmountChangedEvent += OnReceivedCoinEvent;
+
+        _gamePlayerDisplaying.SkillPouch.SkillSetEvent -= OnSkillSetEvent;
 
         _gamePlayerDisplaying = null;
     }

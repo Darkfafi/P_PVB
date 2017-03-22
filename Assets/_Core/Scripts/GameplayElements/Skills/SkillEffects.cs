@@ -42,6 +42,7 @@ public class SkillEffects
                 break;
             case Skill.Trade:
                 // Give player coins
+                gamePlayer.GrabCoins(1);
                 break;
             case Skill.Destruction:
                 // Destroyer call for random building of random player
@@ -75,6 +76,10 @@ public class SkillEffects
     private void OnDestructionEffectEnd(BasePopUp popUpEffected)
     {
         popUpEffected.PopUpBeingDestroyedEvent -= OnDestructionEffectEnd;
+        GamePlayer gamePlayerEffected = _game.GetGamePlayerBy(_effectedFactionType);
+
+        if (gamePlayerEffected.SkillPouch.Skill == Skill.Miracle) { return; } // If Miracle then you can't be effected by destroy skill.
+
         BuildField[] buildFieldsOfTargetFaction = _game.Playfield.GetCornerByFaction(_effectedFactionType).GetAllBuildFieldsInUse();
         if (buildFieldsOfTargetFaction.Length > 0)
             buildFieldsOfTargetFaction[UnityEngine.Random.Range(0, buildFieldsOfTargetFaction.Length)].DestroyCurrentBuilding();

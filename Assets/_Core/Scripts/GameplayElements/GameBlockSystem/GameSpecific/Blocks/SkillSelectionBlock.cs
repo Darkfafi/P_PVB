@@ -52,6 +52,7 @@ public class SkillSelectionBlockLogic : BaseGameBlockLogic<BuildingsGame, SkillS
 
         for (int i = 0; i < game.GamePlayers.Length; i++)
         {
+            game.GamePlayers[i].SkillPouch.SetSkill(Skill.None);
             game.GamePlayers[i].SkillPouch.SkillSetEvent += OnSkillSetEvent;
             _turnSystem.AddTurnTickets(game.GamePlayers[i].PlayerIndex);
             // TODO: Set priority level on who choses skills first.
