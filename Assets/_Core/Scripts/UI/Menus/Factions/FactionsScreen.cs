@@ -65,6 +65,7 @@ public class FactionsScreen : MonoBehaviour
         if (selectType)
         {
             if (ft.Player != null) { return; }
+            _conPlayerFactions.UnassignPlayerFromItsFaction(playerOfId);
             _conPlayerFactions.AssignPlayerToFaction(playerOfId, factionType);
         }
         else

@@ -24,13 +24,6 @@ public class SkillTranslator : BaseACMessageTranslator
             action = "UpdateSkillsAvailable",
             info = new { skillIndexes = CreateParsableString(skillIndexList) }
         };
-
-        //RegisteredPlayer[] registeredPlayers = ConfactoryFinder.Instance.Get<ConPlayers>().GetCurrentlyRegisteredPlayers(true);
-        //for(int i = 0; i < registeredPlayers.Length; i++)
-        //{
-        //    if (registeredPlayers[i].IsConnected)
-        //        AirConsole.instance.Message(registeredPlayers[i].DeviceID, message);
-        //}
         AirConsole.instance.Message(deviceId, message);
     }
 
@@ -47,7 +40,7 @@ public class SkillTranslator : BaseACMessageTranslator
             if (data["skillUseMessage"]["skillIndex"] != null)
             {
                 if (SkillUseRequestEvent != null)
-                    SkillUseRequestEvent(from, ConfactoryFinder.Instance.Get<ConSkills>().SkillsInOrder[(int)data["skillUseMessage"]["skillIndex"]]);
+                    SkillUseRequestEvent(from, ConfactoryFinder.Instance.Get<ConSkills>().SkillsInOrder[int.Parse((string)data["skillUseMessage"]["skillIndex"])]);
                 return true;
             }
             else
@@ -63,9 +56,9 @@ public class SkillTranslator : BaseACMessageTranslator
         if (data["skillPickMessage"] != null)
         {
             if (data["skillPickMessage"]["skillIndex"] != null)
-            { 
+            {
                 if (SkillPickRequestEvent != null)
-                    SkillPickRequestEvent(from, ConfactoryFinder.Instance.Get<ConSkills>().SkillsInOrder[(int)data["skillPickMessage"]["skillIndex"]]);
+                    SkillPickRequestEvent(from, ConfactoryFinder.Instance.Get<ConSkills>().SkillsInOrder[int.Parse((string)data["skillPickMessage"]["skillIndex"])]);
                 return true;
             }
             else
