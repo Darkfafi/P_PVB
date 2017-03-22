@@ -28,17 +28,6 @@ body {
 */
 }
 
-li {
-    text-shadow: none;
-    
-    -webkit-text-stroke: 0px black;
-    -moz-text-stroke: 0px black;
-    -o-text-stroke: 0px black;
-    text-stroke: 0px black;
-    
-    list-style: decimal;
-}
-
 .container {
 /*    position: absolute;*/
     margin: 0;
@@ -194,6 +183,22 @@ li {
 
 #skill_feat {
     width: 92.5%;
+    
+    text-shadow: none;
+    
+    -webkit-text-stroke: 0px black;
+    -moz-text-stroke: 0px black;
+    -o-text-stroke: 0px black;
+    text-stroke: 0px black;
+}
+
+#skill_name {
+    text-shadow: none;
+    
+    -webkit-text-stroke: 0px black;
+    -moz-text-stroke: 0px black;
+    -o-text-stroke: 0px black;
+    text-stroke: 0px black;
 }
 
 #skill-btn {
