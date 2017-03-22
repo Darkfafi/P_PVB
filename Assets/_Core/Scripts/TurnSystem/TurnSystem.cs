@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The Turnsystem is a system which gives turns to Ids in a given order. It will also sort them on prioritylevel.
+/// You can only add 1 of every id to the turnSystem as turnTicket. The 'StartTurnSystem' must be called to run it.
+/// If the turnsystem is looping, the turnsystem will keep on giving turns until it is ended by an outside source, else it will end itself after the last ticket's turn has been ended.
+/// </summary>
 public class TurnSystem
 {
     public event IntHandler TurnStartedEvent;
