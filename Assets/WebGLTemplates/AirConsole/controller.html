@@ -20,10 +20,10 @@
             var index = 0;
             var factionIndex = 0;
             
-            factionsArray[0] = "/images/factions/avatar_knight.png";
-            factionsArray[1] = "/images/factions/avatar_samurai.png";
-            factionsArray[2] = "/images/factions/avatar_viking.png";
-            factionsArray[3] = "/images/factions/avatar_spartan.png";
+            factionsArray[0] = "/images/factions/avatar_spartan.png";
+            factionsArray[1] = "/images/factions/avatar_viking.png";
+            factionsArray[2] = "/images/factions/avatar_knight.png";
+            factionsArray[3] = "/images/factions/avatar_samurai.png";
             
             skillsArray[0] = "/images/cards/skills/card_skill_crown.png";
             skillsArray[1] = "/images/cards/skills/card_skill_stealing.png";
@@ -110,6 +110,11 @@
             {
                 airConsole.onMessage = function(from, data) {
                     
+                    if(from === AirConsole.SCREEN && data.action === "")
+                    {
+                        
+                    }
+                    
                     if(from === AirConsole.SCREEN && data.action === "gamePhaseUpdate")
                     {
                         switch(data.gamePhase)
@@ -129,9 +134,11 @@
                             break;
                                 
                             case "Skills":
+                                document.getElementById("NotMyTurn").style.visibility = "visible";
+                                
                                 document.getElementById("Lobby").style.visibility = "hidden";
                                 document.getElementById("Factions").style.visibility = "hidden";
-                                document.getElementById("Skills").style.visibility = "visible";
+                                document.getElementById("Skills").style.visibility = "hidden";
                                 document.getElementById("Turns").style.visibility = "hidden";
                             break;
                                 
@@ -165,11 +172,16 @@
                     
                     if(from === AirConsole.SCREEN && data.action === "UpdateFactionsAvailable")
                     {
+                        factionsIndexesArray.splice(0, factionsIndexesArray.length);
                         factionsIndexesArray = data.info.factionIndexes.split(",");
                     }
                     
                     if(from === AirConsole.SCREEN && data.action === "UpdateSkillsAvailable")
                     {
+                        document.getElementById("NotMyTurn").style.visibility = "hidden";
+                        document.getElementById("Skills").style.visibility = "visible";
+                        
+                        skillIndexesArray.splice(0, skillIndexesArray.length);
                         skillIndexesArray = data.info.skillIndexes.split(",");
                     }
                 }
@@ -348,7 +360,7 @@
 
                 <button onclick="changeFactionIndex(-1)" id="arrow" class="actionButton"></button>
                     <div class="card-holder">
-                        <img id="faction_card" class="card" src="images/factions/avatar_knight.png">
+                        <img id="faction_card" class="card" src="images/factions/avatar_spartan.png">
                     </div>
                 <button onclick="changeFactionIndex(1)" id="arrow" class="actionButton"></button>
                     
