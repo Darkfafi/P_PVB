@@ -133,6 +133,11 @@ public class GamePlayerSectionUI : MonoBehaviour
         _playfieldSceneTracker = SceneTrackersFinder.Instance.GetSceneTracker<PlayfieldST>();
     }
 
+    protected void OnDestroy()
+    {
+        UnDisplayGamePlayer();
+    }
+
     private void OnPlayCardEvent(GamePlayer gamePlayer, BaseCard card)
     {
         UpdateStats();
