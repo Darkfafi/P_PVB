@@ -84,6 +84,31 @@
                 document.getElementById("Skills").style.visibility = "hidden";
                 document.getElementById("NotMyTurn").style.visibility = "visible";
                 
+                //Set Skill Name in Player Info Tab
+                switch(skillIndexesArray[index])
+                {
+                        case "0":
+                            document.getElementById("skill_name").innerHTML = "The Crown";
+                            document.getElementById("skill_feat").innerHTML = "Start Every Round and Receive 1 coin for every building you own this round.";
+                        break;
+                        case "1":
+                            document.getElementById("skill_name").innerHTML = "Stealing";
+                            document.getElementById("skill_feat").innerHTML = "Take a random player's coins or, if you're unlucky, your own.";
+                        break;
+                        case "2":
+                            document.getElementById("skill_name").innerHTML = "Miracle";
+                            document.getElementById("skill_feat").innerHTML = "Your buildings are unbreakable and you receive 1 coin for every BLUE building you own this round.";
+                        break;
+                        case "3":
+                            document.getElementById("skill_name").innerHTML = "Trade";
+                            document.getElementById("skill_feat").innerHTML = "Receive 1 coin from the bank next to any additional coins for every GREEN building you own this round.";
+                        break;
+                        case "4":
+                            document.getElementById("skill_name").innerHTML = "Destruction";
+                            document.getElementById("skill_feat").innerHTML = "Destroy a random player's building or, if you're unlucky, your own. You also receive 1 coin for every RED building you own this round.";
+                        break;
+                }
+                
                 airConsole.message(AirConsole.SCREEN, pickMessage);
             }
             
@@ -325,11 +350,8 @@
                     <button onclick="skillUseRequest()" id="skill-btn">Skill</button>
                     <br/>
                     <br/>
-                    <h1>Skill Name</h1>
-                    <ul>
-                        <li><h3>Skill Feature</h3></li>
-                        <li><h3>Skill Feature</h3></li>
-                    </ul>
+                    <h1 id="skill_name">Skill Name</h1>
+                    <h4 id="skill_feat">Skill Feature</h4>
                 </div>
 
                 <!-- Player Option Buttons -->
