@@ -89,7 +89,7 @@ public class FactionsScreen : MonoBehaviour
         for(int i = 0; i < freeFactions.Length; i++)
         {
             int factionIndex = (int)freeFactions[i];
-            ffis[i] = factionIndex;
+            ffis[i] = (factionIndex - 1);
         }
 
         _factionsTranslator.SendUpdateFactionsAvailable(ffis);

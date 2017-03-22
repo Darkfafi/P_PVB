@@ -34,7 +34,7 @@ public class FactionsTranslator : BaseACMessageTranslator
         {
             if (data["factionAction"]["factionIndex"] != null && data["factionAction"]["selectType"] != null)
             {
-                FactionType factionRequested = (FactionType)(int.Parse((string)data["factionAction"]["factionIndex"]));
+                FactionType factionRequested = (FactionType)((int.Parse((string)data["factionAction"]["factionIndex"]) + 1));
                 bool selectType = (bool)data["factionAction"]["selectType"];
                 if (FactionRequestEvent != null)
                 {

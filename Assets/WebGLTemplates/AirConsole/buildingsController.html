@@ -275,7 +275,7 @@
                     index = skillIndexesArray.length -1;
                 }
                 
-                skillCycler(skillsArray[index]);
+                skillCycler(skillsArray[skillIndexesArray[index]]);
             }
             
             function changeFactionIndex(value)
@@ -290,8 +290,7 @@
                 {
                     factionIndex = factionsIndexesArray.length -1;
                 }
-                
-                factionCycler(factionsArray[factionIndex]);
+                factionCycler(factionsArray[factionsIndexesArray[factionIndex]]);
             }
             
         </script>
