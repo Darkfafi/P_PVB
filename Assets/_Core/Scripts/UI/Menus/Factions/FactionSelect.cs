@@ -40,6 +40,7 @@ public class FactionSelect : MonoBehaviour
 
     protected void OnDestroy()
     {
+        _selectionIcon.transform.DOKill();
         _conPlayerFactions.PlayerFactionAssignedEvent -= OnPlayerFactionAssignedEvent;
         _conPlayerFactions.PlayerFactionUnassignedEvent -= OnPlayerFactionUnassignedEvent;
     }
