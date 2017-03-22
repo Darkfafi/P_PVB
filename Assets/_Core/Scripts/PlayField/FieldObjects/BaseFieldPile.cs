@@ -25,6 +25,7 @@ public abstract class BaseFieldPile<T> : MonoBehaviour where T : class
 
     public void Grab(GamePlayer player, int amount)
     {
+        if (amount <= 0) { return; }
         GrabLoop(player, amount, 1);
     }
 

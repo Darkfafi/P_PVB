@@ -32,4 +32,9 @@ public class BuildField : MonoBehaviour {
         Destroy(CurrentBuiltBuilding.gameObject);
         CurrentBuiltBuilding = null;
     }
+
+    protected void Awake()
+    {
+        CurrentBuiltBuilding = null;
+    }
 }

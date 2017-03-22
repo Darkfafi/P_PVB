@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using UnityEngine;
 using Ramses.Confactory;
 using NDream.AirConsole;
@@ -63,7 +63,7 @@ public class SkillTranslator : BaseACMessageTranslator
         if (data["skillPickMessage"] != null)
         {
             if (data["skillPickMessage"]["skillIndex"] != null)
-            {
+            { 
                 if (SkillPickRequestEvent != null)
                     SkillPickRequestEvent(from, ConfactoryFinder.Instance.Get<ConSkills>().SkillsInOrder[(int)data["skillPickMessage"]["skillIndex"]]);
                 return true;

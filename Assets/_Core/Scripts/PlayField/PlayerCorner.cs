@@ -16,7 +16,6 @@ public class PlayerCorner : MonoBehaviour
                 bf.Add(_buildFields[i]);
             }
         }
-
         return bf.ToArray();
     }
 

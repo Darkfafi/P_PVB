@@ -25,6 +25,7 @@ public class FactionsScreen : MonoBehaviour
         {
             _conPlayers.ConPlayerReadyToUseEvent += OnConPlayerReadyToUseEvent;
         }
+        SendUpdateFactions();
     }
 
     protected void OnDestroy()

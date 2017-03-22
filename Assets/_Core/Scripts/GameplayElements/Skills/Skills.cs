@@ -37,7 +37,7 @@ public class SkillPouch
 
     public void SetSkill(Skill skill)
     {
-        Skill = Skill;
+        Skill = skill;
         _isUsed = false;
         if (SkillSetEvent != null)
             SkillSetEvent(SkillPouchHolder, Skill);
