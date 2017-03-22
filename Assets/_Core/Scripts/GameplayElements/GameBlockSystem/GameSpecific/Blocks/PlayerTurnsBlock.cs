@@ -36,6 +36,8 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
     private SkillEffects _skillEffects;
 
+    private bool _inSkill = false;
+
     // Translators
     private CardInteractionTranslator _cardInteractionTranslator;
     private CoinTranslator _coinTranslator;
@@ -185,6 +187,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
     // Requests
     private void OnCardPlayRequestEvent(string cardName, int deviceId)
     {
+        if (_inSkill) { return; }
         GamePlayer p = game.GetGamePlayerByDeviceId(deviceId);
         if (p != null)
         {
@@ -195,6 +198,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
     private void OnDrawCardsRequestEvent(int amount, int deviceId)
     {
+        if (_inSkill) { return; }
         GamePlayer p = game.GetGamePlayerByDeviceId(deviceId);
         if(p != null)
         {
@@ -209,6 +213,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
     private void OnCoinRequestEvent(int amount, int deviceId)
     {
+        if (_inSkill) { return; }
         GamePlayer p = game.GetGamePlayerByDeviceId(deviceId);
         if(p != null)
         {
@@ -222,6 +227,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
     private void OnSkillUseRequestEvent(int deviceId, Skill skill)
     {
+        if (_inSkill) { return; }
         GamePlayer p = game.GetGamePlayerByDeviceId(deviceId);
         if (p == null) { return; }
         if (!IsPlayerTurn(p)) { return; }
@@ -244,12 +250,15 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
 
     private void OnSkillUsedEvent(GamePlayer gamePlayer, Skill skill)
     {
+        _inSkill = true;
         _skillEffects.DoSkillEffect(gamePlayer, skill);
     }
 
     private void OnSkillEffectDoneEvent(GamePlayer player, Skill skill)
     {
         if (IsPlayerTurn(player))
-            _turnSystem.EndTurnForCurrentTicket();
+        {
+            _inSkill = false;
+        }
     }
 }

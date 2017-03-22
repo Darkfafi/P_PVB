@@ -40,13 +40,16 @@ public class FortuneWheelPopUp : BasePopUp
 
     protected void Update()
     {
-        if(_animator.GetBool("Ended"))
+        if (_animator.GetBool("Ended"))
         {
             _timeWaited += Time.deltaTime;
             if (_timeWaited >= _waitAfterEndInSeconds)
                 ClosePopUp();
         }
-        _timeWaited = 0;
+        else
+        {
+            _timeWaited = 0;
+        }
     }
 
     private void SetCorners(FactionType[] factionsToDisplay, int indexToWin)

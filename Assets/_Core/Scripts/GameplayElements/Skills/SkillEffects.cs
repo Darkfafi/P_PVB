@@ -43,6 +43,7 @@ public class SkillEffects
             case Skill.Trade:
                 // Give player coins
                 gamePlayer.GrabCoins(1);
+                DoneEffect(gamePlayer, skill);
                 break;
             case Skill.Destruction:
                 // Destroyer call for random building of random player
@@ -90,8 +91,10 @@ public class SkillEffects
     private void OnThiefEffectEnd(BasePopUp popUpEffected)
     {
         popUpEffected.PopUpBeingDestroyedEvent -= OnThiefEffectEnd;
-        _currentEffectGamePlayer.GiveCoins(_game.GetGamePlayerBy(_effectedFactionType).TakeCoins());
-
+        int amountTaken = _game.GetGamePlayerBy(_effectedFactionType).TakeCoins();
+        if(_effectedFactionType != _currentEffectGamePlayer.FactionType)
+            _currentEffectGamePlayer.GiveCoins(amountTaken);
+    
         DoneEffect(_currentEffectGamePlayer, _currentEffectOfSkill);
     }
 
@@ -107,6 +110,7 @@ public class SkillEffects
         {
             _fortuneWheelPopUp.PopUpBeingDestroyedEvent -= OnDestructionEffectEnd;
             _fortuneWheelPopUp.PopUpBeingDestroyedEvent -= OnThiefEffectEnd;
+            _fortuneWheelPopUp = null;
         }
 
         if (SkillEffectDoneEvent != null)
