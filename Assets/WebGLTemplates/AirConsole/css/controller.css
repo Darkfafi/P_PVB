@@ -93,7 +93,7 @@ li {
     visibility: hidden;
 }
 
-.skill-select-holder .card-holder {
+.skill-select-holder .card-holder, .faction-select-holder .card-holder {
     background-color: red;
     position: relative;
     display: inline-block;
@@ -105,7 +105,7 @@ li {
     white-space: normal;
 }
 
-.skill-select-holder .card-holder img {
+.skill-select-holder .card-holder img, .faction-select-holder .card-holder img {
     position: relative;
     width: auto;
     height: 80%;
