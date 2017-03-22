@@ -14,7 +14,7 @@
             var selectedCard;
             var cardsArray = [];
             var factionsArray = [];
-            var factionsNamesArray = [];
+            var factionsIndexesArray = [];
             var skillsArray = [];
             var skillIndexesArray = [];
             var index = 0;
@@ -22,8 +22,8 @@
             
             factionsArray[0] = "/images/factions/avatar_knight.png";
             factionsArray[1] = "/images/factions/avatar_samurai.png";
-            factionsArray[2] = "/images/factions/avatar_spartan.png";
-            factionsArray[3] = "/images/factions/avatar_viking.png";
+            factionsArray[2] = "/images/factions/avatar_viking.png";
+            factionsArray[3] = "/images/factions/avatar_spartan.png";
             
             skillsArray[0] = "/images/cards/skills/card_skill_crown.png";
             skillsArray[1] = "/images/cards/skills/card_skill_stealing.png";
@@ -96,7 +96,7 @@
             function factionPickRequest()
             {
                 var factionMessage = {
-                    'factionAction':{'factionIndex':factionsNamesArray[factionIndex],
+                    'factionAction':{'factionIndex':factionsIndexesArray[factionIndex],
                                      'selectType':true
                                     }
                 };
@@ -165,9 +165,7 @@
                     
                     if(from === AirConsole.SCREEN && data.action === "UpdateFactionsAvailable")
                     {
-                        factionsNamesArray = data.info.factionIndexes.split(",");
-                        alert("my boy?");
-                        console.log("my boy?");
+                        factionsIndexesArray = data.info.factionIndexes.split(",");
                     }
                     
                     if(from === AirConsole.SCREEN && data.action === "UpdateSkillsAvailable")
@@ -273,16 +271,16 @@
             {
                 factionIndex = factionIndex + value;
                 
-                if(factionIndex > factionsNamesArray.length -1)
+                if(factionIndex > factionsIndexesArray.length -1)
                 {
                     factionIndex = 0;
                 }
                 else if(factionIndex < 0)
                 {
-                    factionIndex = factionsNamesArray.length -1;
+                    factionIndex = factionsIndexesArray.length -1;
                 }
                 
-                factionCycler(factionsNamesArray[factionIndex]);
+                factionCycler(factionsIndexesArray[factionIndex]);
             }
             
         </script>
