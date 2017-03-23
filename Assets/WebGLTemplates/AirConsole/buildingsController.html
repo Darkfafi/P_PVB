@@ -38,6 +38,7 @@
                 airConsole.onReady = function() {}
                 
                 receiveMessage();
+                buttonPresses();
                 
                 document.getElementById('buildBtn')
                 $('#isReady').hide();
@@ -328,6 +329,43 @@
                 factionCycler(factionsArray[factionsIndexesArray[factionIndex]]);
             }
             
+            function buttonPresses()
+            {
+                //All the Action Buttons
+                var readyActionBtn = document.getElementById("isReady");
+                var unreadyActionBtn = document.getElementById("isNotReady");
+                
+                var factionReadyBtn = document.getElementById("factionReady");
+                var skillsReadyBtn = document.getElementById("skillReady");
+                
+                var cardsActionBtn = document.getElementById("cardsBtn");
+                var coinsActionBtn = document.getElementById("coinBtn");
+                var buildActionBtn = document.getElementById("buildBtn");
+                var skillActionBtn = document.getElementById("skill-btn");
+                
+                //Arrow Buttons
+                var leftSkillBtn = document.getElementById("skillLeftArrow");
+                var rightSkillBtn = document.getElementById("skillRightArrow");
+                var leftFactionBtn = document.getElementById("factionLeftArrow");
+                var rightFactionBtn = document.getElementById("factionRightArrow");
+                
+                readyActionBtn.addEventListener("touchstart", readyAction(true));
+                unreadyActionBtn.addEventListener("touchstart", unreadyAction(false));
+                
+                factionReadyBtn.addEventListener("touchstart", factionPickRequest());
+                skillsReadyBtn.addEventListener("touchstart", skillPickRequest());
+                
+                cardsActionBtn.addEventListener("touchstart", drawCardsRequest(2));
+                coinsActionBtn.addEventListener("touchstart", takeGoldRequest(2));
+                buildActionBtn.addEventListener("touchstart", playCardRequest());
+                skillActionBtn.addEventListener("touchstart", skillUseRequest());
+                
+                leftSkillBtn.addEventListener("touchstart", changeSkillIndex(-1));
+                rightSkillBtn.addEventListener("touchstart", changeSkillIndex(1));
+                leftFactionBtn.addEventListener("touchstart", changeFactionIndex(-1));
+                rightFactionBtn.addEventListener("touchstart", changeFactionIndex(1));
+            }
+            
         </script>
     </head>
     
@@ -377,34 +415,36 @@
 
             <div id="Skills" class="skill-select-holder">
 
-                <button onclick="changeSkillIndex(-1)" id="arrow"></button>
+                <button onclick="changeSkillIndex(-1)" class="arrow" id="left skillLeftArrow"></button>
                     <div class="card-holder">
                         <img id="skill_card" class="card">
                     </div>
-                <button onclick="changeSkillIndex(1)" id="arrow"></button>
+                <button onclick="changeSkillIndex(1)" class="arrow" id="skillRightArrow"></button>
                 
-                <button onclick="skillPickRequest()" id="readyBtn" class="actionButton"></button>
+                <button onclick="skillPickRequest()" id="readyBtn skillReady" class="actionButton"></button>
             </div>
             
             <div id="Factions" class="faction-select-holder">
 
-                <button onclick="changeFactionIndex(-1)" id="arrow" class="actionButton"></button>
+                <button onclick="changeFactionIndex(-1)" class="arrow" id="left factionLeftArrow"></button>
                     <div class="card-holder">
                         <img id="faction_card" class="card">
                     </div>
-                <button onclick="changeFactionIndex(1)" id="arrow" class="actionButton"></button>
+                <button onclick="changeFactionIndex(1)" class="arrow" id="factionRightArrow"></button>
                     
-                <button onclick="factionPickRequest()" id="readyBtn" class="actionButton"></button>
+                <button onclick="factionPickRequest()" id="readyBtn factionReady" class="actionButton"></button>
             </div>
 
             <div id="Lobby" class="ready-screen-holder">
-                <h1 style="font-size: 3.5em;">Ready up!</h1>
+                <br>
                 <br>
                 <button onclick="readyAction(true)" class="actionButton" id="isNotReady"></button>
                 <button onclick="unreadyAction(false)" class="actionButton" id="isReady"></button>
             </div>
             
             <div id="NotMyTurn" class="notTurn-screen-holder">
+                <br>
+                <br>
                 <h1 style="font-size: 3.5em; text-align:center; font-family:'Burbank';">Wait for your Turn!</h1>
             </div>
             

@@ -2,10 +2,10 @@
 
 @font-face {
     font-family: 'Burbank';
-    src: url(../fonts/Burbank Big Regular Bold.otf) format("opentype");
+    src: url(/fonts/Burbank Big Regular Bold.otf) format("opentype");
     
     font-family: 'Burbank';
-    src: url(../fonts/Burbank Big Regular Bold.ttf) format("truetype");
+    src: url(/fonts/Burbank Big Regular Bold.ttf) format("truetype");
 }
 
 body {
@@ -151,7 +151,7 @@ body {
     top: 0;
 }
 
-#arrow {
+.arrow {
     background: url("/images/buttons/if_pick_arrow.png");
     background-size: contain;
     background-repeat: no-repeat;
@@ -163,6 +163,10 @@ body {
     width: 10%;
     height: 20%;
     display: inline-block;
+}
+
+#left {
+    background: url("/images/buttons/if_pick_arrow_left.png");
 }
 
 /* --- Player Info Tab --- */
