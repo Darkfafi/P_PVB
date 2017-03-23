@@ -77,20 +77,6 @@ public class GamePlayerSectionUI : MonoBehaviour
         UpdateStats();
     }
 
-    private void OnSkillSetEvent(GamePlayer gamePlayer, Skill skill)
-    {
-        SkillLibraryItem item = Ramses.Confactory.ConfactoryFinder.Instance.Get<ConSkills>().SkillLibrary.GetSkillItem(skill);
-        if(item != null)
-        {
-            _skillIconImage.sprite = item.SkillIcon;
-            _skillIconImage.gameObject.SetActive(true);
-        }
-        else
-        {
-            _skillIconImage.gameObject.SetActive(false);
-        }
-    }
-
     /// <summary>
     /// Displays the faction specific parts for the corner, this includes its color / font color and its portrait.
     /// </summary>
@@ -136,6 +122,21 @@ public class GamePlayerSectionUI : MonoBehaviour
     protected void OnDestroy()
     {
         UnDisplayGamePlayer();
+    }
+
+
+    private void OnSkillSetEvent(GamePlayer gamePlayer, Skill skill)
+    {
+        SkillLibraryItem item = Ramses.Confactory.ConfactoryFinder.Instance.Get<ConSkills>().SkillLibrary.GetSkillItem(skill);
+        if (item != null)
+        {
+            _skillIconImage.sprite = item.SkillIcon;
+            _skillIconImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            _skillIconImage.gameObject.SetActive(false);
+        }
     }
 
     private void OnPlayCardEvent(GamePlayer gamePlayer, BaseCard card)

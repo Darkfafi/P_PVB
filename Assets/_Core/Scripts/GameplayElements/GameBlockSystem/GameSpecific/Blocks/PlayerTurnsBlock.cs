@@ -174,6 +174,7 @@ public class PlayerTurnsBlockLogic : BaseGameBlockLogic<BuildingsGame, PlayerTur
                 gamePlayer.GrabCoins(pc.GetAllBuildFieldsInUse().Length);
                 break;
             default:
+                // Nope.png
                 break;
         }
     }

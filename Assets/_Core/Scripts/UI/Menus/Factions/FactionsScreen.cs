@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using Ramses.Confactory;
 using Ramses.SceneTrackers;
-using System;
 
+/// <summary>
+/// This is the component which binds all the FactionsScreen Logic.
+/// </summary>
 public class FactionsScreen : MonoBehaviour
 {
     [SerializeField]

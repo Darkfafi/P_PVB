@@ -3,8 +3,13 @@ using System.Collections;
 using Ramses.Confactory;
 using Ramses.Confactory.Addons;
 using System.Collections.Generic;
-using System;
 
+
+/// <summary>
+/// This class is a Confactory System which runs Coroutines on a seperate object.
+/// NOTE: The coroutines started MUST ALSO BE STOPPED!
+/// PS: The class has an object with a visual representation of all running coroutines.
+/// </summary>
 public class ConCoroutines : IConfactory, IConStructUser
 {
 	private CoroutineObject coroutineObject;
@@ -23,7 +28,13 @@ public class ConCoroutines : IConfactory, IConStructUser
 	{
 		GameObject.Destroy(coroutineObject.gameObject);
 	}
-
+    /// <summary>
+    /// This method starts a coroutine on its given context.
+    /// NOTE: The coroutine must be stopped on this context also!
+    /// </summary>
+    /// <param name="method">IEnumerator method</param>
+    /// <param name="context">The context</param>
+    /// <returns>The Coroutine of the started method</returns>
 	public Coroutine StartCoroutine(IEnumerator method, object context)
 	{
 		Coroutine coroutine = null;
