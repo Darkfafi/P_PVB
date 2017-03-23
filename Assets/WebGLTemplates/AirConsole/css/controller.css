@@ -142,14 +142,6 @@ body {
     width: 40%;
     height: 40%;
 }
-#readyBtn {
-    background-image: url(/images/buttons/button_ready_green.png);
-    width: 22.5%;
-    height: 20%;
-    vertical-align: center;
-    position: relative;
-    top: 0;
-}
 
 .arrow {
     background: url("/images/buttons/if_pick_arrow.png");
@@ -165,8 +157,19 @@ body {
     display: inline-block;
 }
 
-#left {
+.left {
     background: url("/images/buttons/if_pick_arrow_left.png");
+    
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    
+    position: relative;
+    vertical-align: center;
+    margin: auto;
+    width: 10%;
+    height: 20%;
+    display: inline-block;
 }
 
 /* --- Player Info Tab --- */
@@ -360,6 +363,19 @@ body {
     -webkit-transform: scale(0.9);
     -moz-transform: scale(0.9);
     -o-transform: scale(0.9);
+}
+
+.readyBtn {
+    background: url(/images/buttons/button_ready_green.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    
+    position: relative;
+    width: 22.5%;
+    height: 20%;
+    display: inline;
+    padding-bottom: 15px;
 }
 
 #buttonImg {

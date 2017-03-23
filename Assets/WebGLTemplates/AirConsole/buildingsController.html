@@ -31,16 +31,15 @@
             skillsArray[3] = "/images/cards/skills/card_skill_trade.png";
             skillsArray[4] = "/images/cards/skills/card_skill_destruction.png";
             
+            receiveMessage();
+            buttonPresses();
+            
             //Initializer
             function init()
             {
                 airConsole.onActivePlayersChange = function() {}
                 airConsole.onReady = function() {}
                 
-                receiveMessage();
-                buttonPresses();
-                
-                document.getElementById('buildBtn')
                 $('#isReady').hide();
             }
             
@@ -415,24 +414,24 @@
 
             <div id="Skills" class="skill-select-holder">
 
-                <button onclick="changeSkillIndex(-1)" class="arrow" id="left skillLeftArrow"></button>
+                <button onclick="changeSkillIndex(-1)" class="arrow left" id="skillLeftArrow"></button>
                     <div class="card-holder">
                         <img id="skill_card" class="card">
                     </div>
                 <button onclick="changeSkillIndex(1)" class="arrow" id="skillRightArrow"></button>
                 
-                <button onclick="skillPickRequest()" id="readyBtn skillReady" class="actionButton"></button>
+                <button onclick="skillPickRequest()" id="skillReady" class="readyBtn actionButton"></button>
             </div>
             
             <div id="Factions" class="faction-select-holder">
 
-                <button onclick="changeFactionIndex(-1)" class="arrow" id="left factionLeftArrow"></button>
+                <button onclick="changeFactionIndex(-1)" class="arrow left" id="factionLeftArrow"></button>
                     <div class="card-holder">
                         <img id="faction_card" class="card">
                     </div>
                 <button onclick="changeFactionIndex(1)" class="arrow" id="factionRightArrow"></button>
                     
-                <button onclick="factionPickRequest()" id="readyBtn factionReady" class="actionButton"></button>
+                <button onclick="factionPickRequest()" id="factionReady" class="readyBtn actionButton"></button>
             </div>
 
             <div id="Lobby" class="ready-screen-holder">
