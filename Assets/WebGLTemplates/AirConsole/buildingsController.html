@@ -20,10 +20,10 @@
             var index = 0;
             var factionIndex = 0;
             
-            factionsArray[0] = "/images/factions/avatar_spartan.png";
-            factionsArray[1] = "/images/factions/avatar_viking.png";
-            factionsArray[2] = "/images/factions/avatar_knight.png";
-            factionsArray[3] = "/images/factions/avatar_samurai.png";
+            factionsArray[0] = "/images/factions/character_spartan.png";
+            factionsArray[1] = "/images/factions/character_viking.png";
+            factionsArray[2] = "/images/factions/character_knight.png";
+            factionsArray[3] = "/images/factions/character_samurai.png";
             
             skillsArray[0] = "/images/cards/skills/card_skill_crown.png";
             skillsArray[1] = "/images/cards/skills/card_skill_stealing.png";
@@ -32,7 +32,6 @@
             skillsArray[4] = "/images/cards/skills/card_skill_destruction.png";
             
             receiveMessage();
-            buttonPresses();
             
             //Initializer
             function init()
@@ -40,6 +39,7 @@
                 airConsole.onActivePlayersChange = function() {}
                 airConsole.onReady = function() {}
                 
+                buttonPresses();
                 $('#isReady').hide();
             }
             
@@ -330,6 +330,7 @@
             
             function buttonPresses()
             {
+                /*
                 //All the Action Buttons
                 var readyActionBtn = document.getElementById("isReady");
                 var unreadyActionBtn = document.getElementById("isNotReady");
@@ -363,6 +364,97 @@
                 rightSkillBtn.addEventListener("touchstart", changeSkillIndex(1));
                 leftFactionBtn.addEventListener("touchstart", changeFactionIndex(-1));
                 rightFactionBtn.addEventListener("touchstart", changeFactionIndex(1));
+                */
+                
+                //Add function to buttons using AirConsole Buttons.
+                
+                //Ready Phase
+                new Button("isReady", {
+                    "down":function() 
+                    {
+                        readyAction(true);
+                    }
+                });
+                
+                new Button("isNotReady", {
+                    "down":function() 
+                    {
+                        unreadyAction(false);
+                    }
+                });
+                
+                //Selection Phases
+                new Button("factionReady", {
+                    "down":function() 
+                    {
+                        factionPickRequest();
+                    }
+                });
+                
+                new Button("skillReady", {
+                    "down":function() 
+                    {
+                        skillPickRequest();
+                    }
+                });
+                
+                //Player Action Buttons
+                new Button("cardsBtn", {
+                    "down":function() 
+                    {
+                        drawCardsRequest(2);
+                    }
+                });
+                
+                new Button("coinBtn", {
+                    "down":function() 
+                    {
+                        takeGoldRequest(2);
+                    }
+                });
+                
+                new Button("buildBtn", {
+                    "down":function() 
+                    {
+                        playCardRequest();
+                    }
+                });
+                
+                new Button("skill-btn", {
+                    "down":function() 
+                    {
+                        skillUseRequest();
+                    }
+                });
+                
+                //Arrow Buttons
+                new Button("skillLeftArrow", {
+                    "down":function() 
+                    {
+                        changeSkillIndex(-1);
+                    }
+                });
+                
+                new Button("skillRightArrow", {
+                    "down":function() 
+                    {
+                        changeSkillIndex(1);
+                    }
+                });
+                
+                new Button("factionLeftArrow", {
+                    "down":function() 
+                    {
+                        changeFactionIndex(-1);
+                    }
+                });
+                
+                new Button("factionRightArrow", {
+                    "down":function() 
+                    {
+                        changeFactionIndex(1);
+                    }
+                });
             }
             
         </script>
@@ -414,22 +506,22 @@
 
             <div id="Skills" class="skill-select-holder">
 
-                <button onclick="changeSkillIndex(-1)" class="arrow left" id="skillLeftArrow"></button>
+                <button onclick="changeSkillIndex(-1)" class="arrow left actionButton" id="skillLeftArrow"></button>
                     <div class="card-holder">
                         <img id="skill_card" class="card">
                     </div>
-                <button onclick="changeSkillIndex(1)" class="arrow" id="skillRightArrow"></button>
+                <button onclick="changeSkillIndex(1)" class="arrow actionButton" id="skillRightArrow"></button>
                 
                 <button onclick="skillPickRequest()" id="skillReady" class="readyBtn actionButton"></button>
             </div>
             
             <div id="Factions" class="faction-select-holder">
 
-                <button onclick="changeFactionIndex(-1)" class="arrow left" id="factionLeftArrow"></button>
+                <button onclick="changeFactionIndex(-1)" class="arrow left actionButton" id="factionLeftArrow"></button>
                     <div class="card-holder">
                         <img id="faction_card" class="card">
                     </div>
-                <button onclick="changeFactionIndex(1)" class="arrow" id="factionRightArrow"></button>
+                <button onclick="changeFactionIndex(1)" class="arrow actionButton" id="factionRightArrow"></button>
                     
                 <button onclick="factionPickRequest()" id="factionReady" class="readyBtn actionButton"></button>
             </div>
